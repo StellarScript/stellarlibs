@@ -1,1 +1,3 @@
-export interface BootstrapExecutorSchema {} // eslint-disable-line
+export interface BootstrapExecutorSchema {
+  profile?: string | string[];
+}
