@@ -3,6 +3,7 @@ import { Tree, readProjectConfiguration } from '@nx/devkit';
 
 import { removeGenerator } from './generator';
 import { RemoveGeneratorSchema } from './schema';
+import { applicationGenerator } from '../application/generator';
 
 describe('remove generator', () => {
   let tree: Tree;
@@ -12,9 +13,12 @@ describe('remove generator', () => {
     tree = createTreeWithEmptyWorkspace();
   });
 
-  it('should run successfully', async () => {
+  it('remove application', async () => {
+    await applicationGenerator(tree, options);
+    const config = await readProjectConfiguration(tree, options.name);
+    expect(tree.exists(config.sourceRoot)).toBeTruthy();
+
     await removeGenerator(tree, options);
-    const config = readProjectConfiguration(tree, 'test');
-    expect(config).toBeDefined();
+    expect(tree.exists(config.sourceRoot)).toBeFalsy();
   });
 });
