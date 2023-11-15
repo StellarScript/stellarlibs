@@ -40,3 +40,5 @@ jobs:
 
       - name: Publish Plugin
         run: npx nx run aws-cdk:publish  --ver=${{ github.ref_name }} --tag=beta
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
