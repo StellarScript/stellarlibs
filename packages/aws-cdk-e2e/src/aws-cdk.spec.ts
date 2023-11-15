@@ -1,65 +1,39 @@
-import { execSync } from 'child_process';
-import { join, dirname } from 'path';
-import { mkdirSync, rmSync } from 'fs';
+import * as path from 'path';
+import {
+  uniq,
+  checkFilesExist,
+  ensureNxProject,
+  runNxCommandAsync,
+} from '@nx/plugin/testing';
+import { ensureNxLocalLibs, cleanLocalLibs } from './utils';
 
-describe('aws-cdk', () => {
-  let projectDirectory: string;
-
+describe('"@aws-nx/aws-cdk" Application Generator', () => {
   beforeAll(() => {
-    projectDirectory = createTestProject();
-
-    // The plugin has been built and published to a local registry in the jest globalSetup
-    // Install the plugin built with the latest source code into the test repo
-    execSync(`npm install aws-cdk@e2e`, {
-      cwd: projectDirectory,
-      stdio: 'inherit',
-      env: process.env,
-    });
+    ensureNxLocalLibs();
+    ensureNxProject('@aws-nx/aws-cdk', 'dist/packages/aws-cdk');
   });
 
   afterAll(() => {
-    // Cleanup the test project
-    rmSync(projectDirectory, {
-      recursive: true,
-      force: true,
-    });
+    cleanLocalLibs();
   });
 
-  it('should be installed', () => {
-    // npm ls will fail if the package is not installed properly
-    execSync('npm ls aws-cdk', {
-      cwd: projectDirectory,
-      stdio: 'inherit',
-    });
-  });
+  it('@aws-nx/aws-cdk application generator', async () => {
+    const pluginName = uniq('aws-cdk');
+    await runNxCommandAsync(
+      `generate @aws-nx/aws-cdk:application ${pluginName}`
+    );
+
+    expect(() => {
+      // check generated application directory
+      checkFilesExist(path.join(pluginName));
+      // Check generated config files
+      checkFilesExist(path.join(pluginName, 'cdk.json'));
+      checkFilesExist(path.join(pluginName, 'tsconfig.json'));
+      checkFilesExist(path.join(pluginName, 'tsconfig.app.json'));
+      checkFilesExist(path.join(pluginName, 'jest.config.js'));
+      // Check generated source files
+      checkFilesExist(path.join(pluginName, 'src', 'bin/index.ts'));
+      checkFilesExist(path.join(pluginName, 'src', 'stack/app.ts'));
+    }).not.toThrow();
+  }, 100000);
 });
-
-/**
- * Creates a test project with create-nx-workspace and installs the plugin
- * @returns The directory where the test project was created
- */
-function createTestProject() {
-  const projectName = 'test-project';
-  const projectDirectory = join(process.cwd(), 'tmp', projectName);
-
-  // Ensure projectDirectory is empty
-  rmSync(projectDirectory, {
-    recursive: true,
-    force: true,
-  });
-  mkdirSync(dirname(projectDirectory), {
-    recursive: true,
-  });
-
-  execSync(
-    `npx --yes create-nx-workspace@latest ${projectName} --preset apps --no-nxCloud --no-interactive`,
-    {
-      cwd: dirname(projectDirectory),
-      stdio: 'inherit',
-      env: process.env,
-    }
-  );
-  console.log(`Created test project in "${projectDirectory}"`);
-
-  return projectDirectory;
-}
