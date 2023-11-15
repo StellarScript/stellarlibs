@@ -36,4 +36,36 @@ describe('"@aws-nx/aws-cdk" Application Generator', () => {
       checkFilesExist(path.join(pluginName, 'src', 'stack/app.ts'));
     }).not.toThrow();
   }, 100000);
+
+  it('generate application with custom directory', async () => {
+    const pluginName = uniq('aws-cdk');
+    const pluginDirectory = uniq('subdir');
+
+    await runNxCommandAsync(
+      `generate @aws-nx/aws-cdk:application ${pluginName} --directory ${pluginDirectory}`
+    );
+    expect(() =>
+      checkFilesExist(path.join(pluginDirectory, pluginName))
+    ).not.toThrow();
+  }, 100000);
+
+  it('generate application with no jest unit test (test dir should not exist)', async () => {
+    const pluginName = uniq('aws-cdk');
+
+    await runNxCommandAsync(
+      `generate @aws-nx/aws-cdk:application ${pluginName} --jest false`
+    );
+    expect(() => checkFilesExist(path.join(pluginName, 'src/test'))).toThrow();
+  }, 100000);
+
+  it('generate application with no linting (.eslintrc file should not exist)', async () => {
+    const pluginName = uniq('aws-cdk');
+
+    await runNxCommandAsync(
+      `generate @aws-nx/aws-cdk:application ${pluginName} --linting false`
+    );
+    expect(() =>
+      checkFilesExist(path.join(pluginName, '.eslintrc.json'))
+    ).toThrow();
+  }, 100000);
 });
