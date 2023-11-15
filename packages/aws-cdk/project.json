@@ -47,7 +47,8 @@
         "lintFilePatterns": [
           "packages/aws-cdk/**/*.ts",
           "packages/aws-cdk/package.json",
-          "packages/aws-cdk/generators.json"
+          "packages/aws-cdk/generators.json",
+          "packages/aws-cdk/executors.json"
         ]
       }
     },
