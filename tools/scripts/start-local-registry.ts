@@ -17,7 +17,7 @@ export default async () => {
     verbose: false,
   });
   const nx = require.resolve('nx');
-  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', '0.0.1'], {
+  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', '0.0.2'], {
     env: process.env,
     stdio: 'inherit',
   });
