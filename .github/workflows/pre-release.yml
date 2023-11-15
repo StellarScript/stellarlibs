@@ -46,7 +46,6 @@ jobs:
           scope: '@aws-nx'
 
       - name: Publish Plugin
-        run: |
-          nx run aws-cdk:publish  --ver=${{ github.ref_name }} --tag=beta
+        run: npx nx run aws-cdk:publish  --ver=${{ github.ref_name }} --tag=beta
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
