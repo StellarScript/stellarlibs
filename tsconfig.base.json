@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@aws-nx/utils": ["libs/utils/src/index.ts"],
       "aws-cdk": ["packages/aws-cdk/src/index.ts"]
     }
   },
