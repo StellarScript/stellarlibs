@@ -43,6 +43,7 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
+          scope: '@aws-nx'
 
       - name: Publish Plugin
         run: npx nx run aws-cdk:publish  --ver=${{ github.ref_name }} --tag=beta
