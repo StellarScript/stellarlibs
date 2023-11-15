@@ -1,6 +1,6 @@
 {
   "name": "@aws-nx/aws-cdk",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "license": "MIT",
   "homepage": "https://github.com/StellarScript/aws-nx/blob/main/packages/aws-cdk/README.md",
   "author": {
