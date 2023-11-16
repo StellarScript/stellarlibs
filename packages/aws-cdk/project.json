@@ -2,7 +2,7 @@
   "name": "aws-cdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/aws-cdk/src",
-  "projectType": "library",
+  "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
