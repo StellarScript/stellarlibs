@@ -1,5 +1,15 @@
 # Aws-Cdk Documentation
 
+## Installation
+
+[npm library](https://www.npmjs.com/package/@aws-nx/aws-cdk)
+
+```bash
+npm i @aws-nx/aws-cdk
+```
+
+<br>
+
 ## Table of Contents
 
 1. [Create Application](#create-application)
