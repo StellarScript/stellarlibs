@@ -16,19 +16,25 @@ This repository contains a collection of Nx plugins designed to work with AWS.
 
 ## Workspace
 
-The workspace for these plugins are generated using the following command:
+The workspace is generated using the following command:
 
 ```bash
 npx create-nx-workspace aws-nx --package-manager=yarn
 ```
 
-plugins generators are generated using the following command:
+plugin packages are generated using the following command:
+
+```bash
+nx g @nx/plugin:plugin <Plugin_Name> --directory packages --publishable --buildable
+```
+
+plugin generators are generated using the following command:
 
 ```bash
 nx generate @nx/plugin:generator <Generator_Name> --project <Plugin_Name>
 ```
 
-plugins executors are generated using the following command:
+plugin executors are generated using the following command:
 
 ```bash
 nx generate @nx/plugin:executor <Executor_Name> --project <Plugin_Name>
