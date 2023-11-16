@@ -28,6 +28,12 @@ plugin packages are generated using the following command:
 nx g @nx/plugin:plugin <Plugin_Name> --directory packages --publishable --buildable
 ```
 
+plugin e2e tests are generated using the following command:
+
+```bash
+nx g @nx/plugin:e2e-project --pluginName <Plugin_Name> --npmPackageName <Npm_Package_Name> --pluginOutputPath dist/<Plugin_Name>
+```
+
 plugin generators are generated using the following command:
 
 ```bash
