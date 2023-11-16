@@ -18,8 +18,13 @@ export default async () => {
   });
 
   const nx = require.resolve('nx');
-  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', '0.0.2'], {
+  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', version()], {
     env: process.env,
     stdio: 'inherit',
   });
 };
+
+function version() {
+  const randomNum = () => Math.floor(Math.random() * 10);
+  return `${randomNum()}.${randomNum()}.${randomNum()}`;
+}
