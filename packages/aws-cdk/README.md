@@ -16,6 +16,7 @@ npm i @aws-nx/aws-cdk
 2. [Remove Application](#remove-application)
 3. [Bootstrap](#bootstrap)
 4. [Synth](#synth)
+5. [Synth](#deploy)
 
 ---
 
@@ -82,5 +83,35 @@ nx synth <App_Name>
 #### Options:
 
 - `--output` (optional) <Output_Directory>: Specify the directory for the synthesized output.
+
+<br>
+
+## 5. Deploy<a name="deploy"></a>
+
+To deploy the application/stack, execute:
+
+```bash
+nx deploy <Stack_Name>
+    [--stack <Stack_Name>]
+```
+
+#### Options:
+
+- `--stack` (optional) <Stack_Name>: Specify the stack name to deploy.
+
+<br>
+
+## 6. Destroy<a name="destroy"></a>
+
+To destroy the application/stack, execute:
+
+```bash
+nx destroy <Stack_Name>
+    [--stack <Stack_Name>]
+```
+
+#### Options:
+
+- `--stack` (optional) <Stack_Name>: Specify the stack name to destroy.
 
 <br>
