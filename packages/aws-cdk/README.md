@@ -30,7 +30,7 @@ npm i @aws-nx/aws-cdk
 To create a new application, execute the following command:
 
 ```bash
-nx g @appify/aws-cdk:application <APP_NAME>
+nx g @aws-nx/aws-cdk:application <APP_NAME>
         [--jest <true or false>]
         [--linting <true or false>]
         [--tags <Tag_Name>]
@@ -52,7 +52,7 @@ nx g @appify/aws-cdk:application <APP_NAME>
 To remove an existing application, use the following command:
 
 ```bash
-nx g @appify/aws-cdk:remove <APP_NAME>
+nx g @aws-nx/aws-cdk:remove <APP_NAME>
 ```
 
 <br>

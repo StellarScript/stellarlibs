@@ -33,3 +33,9 @@ plugins executors are generated using the following command:
 ```bash
 nx generate @nx/plugin:executor <Executor_Name> --project <Plugin_Name>
 ```
+
+publish plugin to npm registry using the following command:
+
+```bash
+nx run <Plugin_Name>:publish --ver=0.0.1 --tag=latest
+```
