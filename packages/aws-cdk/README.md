@@ -1,4 +1,6 @@
-# Aws-Cdk Documentation
+<br>
+
+# Nx Aws Cdk Documentation
 
 ## Installation
 
@@ -17,6 +19,7 @@ npm i @aws-nx/aws-cdk
 3. [Bootstrap](#bootstrap)
 4. [Synth](#synth)
 5. [Synth](#deploy)
+6. [Synth](#destroy)
 
 ---
 
