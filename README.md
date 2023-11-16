@@ -1,3 +1,7 @@
+[![CI](https://github.com/StellarScript/aws-nx/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/StellarScript/aws-nx/actions/workflows/ci.yml)
+
+---
+
 # AWS Nx Plugins
 
 This repository contains a collection of Nx plugins designed to work with AWS.
@@ -23,7 +27,6 @@ plugins generators are generated using the following command:
 ```bash
 nx generate @nx/plugin:generator <Generator_Name> --project <Plugin_Name>
 ```
-
 
 plugins executors are generated using the following command:
 
