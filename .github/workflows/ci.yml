@@ -2,6 +2,13 @@ name: CI
 
 on:
   pull_request:
+    paths:
+      - '!**/README.md'
+      - '!yarnrc'
+      - '!.prettierrc'
+      - '!.gitignore'
+      - '!.eslintignore'
+      - '!.prettierignore'
 
 permissions:
   actions: read
