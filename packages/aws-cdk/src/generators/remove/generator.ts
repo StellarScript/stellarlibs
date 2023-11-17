@@ -3,12 +3,10 @@ import { readProjectConfiguration } from '@nx/devkit';
 import { removeDirectoryRecursively } from '@aws-nx/utils';
 import { RemoveGeneratorSchema } from './schema';
 
-export async function removeGenerator(
+export default async function removeGenerator(
   tree: Tree,
   options: RemoveGeneratorSchema
 ) {
   const config = readProjectConfiguration(tree, options.name);
   removeDirectoryRecursively(tree, config.root);
 }
-
-export default removeGenerator;

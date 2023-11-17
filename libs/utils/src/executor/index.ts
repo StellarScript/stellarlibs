@@ -2,7 +2,6 @@ import { execSync } from 'child_process';
 
 import { detectPackageManager } from '@nx/devkit';
 import type { ExecutorContext, ProjectConfiguration } from '@nx/devkit';
-
 import { Commands, createArguments } from '../helper';
 
 const LARGE_BUFFER = 1024 * 1000000;
@@ -22,6 +21,13 @@ interface CreateCommand {
   library: string;
 }
 
+/**
+ *
+ * @param command
+ * @param cwd
+ * @description Runs a shell command
+ * @returns
+ */
 export async function runCommand(
   command: string,
   cwd: string
@@ -41,6 +47,13 @@ export async function runCommand(
   }
 }
 
+/**
+ *
+ * @param parsedArgs
+ * @param context
+ * @description Normalizes the options passed to the executor
+ * @returns
+ */
 export function normalizeOptions(
   parsedArgs: object,
   context: ExecutorContext
@@ -57,6 +70,13 @@ export function normalizeOptions(
   };
 }
 
+/**
+ *
+ * @param command
+ * @param options
+ * @description Creates a command to be executed
+ * @returns
+ */
 export function createCommand(command: string, options: CreateCommand): string {
   const argvs = createArguments(options.args);
   const packageManager = detectPackageManager();
@@ -79,10 +99,6 @@ export function createCommand(command: string, options: CreateCommand): string {
   commands.add(`"${generatePath}"`);
   commands.add(command);
   commands.add(argvs);
-  //
 
-  // const projectPath = options.root;
-  // const generatePath = `"${packageManagerExecutor} ts-node --require tsconfig-paths/register --project ${projectPath}/tsconfig.app.json ${projectPath}/src/bin/index.ts"`;
-  // return `node --require ts-node/register node_modules/aws-cdk/bin/cdk.js -a ${generatePath} ${command} ${argvs}`;
   return commands.command;
 }

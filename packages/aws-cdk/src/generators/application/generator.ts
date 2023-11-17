@@ -29,48 +29,14 @@ import {
 import { createConfiguration } from './config';
 import { ApplicationGeneratorSchema } from './schema';
 
-export function normalizeOptions(
-  tree: Tree,
-  schema: ApplicationGeneratorSchema
-) {
-  const name = names(schema.name).fileName;
-  const projectDirectory = schema.directory
-    ? `${names(schema.directory).fileName}/${name}`
-    : name;
-
-  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/${projectDirectory}`;
-  const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
-  const linting = schema.linting === undefined ?? true;
-  const unitTest = schema.jest === undefined ?? true;
-
-  const createTag = () => {
-    if (!schema.tag) return [];
-    if (Array.isArray(schema.tag)) return schema.tag;
-    else return [schema.tag];
-  };
-  return {
-    name,
-    linting,
-    unitTest,
-    projectName,
-    projectRoot,
-    tags: createTag(),
-  };
-}
-
-function addDependencies(tree: Tree): GeneratorCallback {
-  const dependencies: Record<string, string> = {};
-  const devDependencies: Record<string, string> = {
-    'aws-cdk': CDK_VERSION,
-    'aws-cdk-lib': CDK_VERSION,
-    constructs: CONSTRUCTS_VERSION,
-    'source-map-support': SOURCE_MAP_VERSION,
-    'ts-jest': TSJEST_VERSION,
-  };
-  return addDependenciesToPackageJson(tree, dependencies, devDependencies);
-}
-
-export async function applicationGenerator(
+/**
+ *
+ * @param tree
+ * @param schema
+ * @description Main generator for the application generator
+ * @returns
+ */
+export default async function applicationGenerator(
   tree: Tree,
   schema: ApplicationGeneratorSchema
 ) {
@@ -109,4 +75,56 @@ export async function applicationGenerator(
   return runTasksInSerial(...tasks);
 }
 
-export default applicationGenerator;
+/**
+ *
+ * @param tree
+ * @param schema
+ * @description Normalizes the options for the application generator
+ * @returns
+ */
+export function normalizeOptions(
+  tree: Tree,
+  schema: ApplicationGeneratorSchema
+) {
+  const name = names(schema.name).fileName;
+  const projectDirectory = schema.directory
+    ? `${names(schema.directory).fileName}/${name}`
+    : name;
+
+  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/${projectDirectory}`;
+  const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
+  const linting = schema.linting === undefined ?? true;
+  const unitTest = schema.jest === undefined ?? true;
+
+  const createTag = () => {
+    if (!schema.tag) return [];
+    if (Array.isArray(schema.tag)) return schema.tag;
+    else return [schema.tag];
+  };
+  return {
+    name,
+    linting,
+    unitTest,
+    projectName,
+    projectRoot,
+    tags: createTag(),
+  };
+}
+
+/**
+ *
+ * @param tree
+ * @description Adds the dependencies to the package.json
+ * @returns
+ */
+function addDependencies(tree: Tree): GeneratorCallback {
+  const dependencies: Record<string, string> = {};
+  const devDependencies: Record<string, string> = {
+    'aws-cdk': CDK_VERSION,
+    'aws-cdk-lib': CDK_VERSION,
+    constructs: CONSTRUCTS_VERSION,
+    'source-map-support': SOURCE_MAP_VERSION,
+    'ts-jest': TSJEST_VERSION,
+  };
+  return addDependenciesToPackageJson(tree, dependencies, devDependencies);
+}
