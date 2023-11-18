@@ -68,8 +68,8 @@ export function updateLintConfig(tree: Tree, options: GeneratorOptions): void {
  */
 export function addProjectFiles(
   tree: Tree,
-  options: GeneratorOptions,
-  filePath: string
+  filePath: string,
+  options: GeneratorOptions
 ): void {
   generateFiles(tree, filePath, options.projectRoot, {
     ...options,
