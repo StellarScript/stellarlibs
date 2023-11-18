@@ -1,6 +1,11 @@
 import * as path from 'path';
 import { ExecutorContext } from '@nx/devkit';
-import { runCommand, normalizeOptions, ArgumentMap } from '@aws-nx/utils';
+import {
+  toArray,
+  runCommand,
+  normalizeOptions,
+  ArgumentMap,
+} from '@aws-nx/utils';
 
 import { SynthExecutorSchema } from './schema';
 import { createCommand } from '../../util/executor';
@@ -36,9 +41,7 @@ export function normalizeArguments(
 
   const quite = schema.quiet;
   const output = schema.output ?? path.resolve('dist');
-  const stack = Array.isArray(schema.stack)
-    ? schema.stack.join(' ')
-    : schema.stack;
+  const stack = toArray(schema.stack).join(' ');
 
   argsMap.register('_', stack);
   argsMap.register('output', output);

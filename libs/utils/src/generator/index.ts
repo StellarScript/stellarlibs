@@ -4,6 +4,10 @@ import {
   generateFiles,
   offsetFromRoot,
   joinPathFragments,
+  runTasksInSerial,
+  ProjectConfiguration,
+  readProjectConfiguration,
+  updateProjectConfiguration,
 } from '@nx/devkit';
 import type { Tree, GeneratorCallback } from '@nx/devkit';
 import { lintProjectGenerator } from '@nx/linter';
@@ -115,4 +119,25 @@ export function removeDirectoryRecursively(tree: Tree, dirPath: string): void {
       removeDirectoryRecursively(tree, filePath);
     }
   }
+}
+
+export class GeneratorTasks extends Set<GeneratorCallback> {
+  public register(task: GeneratorCallback | undefined): void {
+    if (!task) return;
+    this.add(task);
+  }
+
+  public async runInSerial(): Promise<GeneratorCallback> {
+    return runTasksInSerial(...Array.from(this));
+  }
+}
+
+export function updateProjectConfig(
+  tree: Tree,
+  projectName: string,
+  updater: (x: ProjectConfiguration) => ProjectConfiguration
+): void {
+  const workspace = readProjectConfiguration(tree, projectName);
+  const updatedWorkspace = updater(workspace);
+  updateProjectConfiguration(tree, projectName, updatedWorkspace);
 }

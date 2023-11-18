@@ -1,5 +1,10 @@
 import { ExecutorContext } from '@nx/devkit';
-import { runCommand, ArgumentMap, normalizeOptions } from '@aws-nx/utils';
+import {
+  toArray,
+  runCommand,
+  ArgumentMap,
+  normalizeOptions,
+} from '@aws-nx/utils';
 
 import { createCommand } from '../../util/executor';
 import { BootstrapExecutorSchema } from './schema';
@@ -33,10 +38,8 @@ export function normalizeArguments(
 ): Record<string, string> {
   const argsMap = new ArgumentMap<Record<string, string>>();
 
-  const stack = Array.isArray(schema.profile)
-    ? schema.profile.join(' ')
-    : schema.profile;
-
+  const stack = toArray(schema.profile).join(' ');
   argsMap.register('_', stack);
+
   return argsMap.toJson();
 }

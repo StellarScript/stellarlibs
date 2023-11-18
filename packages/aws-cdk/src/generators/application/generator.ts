@@ -5,11 +5,8 @@ import type { Tree, GeneratorCallback } from '@nx/devkit';
 import {
   names,
   formatFiles,
-  runTasksInSerial,
   getWorkspaceLayout,
   addProjectConfiguration,
-  readProjectConfiguration,
-  updateProjectConfiguration,
   addDependenciesToPackageJson,
 } from '@nx/devkit';
 
@@ -18,6 +15,8 @@ import {
   updateLintConfig,
   lintingGenerator,
   addIgnoreFileName,
+  GeneratorTasks,
+  updateProjectConfig,
 } from '@aws-nx/utils';
 
 import {
@@ -28,6 +27,15 @@ import {
 } from '../../util/constants';
 import { createConfiguration } from './config';
 import { ApplicationGeneratorSchema } from './schema';
+
+interface NormalizedOptions {
+  name: string;
+  linting: boolean;
+  unitTest: boolean;
+  projectName: string;
+  projectRoot: string;
+  tags: string[];
+}
 
 /**
  *
@@ -40,39 +48,101 @@ export default async function applicationGenerator(
   tree: Tree,
   schema: ApplicationGeneratorSchema
 ) {
-  const tasks: GeneratorCallback[] = [];
+  const tasks = new GeneratorTasks();
 
   const options = normalizeOptions(tree, schema);
+  projectConfiguration(tree, options);
+
+  // Jest
+  const jestTask = await JestConfiguration(tree, options);
+  tasks.register(jestTask);
+
+  // Eslint
+  const lintTask = await lintingConfiguration(tree, options);
+  tasks.register(lintTask);
+
+  // Gitignore
+  addIgnoreFileName(tree, '# AWS CDK', ['cdk.out']);
+  tasks.register(addDependencies(tree));
+
+  await formatFiles(tree);
+  return tasks.runInSerial();
+}
+
+/**
+ *
+ * @param tree
+ * @param options
+ * @description Linting configuration
+ * @returns
+ */
+async function lintingConfiguration(
+  tree: Tree,
+  options: NormalizedOptions
+): Promise<GeneratorCallback | undefined> {
+  if (!options.linting) {
+    return;
+  }
+  const lintTask = await lintingGenerator(tree, options);
+  updateLintConfig(tree, options);
+  return lintTask;
+}
+
+/**
+ *
+ * @param tree
+ * @param options
+ * @description  Generate jest configuration
+ * @returns
+ */
+async function JestConfiguration(
+  tree: Tree,
+  options: NormalizedOptions
+): Promise<GeneratorCallback | undefined> {
+  if (!options.unitTest) {
+    return;
+  }
+  const jestTask = await jestInitGenerator(tree, {
+    js: true,
+    compiler: 'tsc',
+    babelJest: false,
+    skipPackageJson: false,
+    testEnvironment: 'node',
+  });
+  addProjectFiles(tree, options, path.join(__dirname, 'unitTest'));
+  return jestTask;
+}
+
+/**
+ *
+ * @param tree
+ * @param options
+ * @description Creates the project configuration for the application
+ */
+function projectConfiguration(tree: Tree, options: NormalizedOptions): void {
   const config = createConfiguration(options);
   addProjectConfiguration(tree, options.projectName, config);
 
-  const workspace = readProjectConfiguration(tree, options.projectName);
-  updateProjectConfiguration(tree, options.projectName, workspace);
+  updateProjectConfig(tree, options.projectName, (workspace) => workspace);
   addProjectFiles(tree, options, path.join(__dirname, 'files'));
+}
 
-  if (options.linting) {
-    const lintTask = await lintingGenerator(tree, options);
-    tasks.push(lintTask);
-    updateLintConfig(tree, options);
-  }
-
-  if (options.unitTest) {
-    const jestTask = await jestInitGenerator(tree, {
-      js: true,
-      compiler: 'tsc',
-      babelJest: false,
-      skipPackageJson: false,
-      testEnvironment: 'node',
-    });
-    tasks.push(jestTask);
-    addProjectFiles(tree, options, path.join(__dirname, 'unitTest'));
-  }
-
-  addIgnoreFileName(tree, '# AWS CDK', ['cdk.out']);
-  tasks.push(addDependencies(tree));
-
-  await formatFiles(tree);
-  return runTasksInSerial(...tasks);
+/**
+ *
+ * @param tree
+ * @description Adds the dependencies to the package.json
+ * @returns
+ */
+function addDependencies(tree: Tree): GeneratorCallback {
+  const dependencies: Record<string, string> = {};
+  const devDependencies: Record<string, string> = {
+    'aws-cdk': CDK_VERSION,
+    'aws-cdk-lib': CDK_VERSION,
+    constructs: CONSTRUCTS_VERSION,
+    'source-map-support': SOURCE_MAP_VERSION,
+    'ts-jest': TSJEST_VERSION,
+  };
+  return addDependenciesToPackageJson(tree, dependencies, devDependencies);
 }
 
 /**
@@ -85,7 +155,7 @@ export default async function applicationGenerator(
 export function normalizeOptions(
   tree: Tree,
   schema: ApplicationGeneratorSchema
-) {
+): NormalizedOptions {
   const name = names(schema.name).fileName;
   const projectDirectory = schema.directory
     ? `${names(schema.directory).fileName}/${name}`
@@ -109,22 +179,4 @@ export function normalizeOptions(
     projectRoot,
     tags: createTag(),
   };
-}
-
-/**
- *
- * @param tree
- * @description Adds the dependencies to the package.json
- * @returns
- */
-function addDependencies(tree: Tree): GeneratorCallback {
-  const dependencies: Record<string, string> = {};
-  const devDependencies: Record<string, string> = {
-    'aws-cdk': CDK_VERSION,
-    'aws-cdk-lib': CDK_VERSION,
-    constructs: CONSTRUCTS_VERSION,
-    'source-map-support': SOURCE_MAP_VERSION,
-    'ts-jest': TSJEST_VERSION,
-  };
-  return addDependenciesToPackageJson(tree, dependencies, devDependencies);
 }

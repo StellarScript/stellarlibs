@@ -1,5 +1,10 @@
 import { ExecutorContext } from '@nx/devkit';
-import { runCommand, normalizeOptions, ArgumentMap } from '@aws-nx/utils';
+import {
+  toArray,
+  runCommand,
+  normalizeOptions,
+  ArgumentMap,
+} from '@aws-nx/utils';
 
 import { DestroyExecutorSchema } from './schema';
 import { createCommand, requireApproval } from '../../util/executor';
@@ -34,9 +39,7 @@ export function normalizeArguments(
   const argsMap = new ArgumentMap<Record<string, string>>();
 
   const approval = requireApproval(schema.approval);
-  const stack = Array.isArray(schema.stack)
-    ? schema.stack.join(' ')
-    : schema.stack;
+  const stack = toArray(schema.stack).join(' ');
 
   argsMap.register('_', stack);
   argsMap.register('require-approval', approval);
