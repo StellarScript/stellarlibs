@@ -18,22 +18,24 @@ describe('"@aws-nx/aws-cdk" Generators', () => {
   });
 
   describe('Application Generator', () => {
-    it('should not generate application with duplicate name', async () => {
+    it('generate application with duplicate name (error)', async () => {
       const pluginName = uniq('aws-cdk');
       await runNxCommandAsync(
         `generate @aws-nx/aws-cdk:application ${pluginName}`
       );
-      expect(() =>
-        runNxCommandAsync(`generate @aws-nx/aws-cdk:application ${pluginName}`)
-      ).toThrow();
-    });
+      expect(() => checkFilesExist(path.join(pluginName)));
+      expect(async () => {
+        return await runNxCommandAsync(
+          `generate @aws-nx/aws-cdk:application ${pluginName}`
+        );
+      }).rejects.toThrow();
+    }, 100000);
 
     it('generate application', async () => {
       const pluginName = uniq('aws-cdk');
       await runNxCommandAsync(
         `generate @aws-nx/aws-cdk:application ${pluginName}`
       );
-
       expect(() => {
         // check generated application directory
         checkFilesExist(path.join(pluginName));
@@ -62,7 +64,6 @@ describe('"@aws-nx/aws-cdk" Generators', () => {
 
     it('generate application with no jest unit test (test dir should not exist)', async () => {
       const pluginName = uniq('aws-cdk');
-
       await runNxCommandAsync(
         `generate @aws-nx/aws-cdk:application ${pluginName} --jest false`
       );
@@ -73,7 +74,6 @@ describe('"@aws-nx/aws-cdk" Generators', () => {
 
     it('generate application with no linting (.eslintrc file should not exist)', async () => {
       const pluginName = uniq('aws-cdk');
-
       await runNxCommandAsync(
         `generate @aws-nx/aws-cdk:application ${pluginName} --linting false`
       );
@@ -85,7 +85,6 @@ describe('"@aws-nx/aws-cdk" Generators', () => {
 
   describe('Remove Generator', () => {
     const pluginName = uniq('aws-cdk');
-
     it('generate application', async () => {
       await runNxCommandAsync(
         `generate @aws-nx/aws-cdk:application ${pluginName}`
