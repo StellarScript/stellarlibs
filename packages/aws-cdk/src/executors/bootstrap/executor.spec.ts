@@ -34,8 +34,8 @@ describe('bootstrap Executor', () => {
     expect(command).toBe(execution.command[1]);
   });
 
-  it('single stack argument', () => {
-    const profile = 'stackOne';
+  it('single profile argument', () => {
+    const profile = 'profileOne';
     const args = normalizeArguments({ profile });
     const options = normalizeOptions(args, context);
 
@@ -43,12 +43,12 @@ describe('bootstrap Executor', () => {
     expect(command).toContain(`bootstrap ${profile}`);
   });
 
-  it('multiple stack argument', () => {
-    const mulipleStack = ['stackOne', 'stackTwo'];
-    const args = normalizeArguments({ profile: mulipleStack });
+  it('multiple profiles argument', () => {
+    const mulipleProfiles = ['profileOne', 'profileTwo'];
+    const args = normalizeArguments({ profile: mulipleProfiles });
     const options = normalizeOptions(args, context);
 
     const command = createCommand('bootstrap', options);
-    expect(command).toContain(`bootstrap ${mulipleStack.join(' ')}`);
+    expect(command).toContain(`bootstrap ${mulipleProfiles.join(' ')}`);
   });
 });
