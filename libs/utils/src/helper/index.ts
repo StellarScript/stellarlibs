@@ -1,6 +1,9 @@
 type Key<T> = keyof T | string;
 type Value = string | number | boolean | undefined;
 
+/**
+ * @description A map of arguments
+ */
 export class ArgumentMap<T> extends Map<Key<T>, Value> {
   public register(key: Key<T>, value: Value): void {
     if (!key || !value) {
@@ -14,6 +17,9 @@ export class ArgumentMap<T> extends Map<Key<T>, Value> {
   }
 }
 
+/**
+ * @description A set of commands & arguments
+ */
 export class Commands extends Set {
   public set(command: string) {
     this.add(command);
@@ -26,6 +32,12 @@ export class Commands extends Set {
   }
 }
 
+/**
+ *
+ * @param args
+ * @description Creates a string of arguments
+ * @returns
+ */
 export function createArguments(args: object): string {
   const commands: string[] = [];
 
@@ -52,4 +64,9 @@ export function createArguments(args: object): string {
     }
   }
   return commands.join(' ');
+}
+
+export function toArray(value: string | string[] | undefined): string[] {
+  if (value === undefined) return [];
+  return Array.isArray(value) ? value : [value];
 }

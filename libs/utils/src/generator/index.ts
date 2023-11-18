@@ -4,11 +4,23 @@ import {
   generateFiles,
   offsetFromRoot,
   joinPathFragments,
+  runTasksInSerial,
+  ProjectConfiguration,
+  readProjectConfiguration,
+  updateProjectConfiguration,
 } from '@nx/devkit';
 import type { Tree, GeneratorCallback } from '@nx/devkit';
 import { lintProjectGenerator } from '@nx/linter';
 import type { GeneratorOptions } from './types';
 
+/**
+ *
+ * @param tree
+ * @param comment
+ * @param fileNames
+ * @description Adds a file to the .gitignore file
+ * @returns
+ */
 export function addIgnoreFileName(
   tree: Tree,
   comment: string,
@@ -28,6 +40,12 @@ export function addIgnoreFileName(
   }
 }
 
+/**
+ *
+ * @param tree
+ * @param options
+ * @description Updates the lint configuration file
+ */
 export function updateLintConfig(tree: Tree, options: GeneratorOptions): void {
   updateJson(tree, `${options.projectRoot}/.eslintrc.json`, (json) => {
     json.plugins = json?.plugins || [];
@@ -41,6 +59,13 @@ export function updateLintConfig(tree: Tree, options: GeneratorOptions): void {
   });
 }
 
+/**
+ *
+ * @param tree
+ * @param options
+ * @param filePath
+ * @description Adds the project files to the project
+ */
 export function addProjectFiles(
   tree: Tree,
   options: GeneratorOptions,
@@ -54,6 +79,13 @@ export function addProjectFiles(
   });
 }
 
+/**
+ *
+ * @param tree
+ * @param options
+ * @description Generate linting files
+ * @returns
+ */
 export async function lintingGenerator(
   tree: Tree,
   options: GeneratorOptions
@@ -68,6 +100,12 @@ export async function lintingGenerator(
   });
 }
 
+/**
+ *
+ * @param tree
+ * @param dirPath
+ * @description Removes files and directories recursively
+ */
 export function removeDirectoryRecursively(tree: Tree, dirPath: string): void {
   const list = tree.exists(dirPath) ? tree.children(dirPath) : [];
 
@@ -81,4 +119,25 @@ export function removeDirectoryRecursively(tree: Tree, dirPath: string): void {
       removeDirectoryRecursively(tree, filePath);
     }
   }
+}
+
+export class GeneratorTasks extends Set<GeneratorCallback> {
+  public register(task: GeneratorCallback | undefined): void {
+    if (!task) return;
+    this.add(task);
+  }
+
+  public async runInSerial(): Promise<GeneratorCallback> {
+    return runTasksInSerial(...Array.from(this));
+  }
+}
+
+export function updateProjectConfig(
+  tree: Tree,
+  projectName: string,
+  updater: (x: ProjectConfiguration) => ProjectConfiguration
+): void {
+  const workspace = readProjectConfiguration(tree, projectName);
+  const updatedWorkspace = updater(workspace);
+  updateProjectConfiguration(tree, projectName, updatedWorkspace);
 }
