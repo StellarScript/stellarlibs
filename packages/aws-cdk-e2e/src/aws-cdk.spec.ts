@@ -17,8 +17,18 @@ describe('"@aws-nx/aws-cdk" Generators', () => {
     cleanLocalLibs();
   });
 
-  describe('Application generator', () => {
-    it('@aws-nx/aws-cdk application generator', async () => {
+  describe('Application Generator', () => {
+    it('should not generate application with duplicate name', async () => {
+      const pluginName = uniq('aws-cdk');
+      await runNxCommandAsync(
+        `generate @aws-nx/aws-cdk:application ${pluginName}`
+      );
+      expect(() =>
+        runNxCommandAsync(`generate @aws-nx/aws-cdk:application ${pluginName}`)
+      ).toThrow();
+    });
+
+    it('generate application', async () => {
       const pluginName = uniq('aws-cdk');
       await runNxCommandAsync(
         `generate @aws-nx/aws-cdk:application ${pluginName}`
