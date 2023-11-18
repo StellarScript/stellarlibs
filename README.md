@@ -1,4 +1,4 @@
-[![CI](https://github.com/StellarScript/aws-nx/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/StellarScript/aws-nx/actions/workflows/ci.yml)
+![CI](https://github.com/StellarScript/aws-nx/actions/workflows/ci.yml/badge.svg)
 
 ---
 
