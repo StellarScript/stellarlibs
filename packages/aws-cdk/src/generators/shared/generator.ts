@@ -111,7 +111,7 @@ async function JestConfiguration(
     skipPackageJson: false,
     testEnvironment: 'node',
   });
-  addProjectFiles(tree, path.join(__dirname, 'unitTest'), options);
+  addProjectFiles(tree, path.join(__dirname, 'files/unitTest'), options);
   return jestTask;
 }
 
@@ -130,7 +130,7 @@ function projectConfiguration(
   addProjectConfiguration(tree, options.projectName, config);
 
   updateProjectConfig(tree, options.projectName, (workspace) => workspace);
-  addProjectFiles(tree, path.join(__dirname, 'files'), options);
+  addProjectFiles(tree, path.join(__dirname, 'files/app'), options);
 }
 
 /**
