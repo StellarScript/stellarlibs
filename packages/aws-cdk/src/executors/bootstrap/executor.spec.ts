@@ -1,6 +1,5 @@
 import * as childProcess from 'child_process';
-import { logger } from '@nx/devkit';
-import type { ExecutorContext } from '@nx/devkit';
+import { type ExecutorContext, logger } from '@nx/devkit';
 import {
   classInstance,
   normalizeOptions,
@@ -8,11 +7,11 @@ import {
 } from '@aws-nx/utils';
 
 import synthExecutor from './executor';
-import { BootstrapOptions, CommandMap } from './options';
+import { BootstrapArguments } from './arguments.ts';
 import { createCommand } from '../../util/executor';
 
 const normalizeArguments = async (args: object) => {
-  return await classInstance(BootstrapOptions, args);
+  return await classInstance(BootstrapArguments, args);
 };
 
 describe('Bootstrap Executor', () => {
@@ -47,6 +46,13 @@ describe('Bootstrap Executor', () => {
   });
 
   describe('Profile Argument', () => {
+    it('invalid profile argument', async () => {
+      const invalidProfile = true;
+      expect(() =>
+        normalizeArguments({ profile: invalidProfile })
+      ).rejects.toThrow();
+    });
+
     it('single profile argument', async () => {
       const profile = 'profileOne';
       const args = await normalizeArguments({ profile });
@@ -82,13 +88,18 @@ describe('Bootstrap Executor', () => {
       const options = normalizeOptions(args, context);
 
       const command = createCommand('bootstrap', options);
-      expect(command).toContain(
-        `bootstrap --${CommandMap.qualifier} ${qualifier}`
-      );
+      expect(command).toContain(`bootstrap --qualifier ${qualifier}`);
     });
   });
 
   describe('bucketName Argument', () => {
+    it('invalid bucketName argument', async () => {
+      const bucketName = true;
+      expect(() => normalizeArguments({ bucketName })).rejects.toThrow(
+        'bucket name must be a string'
+      );
+    });
+
     it('bucketName argument', async () => {
       const bucketName = 'bucketName';
       const args = await normalizeArguments({ bucketName });
@@ -96,7 +107,7 @@ describe('Bootstrap Executor', () => {
 
       const command = createCommand('bootstrap', options);
       expect(command).toContain(
-        `bootstrap --${CommandMap.bucketName} ${bucketName}`
+        `bootstrap --bootstrap-bucket-name ${bucketName}`
       );
     });
   });

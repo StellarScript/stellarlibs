@@ -1,7 +1,7 @@
 import { ExecutorContext } from '@nx/devkit';
 import { runCommand, normalizeOptions, classInstance } from '@aws-nx/utils';
 
-import { DeployOptions } from './options';
+import { DeployArguments } from './arguments.ts';
 import { DeployExecutorSchema } from './schema';
 import { createCommand } from '../../util/executor';
 
@@ -16,7 +16,7 @@ export default async function runExecutor(
   schema: DeployExecutorSchema,
   context: ExecutorContext
 ) {
-  const args = classInstance(DeployOptions, schema);
+  const args = classInstance(DeployArguments, schema);
   const options = normalizeOptions(args, context);
 
   const command = createCommand('deploy', options);

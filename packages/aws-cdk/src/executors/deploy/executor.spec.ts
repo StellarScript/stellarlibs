@@ -1,7 +1,6 @@
 import * as childProcess from 'child_process';
+import { type ExecutorContext, logger } from '@nx/devkit';
 
-import { logger } from '@nx/devkit';
-import type { ExecutorContext } from '@nx/devkit';
 import {
   classInstance,
   normalizeOptions,
@@ -9,11 +8,11 @@ import {
 } from '@aws-nx/utils';
 
 import deployExecutor from './executor';
-import { CommandMap, DeployOptions } from './options';
+import { DeployArguments } from './arguments.ts';
 import { createCommand } from '../../util/executor';
 
 const normalizeArguments = async (args: object) => {
-  return await classInstance(DeployOptions, args);
+  return await classInstance(DeployArguments, args);
 };
 
 describe('deploy Executor', () => {
@@ -46,6 +45,11 @@ describe('deploy Executor', () => {
   });
 
   describe('Stack Argument', () => {
+    it('stack invalid argument', async () => {
+      const stack = false;
+      expect(() => normalizeArguments({ stack })).rejects.toThrow();
+    });
+
     it('single stack argument', async () => {
       const stack = 'stackOne';
       const args = await normalizeArguments({ stack });
@@ -66,22 +70,45 @@ describe('deploy Executor', () => {
   });
 
   describe('Require Approval Argument', () => {
-    it('require approval argument', async () => {
+    it('require approval invalid argument', async () => {
+      const approval = [false];
+      expect(() => normalizeArguments({ approval })).rejects.toThrow();
+    });
+
+    it('require approval argument as boolean true', async () => {
       const approval = true;
       const args = await normalizeArguments({ approval });
       const options = normalizeOptions(args, context);
 
       const command = createCommand('deploy', options);
-      expect(command).toContain(`deploy --${CommandMap.approval} always`);
+      expect(command).toContain(`deploy --require-approval always`);
     });
 
-    it('require approval argument', async () => {
+    it('require approval argument as boolean false', async () => {
       const approval = false;
       const args = await normalizeArguments({ approval });
       const options = normalizeOptions(args, context);
 
       const command = createCommand('deploy', options);
-      expect(command).toContain(`deploy --${CommandMap.approval} never`);
+      expect(command).toContain(`deploy --require-approval never`);
+    });
+
+    it('require approval argument as string always', async () => {
+      const approval = 'always';
+      const args = await normalizeArguments({ approval });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('deploy', options);
+      expect(command).toContain(`deploy --require-approval ${approval}`);
+    });
+
+    it('require approval argument as string never', async () => {
+      const approval = 'never';
+      const args = await normalizeArguments({ approval });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('deploy', options);
+      expect(command).toContain(`deploy --require-approval ${approval}`);
     });
   });
 });

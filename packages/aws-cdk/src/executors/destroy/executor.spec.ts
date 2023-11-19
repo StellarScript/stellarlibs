@@ -1,7 +1,6 @@
 import * as childProcess from 'child_process';
+import { type ExecutorContext, logger } from '@nx/devkit';
 
-import { logger } from '@nx/devkit';
-import type { ExecutorContext } from '@nx/devkit';
 import {
   classInstance,
   normalizeOptions,
@@ -9,11 +8,11 @@ import {
 } from '@aws-nx/utils';
 
 import destroyExecutor from './executor';
-import { DestroyOptions } from './options';
+import { DestroyArguments } from './arguments.ts';
 import { createCommand } from '../../util/executor';
 
 const normalizeArguments = async (args: object) => {
-  return await classInstance(DestroyOptions, args);
+  return await classInstance(DestroyArguments, args);
 };
 
 describe('destroy Executor', () => {
@@ -46,6 +45,11 @@ describe('destroy Executor', () => {
   });
 
   describe('stack argument', () => {
+    it('stack invalid argument', async () => {
+      const stack = false;
+      expect(() => normalizeArguments({ stack })).rejects.toThrow();
+    });
+
     it('single stack stack argument', async () => {
       const stack = 'stackOne';
       const args = await normalizeArguments({ stack });
@@ -66,12 +70,17 @@ describe('destroy Executor', () => {
   });
 
   describe('require-approval argument', () => {
+    it('require approval invalid argument', async () => {
+      const approval = 'invalid';
+      expect(() => normalizeArguments({ approval })).rejects.toThrow();
+    });
+
     it('require approval argument', async () => {
       const args = await normalizeArguments({ approval: true });
       const options = normalizeOptions(args, context);
 
-      const command = createCommand('deploy', options);
-      expect(command).toContain(`--require-approval always`);
+      const command = createCommand('destroy', options);
+      expect(command).toContain(`destroy --require-approval always`);
     });
   });
 });

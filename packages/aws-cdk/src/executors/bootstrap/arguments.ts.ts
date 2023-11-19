@@ -1,17 +1,11 @@
-import { IsOptional, IsString } from 'class-validator';
 import { Transform, Expose } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 import { toArray } from '@aws-nx/utils';
 
-export enum CommandMap {
-  profile = '_',
-  qualifier = 'qualifier',
-  bucketName = 'bootstrap-bucket-name',
-}
-
-export class BootstrapOptions {
+export class BootstrapArguments {
   @IsOptional()
-  @IsString({ each: true })
   @Expose({ name: 'profile' })
+  @IsString({ each: true, message: 'profile must be a string' })
   @Transform(({ obj }) => toArray(obj['profile']))
   ['_']?: string[];
 

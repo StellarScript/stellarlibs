@@ -1,7 +1,7 @@
 import { ExecutorContext } from '@nx/devkit';
 import { runCommand, normalizeOptions, classInstance } from '@aws-nx/utils';
 
-import { SynthOptions } from './options';
+import { SynthArguments } from './arguments';
 import { SynthExecutorSchema } from './schema';
 import { createCommand } from '../../util/executor';
 
@@ -16,7 +16,7 @@ export default async function runExecutor(
   schema: SynthExecutorSchema,
   context: ExecutorContext
 ) {
-  const args = classInstance(SynthOptions, schema);
+  const args = classInstance(SynthArguments, schema);
   const options = normalizeOptions(args, context);
 
   const command = createCommand('synth', options);

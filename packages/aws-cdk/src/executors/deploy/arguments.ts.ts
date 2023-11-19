@@ -1,16 +1,16 @@
-import { IsOptional, IsString } from 'class-validator';
 import { Transform, Expose } from 'class-transformer';
+import { IsOptional, IsString } from 'class-validator';
 import { toArray } from '@aws-nx/utils';
 
-export class DestroyOptions {
+export class DeployArguments {
   @IsOptional()
-  @IsString({ each: true })
   @Expose({ name: 'stack' })
+  @IsString({ each: true, message: 'stack must be a string' })
   @Transform(({ obj }) => toArray(obj['stack']))
   ['_']?: string[];
 
-  @Expose({ name: 'approval' })
   @IsOptional()
+  @Expose({ name: 'approval' })
   @IsString({ message: 'approval must be a boolean' })
   @Transform(({ obj }) => {
     if (typeof obj['approval'] === 'boolean')

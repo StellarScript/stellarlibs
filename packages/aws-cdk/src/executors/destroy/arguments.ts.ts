@@ -1,26 +1,22 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 import { Transform, Expose } from 'class-transformer';
 import { toArray } from '@aws-nx/utils';
 
-export enum CommandMap {
-  stack = '_',
-  approval = 'require-approval',
-}
-
-export class DeployOptions {
+export class DestroyArguments {
   @IsOptional()
   @IsString({ each: true })
   @Expose({ name: 'stack' })
   @Transform(({ obj }) => toArray(obj['stack']))
   ['_']?: string[];
 
-  @IsOptional()
   @Expose({ name: 'approval' })
+  @IsOptional()
   @IsString({ message: 'approval must be a boolean' })
   @Transform(({ obj }) => {
     if (typeof obj['approval'] === 'boolean')
       return obj['approval'] ? 'always' : 'never';
     return obj['approval'];
   })
-  ['require-approval']?: string;
+  @IsIn(['always', 'never'])
+  ['require-approval']?: 'always' | 'never';
 }

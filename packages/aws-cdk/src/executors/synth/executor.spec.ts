@@ -1,7 +1,6 @@
 import * as childProcess from 'child_process';
+import { type ExecutorContext, logger } from '@nx/devkit';
 
-import { logger } from '@nx/devkit';
-import type { ExecutorContext } from '@nx/devkit';
 import {
   classInstance,
   normalizeOptions,
@@ -9,11 +8,11 @@ import {
 } from '@aws-nx/utils';
 
 import synthExecutor from './executor';
-import { SynthOptions } from './options';
+import { SynthArguments } from './arguments';
 import { createCommand } from '../../util/executor';
 
 const normalizeArguments = async (args: object) => {
-  return await classInstance(SynthOptions, args);
+  return await classInstance(SynthArguments, args);
 };
 
 describe('Synth Executor', () => {
@@ -45,6 +44,11 @@ describe('Synth Executor', () => {
   });
 
   describe('Stack Argument', () => {
+    it('stack invalid argument', async () => {
+      const stack = false;
+      expect(() => normalizeArguments({ stack })).rejects.toThrow();
+    });
+
     it('single stack stack argument', async () => {
       const stack = 'stackOne';
       const args = await normalizeArguments({ stack });
@@ -65,6 +69,11 @@ describe('Synth Executor', () => {
   });
 
   describe('Output Argument', () => {
+    it('output invalid argument', async () => {
+      const output = false;
+      expect(() => normalizeArguments({ output })).rejects.toThrow();
+    });
+
     it('output argument', async () => {
       const output = 'output-path';
       const args = await normalizeArguments({ output });
@@ -76,6 +85,11 @@ describe('Synth Executor', () => {
   });
 
   describe('quite argument', () => {
+    it('quiet invalid argument', async () => {
+      const quiet = 'invalid';
+      expect(() => normalizeArguments({ quiet })).rejects.toThrow();
+    });
+
     it('quiet argument', async () => {
       const quiet = true;
       const args = await normalizeArguments({ quiet });

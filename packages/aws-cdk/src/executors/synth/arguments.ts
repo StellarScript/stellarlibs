@@ -2,7 +2,7 @@ import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { Transform, Expose } from 'class-transformer';
 import { toArray } from '@aws-nx/utils';
 
-export class SynthOptions {
+export class SynthArguments {
   @IsOptional()
   @IsString({ each: true })
   @Expose({ name: 'stack' })
