@@ -1,4 +1,4 @@
-import type { ProjectConfiguration } from '@nx/devkit';
+import type { ProjectConfiguration, ProjectType } from '@nx/devkit';
 
 interface ConfigOptions {
   tags: string[];
@@ -6,10 +6,11 @@ interface ConfigOptions {
 }
 
 export const createConfiguration = (
+  projectType: ProjectType,
   options: ConfigOptions
 ): ProjectConfiguration => ({
   root: options.projectRoot,
-  projectType: 'application',
+  projectType: projectType,
   sourceRoot: `${options.projectRoot}/src`,
   targets: {
     deploy: {
