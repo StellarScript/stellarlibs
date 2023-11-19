@@ -1,62 +1,86 @@
 import * as childProcess from 'child_process';
+import { type ExecutorContext, logger } from '@nx/devkit';
 
-import { logger } from '@nx/devkit';
-import { normalizeOptions, ExecutionContextMock } from '@aws-nx/utils';
-import type { ExecutorContext } from '@nx/devkit';
+import {
+  classInstance,
+  normalizeOptions,
+  ExecutionContextMock,
+} from '@aws-nx/utils';
 
+import destroyExecutor from './executor';
+import { DestroyArguments } from './arguments.ts';
 import { createCommand } from '../../util/executor';
-import destroyExecutor, { normalizeArguments } from './executor';
+
+const normalizeArguments = async (args: object) => {
+  return await classInstance(DestroyArguments, args);
+};
 
 describe('destroy Executor', () => {
   let context: ExecutorContext;
   const projectName = 'test-app';
 
-  afterEach(() => jest.clearAllMocks());
+  describe('Execute Destroy', () => {
+    afterEach(() => jest.clearAllMocks());
 
-  beforeAll(() => {
-    context = ExecutionContextMock({
-      executor: 'destroy',
-      projectName: projectName,
-      plugin: '@aws-nx/aws-cdk',
+    beforeAll(() => {
+      context = ExecutionContextMock({
+        executor: 'destroy',
+        projectName: projectName,
+        plugin: '@aws-nx/aws-cdk',
+      });
+
+      jest.spyOn(logger, 'debug');
+      jest.spyOn(childProcess, 'execSync');
     });
 
-    jest.spyOn(logger, 'debug');
-    jest.spyOn(childProcess, 'execSync');
+    it('run destroy executor command', async () => {
+      const execution = await destroyExecutor({}, context);
+
+      const options = normalizeOptions({}, context);
+      const command = createCommand('destroy', options);
+
+      expect(childProcess.execSync).toHaveBeenCalledTimes(1);
+      expect(command).toBe(execution.command[1]);
+    });
   });
 
-  it('run destroy executor command', async () => {
-    const execution = await destroyExecutor({}, context);
+  describe('stack argument', () => {
+    it('stack invalid argument', async () => {
+      const stack = false;
+      expect(() => normalizeArguments({ stack })).rejects.toThrow();
+    });
 
-    const options = normalizeOptions({}, context);
-    const command = createCommand('destroy', options);
+    it('single stack stack argument', async () => {
+      const stack = 'stackOne';
+      const args = await normalizeArguments({ stack });
+      const options = normalizeOptions(args, context);
 
-    expect(childProcess.execSync).toHaveBeenCalledTimes(1);
-    expect(command).toBe(execution.command[1]);
+      const command = createCommand('destroy', options);
+      expect(command).toContain(`destroy ${stack}`);
+    });
+
+    it('multiple stack argument', async () => {
+      const mulipleStack = ['stackOne', 'stackTwo'];
+      const args = await normalizeArguments({ stack: mulipleStack });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('destroy', options);
+      expect(command).toContain(`destroy ${mulipleStack.reverse().join(' ')}`);
+    });
   });
 
-  it('single stack stack argument', () => {
-    const stack = 'stackOne';
-    const args = normalizeArguments({ stack });
-    const options = normalizeOptions(args, context);
+  describe('require-approval argument', () => {
+    it('require approval invalid argument', async () => {
+      const approval = 'invalid';
+      expect(() => normalizeArguments({ approval })).rejects.toThrow();
+    });
 
-    const command = createCommand('destroy', options);
-    expect(command).toContain(`destroy ${stack}`);
-  });
+    it('require approval argument', async () => {
+      const args = await normalizeArguments({ approval: true });
+      const options = normalizeOptions(args, context);
 
-  it('multiple stack argument', () => {
-    const mulipleStack = ['stackOne', 'stackTwo'];
-    const args = normalizeArguments({ stack: mulipleStack });
-    const options = normalizeOptions(args, context);
-
-    const command = createCommand('destroy', options);
-    expect(command).toContain(`destroy ${mulipleStack.join(' ')}`);
-  });
-
-  it('require approval argument', () => {
-    const args = normalizeArguments({ approval: true });
-    const options = normalizeOptions(args, context);
-
-    const command = createCommand('deploy', options);
-    expect(command).toContain(`--require-approval always`);
+      const command = createCommand('destroy', options);
+      expect(command).toContain(`destroy --require-approval always`);
+    });
   });
 });

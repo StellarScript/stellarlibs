@@ -13,10 +13,3 @@ export function createCommand(command: string, options: CreateCommand): string {
     library: 'node_modules/aws-cdk/bin/cdk.js',
   });
 }
-
-export function requireApproval(approval: string | boolean): string {
-  if (typeof approval === 'boolean') {
-    return approval ? 'always' : 'never';
-  }
-  return approval;
-}

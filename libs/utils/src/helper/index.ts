@@ -1,3 +1,6 @@
+import { validate } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
+
 type Key<T> = keyof T | string;
 type Value = string | number | boolean | undefined;
 
@@ -69,4 +72,19 @@ export function createArguments(args: object): string {
 export function toArray(value: string | string[] | undefined): string[] {
   if (value === undefined) return [];
   return Array.isArray(value) ? value : [value];
+}
+
+export async function classInstance<T extends object>(
+  objClass: { new (): T },
+  obj: object
+) {
+  const instance = plainToInstance(objClass, obj);
+  const [validation] = await validate(instance, {
+    skipMissingProperties: false,
+    skipUndefinedProperties: true,
+  });
+  for (const error in validation?.constraints) {
+    throw new Error(validation.constraints[error]);
+  }
+  return instance;
 }
