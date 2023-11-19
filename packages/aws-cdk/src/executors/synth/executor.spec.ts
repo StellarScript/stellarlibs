@@ -1,74 +1,102 @@
-import * as path from 'path';
 import * as childProcess from 'child_process';
+import { type ExecutorContext, logger } from '@nx/devkit';
 
-import { logger } from '@nx/devkit';
-import type { ExecutorContext } from '@nx/devkit';
-import { normalizeOptions, ExecutionContextMock } from '@aws-nx/utils';
+import {
+  classInstance,
+  normalizeOptions,
+  ExecutionContextMock,
+} from '@aws-nx/utils';
 
+import synthExecutor from './executor';
+import { SynthArguments } from './arguments';
 import { createCommand } from '../../util/executor';
-import synthExecutor, { normalizeArguments } from './executor';
+
+const normalizeArguments = async (args: object) => {
+  return await classInstance(SynthArguments, args);
+};
 
 describe('Synth Executor', () => {
   let context: ExecutorContext;
   const projectName = 'test-app';
 
-  afterEach(() => jest.clearAllMocks());
+  describe('Execute Synth', () => {
+    afterEach(() => jest.clearAllMocks());
 
-  beforeAll(() => {
-    context = ExecutionContextMock({
-      executor: 'synth',
-      projectName: projectName,
-      plugin: '@aws-nx/aws-cdk',
+    beforeAll(() => {
+      context = ExecutionContextMock({
+        executor: 'synth',
+        projectName: projectName,
+        plugin: '@aws-nx/aws-cdk',
+      });
+
+      jest.spyOn(logger, 'debug');
+      jest.spyOn(childProcess, 'execSync');
     });
 
-    jest.spyOn(logger, 'debug');
-    jest.spyOn(childProcess, 'execSync');
+    it('run synth executor command', async () => {
+      const execution = await synthExecutor({}, context);
+      const options = normalizeOptions({}, context);
+      const command = createCommand('synth', options);
+
+      expect(childProcess.execSync).toHaveBeenCalledTimes(1);
+      expect(command).toBe(execution.command[1]);
+    });
   });
 
-  it('run synth executor command', async () => {
-    const execution = await synthExecutor({}, context);
-    const defaultArgs = { output: path.resolve('dist') };
+  describe('Stack Argument', () => {
+    it('stack invalid argument', async () => {
+      const stack = false;
+      expect(() => normalizeArguments({ stack })).rejects.toThrow();
+    });
 
-    const options = normalizeOptions(defaultArgs, context);
-    const command = createCommand('synth', options);
+    it('single stack stack argument', async () => {
+      const stack = 'stackOne';
+      const args = await normalizeArguments({ stack });
+      const options = normalizeOptions(args, context);
 
-    expect(childProcess.execSync).toHaveBeenCalledTimes(1);
-    expect(command).toBe(execution.command[1]);
+      const command = createCommand('synth', options);
+      expect(command).toContain(`synth ${stack}`);
+    });
+
+    it('multiple stack argument', async () => {
+      const mulipleStack = ['stackOne', 'stackTwo'];
+      const args = await normalizeArguments({ stack: mulipleStack });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('synth', options);
+      expect(command).toContain(`synth ${mulipleStack.reverse().join(' ')}`);
+    });
   });
 
-  it('single stack stack argument', () => {
-    const stack = 'stackOne';
-    const args = normalizeArguments({ stack });
-    const options = normalizeOptions(args, context);
+  describe('Output Argument', () => {
+    it('output invalid argument', async () => {
+      const output = false;
+      expect(() => normalizeArguments({ output })).rejects.toThrow();
+    });
 
-    const command = createCommand('synth', options);
-    expect(command).toContain(`synth ${stack}`);
+    it('output argument', async () => {
+      const output = 'output-path';
+      const args = await normalizeArguments({ output });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('synth', options);
+      expect(command).toContain(`synth --output ${output}`);
+    });
   });
 
-  it('multiple stack argument', () => {
-    const mulipleStack = ['stackOne', 'stackTwo'];
-    const args = normalizeArguments({ stack: mulipleStack });
-    const options = normalizeOptions(args, context);
+  describe('quite argument', () => {
+    it('quiet invalid argument', async () => {
+      const quiet = 'invalid';
+      expect(() => normalizeArguments({ quiet })).rejects.toThrow();
+    });
 
-    const command = createCommand('synth', options);
-    expect(command).toContain(`synth ${mulipleStack.join(' ')}`);
-  });
+    it('quiet argument', async () => {
+      const quiet = true;
+      const args = await normalizeArguments({ quiet });
+      const options = normalizeOptions(args, context);
 
-  it('output argument', () => {
-    const output = 'output-path';
-    const args = normalizeArguments({ output });
-    const options = normalizeOptions(args, context);
-
-    const command = createCommand('synth', options);
-    expect(command).toContain(`--output ${output}`);
-  });
-
-  it('quiet argument', () => {
-    const quiet = true;
-    const args = normalizeArguments({ quiet });
-    const options = normalizeOptions(args, context);
-
-    const command = createCommand('synth', options);
-    expect(command).toContain(`--quiet ${quiet}`);
+      const command = createCommand('synth', options);
+      expect(command).toContain(`synth --quiet ${quiet}`);
+    });
   });
 });
