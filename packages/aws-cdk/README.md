@@ -2,14 +2,6 @@
 
 # Nx Aws Cdk Documentation
 
-## Installation
-
-[npm library](https://www.npmjs.com/package/@aws-nx/aws-cdk)
-
-```bash
-npm i @aws-nx/aws-cdk
-```
-
 <br>
 
 ## Table of Contents
@@ -18,10 +10,20 @@ npm i @aws-nx/aws-cdk
 2. [Remove Application](#remove-application)
 3. [Bootstrap](#bootstrap)
 4. [Synth](#synth)
-5. [Synth](#deploy)
-6. [Synth](#destroy)
+5. [Deploy](#deploy)
+6. [Destroy](#destroy)
 
 ---
+
+<br>
+
+## Installation
+
+[npm library](https://www.npmjs.com/package/@aws-nx/aws-cdk)
+
+```bash
+npm i @aws-nx/aws-cdk
+```
 
 <br>
 
