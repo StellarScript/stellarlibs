@@ -66,12 +66,18 @@ Before deploying the application, bootstrap the environment:
 
 ```bash
 nx bootstrap <APP_NAME>
-    [--profile <Name accountId/region>]
 ```
 
 #### Options:
 
 - `--profile` (optional): Specify the AWS profile for bootstrapping.
+- `--qualifier` (optional): Specify bootstrap qualifier
+- `--bucketName` (optional): Bootsrap bucket name
+- `--executionPolicy` (optional): Execution policy ARN
+- `--terminationProtection`(optional): Protect agains termination
+- `--kmsKeyId` (optional): Specify Kms key id
+- `--trust` (optional): Tags
+- `--trust` (optional): Trust
 
 <br>
 <br>
