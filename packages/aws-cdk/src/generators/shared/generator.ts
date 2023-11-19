@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { jestInitGenerator } from '@nx/jest';
-import type { Tree, GeneratorCallback, ProjectType } from '@nx/devkit';
+import type { Tree, GeneratorCallback } from '@nx/devkit';
 
 import {
   names,
@@ -27,6 +27,7 @@ import {
 } from '../../util/constants';
 import { GeneratorSchema } from './schema';
 import { createConfiguration } from './config';
+import { ProjectType } from '../../util/enums';
 
 interface NormalizedOptions {
   name: string;
@@ -51,7 +52,7 @@ export default async function generate<T extends GeneratorSchema>(
 ) {
   const tasks = new GeneratorTasks();
 
-  const options = normalizeOptions(tree, schema);
+  const options = normalizeOptions(tree, projectType, schema);
   projectConfiguration(tree, projectType, options);
 
   // Jest
@@ -159,14 +160,20 @@ function addDependencies(tree: Tree): GeneratorCallback {
  */
 export function normalizeOptions<T extends GeneratorSchema>(
   tree: Tree,
+  projectType: ProjectType,
   schema: T
 ): NormalizedOptions {
+  const getProjectDir = () => {
+    if (projectType === ProjectType.Application)
+      return getWorkspaceLayout(tree).appsDir;
+    return getWorkspaceLayout(tree).libsDir;
+  };
+
   const name = names(schema.name).fileName;
   const projectDirectory = schema.directory
     ? `${names(schema.directory).fileName}/${name}`
     : name;
-
-  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/${projectDirectory}`;
+  const projectRoot = `${getProjectDir()}/${projectDirectory}`;
   const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
   const linting = schema.linting === undefined ?? true;
   const unitTest = schema.jest === undefined ?? true;

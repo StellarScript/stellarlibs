@@ -1,5 +1,7 @@
 import { type Tree } from '@nx/devkit';
+
 import generator from '../shared/generator';
+import { ProjectType } from '../../util/enums';
 import { ApplicationGeneratorSchema } from './schema';
 
 export default async function applicationGenerator(
@@ -9,6 +11,6 @@ export default async function applicationGenerator(
   return await generator<ApplicationGeneratorSchema>(
     tree,
     schema,
-    'application'
+    ProjectType.Application
   );
 }

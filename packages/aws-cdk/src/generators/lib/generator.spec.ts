@@ -1,7 +1,7 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
 
-import { libGenerator } from './generator';
+import generator from './generator';
 import { LibGeneratorSchema } from './schema';
 
 describe('lib generator', () => {
@@ -13,7 +13,7 @@ describe('lib generator', () => {
   });
 
   it('should run successfully', async () => {
-    await libGenerator(tree, options);
+    await generator(tree, options);
     const config = readProjectConfiguration(tree, 'test');
     expect(config).toBeDefined();
   });
