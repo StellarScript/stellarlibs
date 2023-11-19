@@ -1,13 +1,9 @@
 import { ExecutorContext } from '@nx/devkit';
-import {
-  toArray,
-  runCommand,
-  normalizeOptions,
-  ArgumentMap,
-} from '@aws-nx/utils';
+import { runCommand, normalizeOptions, classInstance } from '@aws-nx/utils';
 
+import { DeployOptions } from './options';
 import { DeployExecutorSchema } from './schema';
-import { createCommand, requireApproval } from '../../util/executor';
+import { createCommand } from '../../util/executor';
 
 /**
  *
@@ -20,28 +16,9 @@ export default async function runExecutor(
   schema: DeployExecutorSchema,
   context: ExecutorContext
 ) {
-  const args = normalizeArguments(schema);
+  const args = classInstance(DeployOptions, schema);
   const options = normalizeOptions(args, context);
 
   const command = createCommand('deploy', options);
   return await runCommand(command, context.root);
-}
-
-/**
- *
- * @param schema
- * @description Normalizes the arguments passed to the deploy command
- * @returns
- */
-export function normalizeArguments(
-  schema: DeployExecutorSchema
-): Record<string, string> {
-  const argsMap = new ArgumentMap<Record<string, string>>();
-
-  const approval = requireApproval(schema.approval);
-  const stack = toArray(schema.stack).join(' ');
-
-  argsMap.register('_', stack);
-  argsMap.register('require-approval', approval);
-  return argsMap.toJson();
 }

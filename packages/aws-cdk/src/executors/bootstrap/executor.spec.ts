@@ -1,17 +1,23 @@
 import * as childProcess from 'child_process';
-
 import { logger } from '@nx/devkit';
 import type { ExecutorContext } from '@nx/devkit';
-import { normalizeOptions, ExecutionContextMock } from '@aws-nx/utils';
+import {
+  classInstance,
+  normalizeOptions,
+  ExecutionContextMock,
+} from '@aws-nx/utils';
 
+import synthExecutor from './executor';
+import { BootstrapOptions, CommandMap } from './options';
 import { createCommand } from '../../util/executor';
-import synthExecutor, { normalizeArguments } from './executor';
 
-describe('bootstrap Executor', () => {
+const normalizeArguments = async (args: object) => {
+  return await classInstance(BootstrapOptions, args);
+};
+
+describe('Bootstrap Executor', () => {
   let context: ExecutorContext;
   const projectName = 'test-app';
-
-  afterEach(() => jest.clearAllMocks());
 
   beforeAll(() => {
     context = ExecutionContextMock({
@@ -19,36 +25,79 @@ describe('bootstrap Executor', () => {
       projectName: projectName,
       plugin: '@aws-nx/aws-cdk',
     });
-
-    jest.spyOn(logger, 'debug');
-    jest.spyOn(childProcess, 'execSync');
   });
 
-  it('run bootstrap executor command', async () => {
-    const execution = await synthExecutor({}, context);
+  describe('Execute Bootstrap', () => {
+    afterEach(() => jest.clearAllMocks());
 
-    const options = normalizeOptions({}, context);
-    const command = createCommand('bootstrap', options);
+    beforeAll(() => {
+      jest.spyOn(logger, 'debug');
+      jest.spyOn(childProcess, 'execSync');
+    });
 
-    expect(childProcess.execSync).toHaveBeenCalledTimes(1);
-    expect(command).toBe(execution.command[1]);
+    it('run bootstrap executor command', async () => {
+      const execution = await synthExecutor({}, context);
+
+      const options = normalizeOptions({}, context);
+      const command = createCommand('bootstrap', options);
+
+      expect(childProcess.execSync).toHaveBeenCalledTimes(1);
+      expect(command).toBe(execution.command[1]);
+    });
   });
 
-  it('single profile argument', () => {
-    const profile = 'profileOne';
-    const args = normalizeArguments({ profile });
-    const options = normalizeOptions(args, context);
+  describe('Profile Argument', () => {
+    it('single profile argument', async () => {
+      const profile = 'profileOne';
+      const args = await normalizeArguments({ profile });
+      const options = normalizeOptions(args, context);
 
-    const command = createCommand('bootstrap', options);
-    expect(command).toContain(`bootstrap ${profile}`);
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(`bootstrap ${profile}`);
+    });
+
+    it('multiple profiles argument', async () => {
+      const mulipleProfiles = ['profileOne', 'profileTwo'];
+      const args = await normalizeArguments({ profile: mulipleProfiles });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(
+        `bootstrap ${mulipleProfiles.reverse().join(' ')}`
+      );
+    });
   });
 
-  it('multiple profiles argument', () => {
-    const mulipleProfiles = ['profileOne', 'profileTwo'];
-    const args = normalizeArguments({ profile: mulipleProfiles });
-    const options = normalizeOptions(args, context);
+  describe('Qualifiers Argument', () => {
+    it('invalid qualifier argument', async () => {
+      const qualifier = true;
+      expect(() => normalizeArguments({ qualifier })).rejects.toThrow(
+        'qualifier name must be a string'
+      );
+    });
 
-    const command = createCommand('bootstrap', options);
-    expect(command).toContain(`bootstrap ${mulipleProfiles.join(' ')}`);
+    it('qualifier argument', async () => {
+      const qualifier = 'qualifierOne';
+      const args = await normalizeArguments({ qualifier });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(
+        `bootstrap --${CommandMap.qualifier} ${qualifier}`
+      );
+    });
+  });
+
+  describe('bucketName Argument', () => {
+    it('bucketName argument', async () => {
+      const bucketName = 'bucketName';
+      const args = await normalizeArguments({ bucketName });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(
+        `bootstrap --${CommandMap.bucketName} ${bucketName}`
+      );
+    });
   });
 });
