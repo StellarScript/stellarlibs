@@ -92,7 +92,7 @@ describe('Bootstrap Executor', () => {
     });
   });
 
-  describe('bucketName Argument', () => {
+  describe('BucketName Argument', () => {
     it('invalid bucketName argument', async () => {
       const bucketName = true;
       expect(() => normalizeArguments({ bucketName })).rejects.toThrow(
@@ -109,6 +109,101 @@ describe('Bootstrap Executor', () => {
       expect(command).toContain(
         `bootstrap --bootstrap-bucket-name ${bucketName}`
       );
+    });
+  });
+
+  describe('ExecutionPolicy Argument', () => {
+    it('invalid executionPolicy argument', async () => {
+      const executionPolicy = true;
+      expect(() => normalizeArguments({ executionPolicy })).rejects.toThrow(
+        'executionPolicy name must be a string'
+      );
+    });
+
+    it('executionPolicy argument', async () => {
+      const executionPolicy = 'executionPolicy';
+      const args = await normalizeArguments({ executionPolicy });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(
+        `bootstrap --cloudformation-execution-policies ${executionPolicy}`
+      );
+    });
+  });
+
+  describe('Tag Argument', () => {
+    it('invalid tag argument', async () => {
+      const tag = true;
+      expect(() => normalizeArguments({ tag })).rejects.toThrow();
+    });
+
+    it('single tag argument', async () => {
+      const tag = 'bootstrap-tag';
+      const args = await normalizeArguments({ tag });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(`bootstrap --tags ${tag}`);
+    });
+
+    it('multiple tag argument', async () => {
+      const tag = ['bootstrap-tag'];
+      const args = await normalizeArguments({ tag });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(`bootstrap --tags ${tag.reverse().join(' ')}`);
+    });
+  });
+
+  describe('Trust Argument', () => {
+    it('invalid trust argument', async () => {
+      const trust = 'invalid';
+      expect(() => normalizeArguments({ trust })).rejects.toThrow();
+    });
+
+    it('trust argument', async () => {
+      const trust = true;
+      const args = await normalizeArguments({ trust });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(`bootstrap --trust`);
+    });
+  });
+
+  describe('terminationProtection Argument', () => {
+    it('invalid terminationProtection argument', async () => {
+      const terminationProtection = 'invalid';
+      expect(() =>
+        normalizeArguments({ terminationProtection })
+      ).rejects.toThrow();
+    });
+
+    it('terminationProtection argument', async () => {
+      const terminationProtection = true;
+      const args = await normalizeArguments({ terminationProtection });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(`bootstrap --termination-protection`);
+    });
+  });
+
+  describe('KmsKeyId Argument', () => {
+    it('invalid kmsKeyId argument', async () => {
+      const kmsKeyId = true;
+      expect(() => normalizeArguments({ kmsKeyId })).rejects.toThrow();
+    });
+
+    it('kmsKeyId argument', async () => {
+      const kmsKeyId = 'kmsKeyId';
+      const args = await normalizeArguments({ kmsKeyId });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('bootstrap', options);
+      expect(command).toContain(`bootstrap --bootstrap-kms-key-id ${kmsKeyId}`);
     });
   });
 });
