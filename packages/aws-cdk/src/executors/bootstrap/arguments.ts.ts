@@ -1,5 +1,5 @@
 import { Transform, Expose } from 'class-transformer';
-import { IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { toArray } from '@aws-nx/utils';
 
 export class BootstrapArguments {
@@ -17,4 +17,29 @@ export class BootstrapArguments {
   @IsOptional()
   @IsString({ message: 'qualifier name must be a string' })
   ['qualifier']?: string;
+
+  @IsOptional()
+  @Expose({ name: 'executionPolicy' })
+  @IsString({ message: 'executionPolicy name must be a string' })
+  ['cloudformation-execution-policies']?: string;
+
+  @IsOptional()
+  @Expose({ name: 'tag' })
+  @IsString({ each: true, message: 'tags must be a string' })
+  @Transform(({ obj }) => toArray(obj['tag']))
+  ['tags']?: string[];
+
+  @IsOptional()
+  @IsBoolean({ message: 'trust must be a boolean' })
+  ['trust']?: boolean;
+
+  @IsOptional()
+  @Expose({ name: 'terminationProtection' })
+  @IsBoolean({ message: 'terminationProtection must be a boolean' })
+  ['termination-protection']?: boolean;
+
+  @IsOptional()
+  @Expose({ name: 'kmsKeyId' })
+  @IsString({ message: 'kmsKeyId must be a string' })
+  ['bootstrap-kms-key-id']?: string;
 }
