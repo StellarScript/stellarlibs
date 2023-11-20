@@ -1,9 +1,9 @@
 import * as path from 'path';
 import {
-  Tree,
+  type Tree,
   names,
-  addProjectConfiguration,
   joinPathFragments,
+  addProjectConfiguration,
 } from '@nx/devkit';
 
 import {
@@ -11,7 +11,7 @@ import {
   appDirectory,
   classInstance,
   addProjectFiles,
-  updateProjectConfig,
+  updateConfiguration,
 } from '@aws-nx/utils';
 
 import { GeneratorAppSchema } from './schema';
@@ -42,14 +42,17 @@ export async function createApplication<T extends GeneratorAppSchema>(
     projectRoot: options.projectRoot,
     tags: options.args.tags,
   });
-  addProjectFiles(tree, joinPathFragments(__dirname, 'files', 'src'), {
-    projectRoot: joinPathFragments(options.projectRoot, 'src'),
-    projectName: options.name,
-  });
 
+  addProjectFiles(tree, path.join(__dirname, 'files', 'app'), {
+    projectRoot: options.projectRoot,
+    projectName: options.projectName,
+  });
+  addProjectFiles(tree, path.join(__dirname, 'files', 'src'), {
+    projectRoot: joinPathFragments(options.projectRoot, 'src'),
+    projectName: options.projectName,
+  });
   addProjectConfiguration(tree, options.name, config);
   createLibConfiguration(tree, options);
-  addProjectFiles(tree, path.join(__dirname, 'files', 'app'), options);
 }
 
 /**
@@ -58,12 +61,10 @@ export async function createApplication<T extends GeneratorAppSchema>(
  * @param options
  */
 function createLibConfiguration(tree: Tree, options: NormalizeOptions): void {
-  updateProjectConfig(tree, options.projectName, (workspace) => {
+  updateConfiguration(tree, options.projectName, (workspace) => {
     workspace.targets.build.executor = '@nx/esbuild:esbuild';
     workspace.tags = options.args.tags;
-    workspace['functions'] = [];
     workspace.targets.build.options = {
-      additionalEntryPoints: [],
       bundle: options.args.bundle,
       thirdParty: options.args.bundle,
       outputPath: `dist/${options.projectRoot}`,

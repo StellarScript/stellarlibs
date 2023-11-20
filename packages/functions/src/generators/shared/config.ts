@@ -1,5 +1,5 @@
-import type { ProjectConfiguration } from '@nx/devkit';
 import { ProjectType } from '@aws-nx/utils';
+import type { ProjectConfiguration } from './schema';
 
 interface ConfigOptions {
   tags: string[];
@@ -16,8 +16,11 @@ export const createConfiguration = (
   targets: {
     build: {
       executor: '@aws-nx/function:build',
-      options: {},
+      options: {
+        additionalEntryPoints: [],
+      },
     },
   },
   tags: options.tags,
+  functions: [],
 });
