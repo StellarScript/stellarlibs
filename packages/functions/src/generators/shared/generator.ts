@@ -1,15 +1,13 @@
 import * as path from 'path';
 import {
-  type Tree,
-  updateJson,
-  formatFiles,
-  joinPathFragments,
-  addProjectConfiguration,
+  Tree,
   names,
+  addProjectConfiguration,
+  joinPathFragments,
 } from '@nx/devkit';
 
 import {
-  type ProjectType,
+  ProjectType,
   appDirectory,
   classInstance,
   addProjectFiles,
@@ -34,47 +32,19 @@ interface NormalizeOptions {
   args: NormalizedArguments;
 }
 
-export default async function functionsGenerator(
+export async function createApplication<T extends GeneratorSchema>(
   tree: Tree,
-  schema: GeneratorSchema,
+  schema: T,
   projectType: ProjectType
-): Promise<void> {
+) {
   const options = await normalizeOptions(tree, schema, projectType);
-  await createApplication(tree, options, projectType);
-
-  if (tree.exists(options.root)) {
-    throw new Error(`${options.name} already exists`);
-  }
-
-  addProjectFiles(tree, joinPathFragments(__dirname, 'files', 'lib'), {
-    projectName: options.projectName,
-    projectRoot: options.root,
-  });
-
-  addProjectFiles(tree, joinPathFragments(__dirname, 'files', 'src'), {
-    projectName: options.projectName,
-    projectRoot: joinPathFragments(options.projectRoot, 'src'),
-  });
-
-  updateLibConfiguration(tree, options);
-  await formatFiles(tree);
-}
-
-async function createApplication(
-  tree: Tree,
-  options: NormalizeOptions,
-  projectType: ProjectType
-): Promise<void> {
-  if (tree.exists(options.projectRoot)) {
-    return;
-  }
   const config = createConfiguration(projectType, {
-    tags: options.args.tags,
     projectRoot: options.projectRoot,
+    tags: options.args.tags,
   });
-  addProjectConfiguration(tree, options.projectName, config);
 
   createLibConfiguration(tree, options);
+  addProjectConfiguration(tree, options.projectName, config);
   addProjectFiles(tree, path.join(__dirname, 'files', 'app'), options);
 }
 
@@ -94,47 +64,6 @@ function createLibConfiguration(tree: Tree, options: NormalizeOptions): void {
       main: `${options.projectRoot}/src/index.ts`,
       tsConfig: `${options.projectRoot}/tsconfig.lib.json`,
     };
-    return workspace;
-  });
-}
-
-/**
- *
- * @param tree
- * @param options
- */
-export function updateLibConfiguration(
-  tree: Tree,
-  options: NormalizeOptions
-): void {
-  // update tsconfig
-  const tsConfigPath = joinPathFragments(
-    options.projectRoot,
-    'tsconfig.lib.json'
-  );
-  updateJson(tree, tsConfigPath, (config) => {
-    config.include.push(`./${options.name}/**/*`);
-    return config;
-  });
-
-  // update serverless
-  const serverlessPath = joinPathFragments(
-    options.projectRoot,
-    'serverless.json'
-  );
-  updateJson(tree, serverlessPath, (config) => {
-    config.handlers.push({
-      name: options.name,
-      root: options.root,
-    });
-    return config;
-  });
-
-  // update project config
-  updateProjectConfig(tree, options.projectName, (workspace) => {
-    workspace.targets.build.options.additionalEntryPoints.push(
-      joinPathFragments(options.root, 'index.ts')
-    );
     return workspace;
   });
 }
