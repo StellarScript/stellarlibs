@@ -1,7 +1,7 @@
 import type { Tree } from '@nx/devkit';
 import { ProjectType } from '@aws-nx/utils';
 import { AppGeneratorSchema } from './schema';
-import { createApplication } from '../shared/generator';
+import { createApplication } from '../../shared/generator/generator';
 
 export default async function appGenerator(
   tree: Tree,

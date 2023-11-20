@@ -6,7 +6,7 @@ import {
 } from '@aws-nx/utils';
 
 import { RemoveGeneratorSchema } from './schema';
-import { ProjectConfiguration as ProjectConfig } from '../shared/schema';
+import { ProjectConfiguration as ProjectConfig } from '../../shared/generator/schema';
 
 interface NormalizedOptions {
   root: string;

@@ -15,7 +15,7 @@ import {
 } from '@aws-nx/utils';
 
 import { FunctionGeneratorSchema } from './schema';
-import { ProjectConfiguration as ProjectConfig } from '../shared/schema';
+import { ProjectConfiguration as ProjectConfig } from '../../shared/generator/schema';
 
 interface NormalizedOptions {
   name: string;

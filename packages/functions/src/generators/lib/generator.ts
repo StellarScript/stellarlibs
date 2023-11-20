@@ -2,7 +2,7 @@ import type { Tree } from '@nx/devkit';
 import { ProjectType } from '@aws-nx/utils';
 
 import { LibGeneratorSchema } from './schema';
-import { createApplication } from '../shared/generator';
+import { createApplication } from '../../shared/generator/generator';
 
 export default async function libGenerator(
   tree: Tree,
