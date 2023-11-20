@@ -7,13 +7,15 @@ import {
   addProjectConfiguration,
   names,
 } from '@nx/devkit';
+
 import {
   type ProjectType,
   appDirectory,
+  classInstance,
   addProjectFiles,
   updateProjectConfig,
-  classInstance,
 } from '@aws-nx/utils';
+
 import { GeneratorSchema } from './schema';
 import { createConfiguration } from './config';
 import { FunctionsGeneratorArguments } from './arguments';
