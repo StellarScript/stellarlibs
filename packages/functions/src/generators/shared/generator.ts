@@ -14,7 +14,7 @@ import {
   updateProjectConfig,
 } from '@aws-nx/utils';
 
-import { GeneratorSchema } from './schema';
+import { GeneratorAppSchema } from './schema';
 import { createConfiguration } from './config';
 import { FunctionsGeneratorArguments } from './arguments';
 
@@ -26,18 +26,17 @@ interface NormalizedArguments {
 interface NormalizeOptions {
   name: string;
   root: string;
-  project: string;
-  projectRoot: string;
   projectName: string;
+  projectRoot: string;
   args: NormalizedArguments;
 }
 
-export async function createFunction<T extends GeneratorSchema>(
-  tree: Tree,
-  schema: T
-): Promise<void> {}
+// export async function createFunction<T extends GeneratorAppSchema>(
+//   tree: Tree,
+//   schema: T
+// ): Promise<void> {}
 
-export async function createApplication<T extends GeneratorSchema>(
+export async function createApplication<T extends GeneratorAppSchema>(
   tree: Tree,
   schema: T,
   projectType: ProjectType
@@ -50,11 +49,11 @@ export async function createApplication<T extends GeneratorSchema>(
   });
   addProjectFiles(tree, joinPathFragments(__dirname, 'files', 'src'), {
     projectRoot: joinPathFragments(options.projectRoot, 'src'),
-    projectName: options.projectName,
+    projectName: options.name,
   });
 
+  addProjectConfiguration(tree, options.name, config);
   createLibConfiguration(tree, options);
-  addProjectConfiguration(tree, options.projectName, config);
   addProjectFiles(tree, path.join(__dirname, 'files', 'app'), options);
 }
 
@@ -66,6 +65,8 @@ export async function createApplication<T extends GeneratorSchema>(
 function createLibConfiguration(tree: Tree, options: NormalizeOptions): void {
   updateProjectConfig(tree, options.projectName, (workspace) => {
     workspace.targets.build.executor = '@nx/esbuild:esbuild';
+    workspace.tags = options.args.tags;
+    workspace['functions'] = [];
     workspace.targets.build.options = {
       additionalEntryPoints: [],
       bundle: options.args.bundle,
@@ -80,15 +81,16 @@ function createLibConfiguration(tree: Tree, options: NormalizeOptions): void {
 
 async function normalizeOptions(
   tree: Tree,
-  schema: GeneratorSchema,
+  schema: GeneratorAppSchema,
   projectType: ProjectType
 ): Promise<NormalizeOptions> {
   const name = names(schema.name).fileName;
-  const appdir = appDirectory(tree, projectType);
-  const projectName = schema.project.replace(new RegExp('/', 'g'), '-');
+  const projectDirectory = schema.directory
+    ? `${names(schema.directory).fileName}/${name}`
+    : name;
 
-  const project = joinPathFragments(projectName, name);
-  const projectRoot = joinPathFragments(appdir, projectName);
+  const projectRoot = `${appDirectory(tree, projectType)}/${projectDirectory}`;
+  const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
   const root = joinPathFragments(projectRoot, 'src', name);
 
   const args = await classInstance<NormalizedArguments>(
@@ -99,8 +101,7 @@ async function normalizeOptions(
     name,
     root,
     args,
-    project,
-    projectRoot,
     projectName,
+    projectRoot,
   };
 }

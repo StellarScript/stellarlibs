@@ -1,5 +1,5 @@
-import { GeneratorSchema } from '../shared/schema';
+import { GeneratorAppSchema } from '../shared/schema';
 
-export interface LibGeneratorSchema extends GeneratorSchema {
+export interface LibGeneratorSchema extends GeneratorAppSchema {
   name: string;
 }
