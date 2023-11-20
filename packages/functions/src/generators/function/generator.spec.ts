@@ -1,12 +1,12 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
 
-import { functionGenerator } from './generator';
+import functionGenerator from './generator';
 import { FunctionGeneratorSchema } from './schema';
 
 describe('function generator', () => {
   let tree: Tree;
-  const options: FunctionGeneratorSchema = { name: 'test' };
+  const options: FunctionGeneratorSchema = { name: 'test', project: '' };
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();

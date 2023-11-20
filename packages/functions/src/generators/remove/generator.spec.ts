@@ -1,7 +1,7 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
 
-import { removeGenerator } from './generator';
+import removeGenerator from './generator';
 import { RemoveGeneratorSchema } from './schema';
 
 describe('remove generator', () => {

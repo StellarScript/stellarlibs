@@ -78,11 +78,11 @@ async function normalizeOptions(
 ): Promise<NormalizeOptions> {
   const name = names(schema.name).fileName;
   const projectDirectory = schema.directory
-    ? `${names(schema.directory).fileName}/${name}`
+    ? joinPathFragments(schema.directory, schema.name)
     : name;
 
   const projectRoot = `${appDirectory(tree, projectType)}/${projectDirectory}`;
-  const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
+  const projectName = schema.name;
   const root = joinPathFragments(projectRoot, 'src', name);
 
   return {
