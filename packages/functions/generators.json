@@ -9,6 +9,11 @@
       "factory": "./src/generators/lib/generator",
       "schema": "./src/generators/lib/schema.json",
       "description": "lib generator"
+    },
+    "remove": {
+      "factory": "./src/generators/remove/generator",
+      "schema": "./src/generators/remove/schema.json",
+      "description": "remove generator"
     }
   }
 }
