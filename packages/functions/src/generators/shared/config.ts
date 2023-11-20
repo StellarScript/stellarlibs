@@ -1,13 +1,9 @@
 import type { ProjectConfiguration } from '@nx/devkit';
+import { ProjectType } from '@aws-nx/utils';
 
 interface ConfigOptions {
   tags: string[];
   projectRoot: string;
-}
-
-export enum ProjectType {
-  Application = 'application',
-  Library = 'library',
 }
 
 export const createConfiguration = (
