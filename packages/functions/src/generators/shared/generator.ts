@@ -7,28 +7,23 @@ import {
 } from '@nx/devkit';
 
 import {
+  toArray,
   ProjectType,
   appDirectory,
-  classInstance,
   addProjectFiles,
   updateConfiguration,
 } from '@aws-nx/utils';
 
 import { GeneratorAppSchema } from './schema';
 import { createConfiguration } from './config';
-import { FunctionsGeneratorArguments } from './arguments';
-
-interface NormalizedArguments {
-  tags: string[];
-  bundle: boolean;
-}
 
 interface NormalizeOptions {
   name: string;
   root: string;
   projectName: string;
   projectRoot: string;
-  args: NormalizedArguments;
+  tags: string[];
+  bundle: boolean;
 }
 
 export async function createApplication<T extends GeneratorAppSchema>(
@@ -40,7 +35,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
 
   const config = createConfiguration(projectType, {
     projectRoot: options.projectRoot,
-    tags: options.args.tags,
+    tags: options.tags,
   });
 
   addProjectFiles(tree, path.join(__dirname, 'files', 'app'), {
@@ -63,11 +58,11 @@ export async function createApplication<T extends GeneratorAppSchema>(
 function updateProjectConfiguration(tree: Tree, options: NormalizeOptions) {
   updateConfiguration(tree, options.projectName, (workspace) => {
     workspace.targets.build.executor = '@nx/esbuild:esbuild';
-    workspace.tags = options.args.tags;
+    workspace.tags = options.tags;
     workspace.targets.build.options = {
       additionalEntryPoints: [],
-      bundle: options.args.bundle,
-      thirdParty: options.args.bundle,
+      bundle: options.bundle,
+      thirdParty: options.bundle,
       outputPath: `dist/${options.projectRoot}`,
       main: `${options.projectRoot}/src/index.ts`,
       tsConfig: `${options.projectRoot}/tsconfig.lib.json`,
@@ -90,15 +85,12 @@ async function normalizeOptions(
   const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
   const root = joinPathFragments(projectRoot, 'src', name);
 
-  const args = await classInstance<NormalizedArguments>(
-    FunctionsGeneratorArguments,
-    schema
-  );
   return {
     name,
     root,
-    args,
     projectName,
     projectRoot,
+    bundle: schema.bundle,
+    tags: toArray(schema.tag),
   };
 }

@@ -67,6 +67,12 @@ To remove an existing application, use the following command:
 nx g @aws-nx/functions:remove <APP_NAME>
 ```
 
+or
+
+```bash
+nx g @aws-nx/functions:remove --project <APP_NAME>
+```
+
 <br>
 <br>
 
