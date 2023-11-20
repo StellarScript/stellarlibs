@@ -31,11 +31,6 @@ interface NormalizeOptions {
   args: NormalizedArguments;
 }
 
-// export async function createFunction<T extends GeneratorAppSchema>(
-//   tree: Tree,
-//   schema: T
-// ): Promise<void> {}
-
 export async function createApplication<T extends GeneratorAppSchema>(
   tree: Tree,
   schema: T,
