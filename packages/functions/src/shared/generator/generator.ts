@@ -1,7 +1,7 @@
 import * as path from 'path';
 import {
-  type Tree,
   names,
+  type Tree,
   joinPathFragments,
   addProjectConfiguration,
 } from '@nx/devkit';

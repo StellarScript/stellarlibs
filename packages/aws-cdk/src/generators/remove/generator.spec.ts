@@ -1,8 +1,8 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
 
-import { RemoveGeneratorSchema } from './schema';
 import removeGenerator from './generator';
+import { RemoveGeneratorSchema } from './schema';
 import applicationGenerator from '../application/generator';
 
 describe('remove generator', () => {
@@ -11,6 +11,10 @@ describe('remove generator', () => {
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
+  });
+
+  it('remove none existing application', async () => {
+    expect(() => removeGenerator(tree, options)).rejects.toThrow();
   });
 
   it('remove application', async () => {

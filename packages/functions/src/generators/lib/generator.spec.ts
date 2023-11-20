@@ -1,20 +1,36 @@
-import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
+import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 
-import libGenerator from './generator';
+import libraryGenerator from './generator';
 import { LibGeneratorSchema } from './schema';
 
-describe('lib generator', () => {
+describe('App Generator', () => {
   let tree: Tree;
-  const options: LibGeneratorSchema = { name: 'test' };
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
   });
 
-  it('should run successfully', async () => {
-    await libGenerator(tree, options);
-    const config = readProjectConfiguration(tree, 'test');
+  it('generate library', async () => {
+    const options: LibGeneratorSchema = {
+      name: 'testapp',
+    };
+    await libraryGenerator(tree, options);
+    const config = await readProjectConfiguration(tree, options.name);
+
     expect(config).toBeDefined();
+    expect(tree.exists(config.sourceRoot)).toBeTruthy();
+  });
+
+  it('option directory', async () => {
+    const appName = 'testxx';
+    const directory = 'dir';
+
+    await libraryGenerator(tree, { name: appName, directory });
+    const config = await readProjectConfiguration(tree, appName);
+
+    expect(config).toBeDefined();
+    expect(tree.exists(config.sourceRoot)).toBeTruthy();
+    expect(tree.exists(`${directory}/${appName}`)).toBeTruthy();
   });
 });
