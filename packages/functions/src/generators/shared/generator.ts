@@ -52,7 +52,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
     projectName: options.projectName,
   });
   addProjectConfiguration(tree, options.name, config);
-  createLibConfiguration(tree, options);
+  updateProjectConfiguration(tree, options);
 }
 
 /**
@@ -60,11 +60,12 @@ export async function createApplication<T extends GeneratorAppSchema>(
  * @param tree
  * @param options
  */
-function createLibConfiguration(tree: Tree, options: NormalizeOptions): void {
+function updateProjectConfiguration(tree: Tree, options: NormalizeOptions) {
   updateConfiguration(tree, options.projectName, (workspace) => {
     workspace.targets.build.executor = '@nx/esbuild:esbuild';
     workspace.tags = options.args.tags;
     workspace.targets.build.options = {
+      additionalEntryPoints: [],
       bundle: options.args.bundle,
       thirdParty: options.args.bundle,
       outputPath: `dist/${options.projectRoot}`,

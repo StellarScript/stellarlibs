@@ -75,7 +75,13 @@ nx g @aws-nx/functions:remove <APP_NAME>
 To remove single function from an existing application, use the following command:
 
 ```bash
-nx g @aws-nx/functions:remove --function <Function_Name> --project <Project_Name>
+nx g @aws-nx/functions:remove <Project_Name> --function <Function_Name>
+```
+
+or
+
+```bash
+nx g @aws-nx/functions:remove  --function <Function_Name> --project <Project_Name>
 ```
 
 <br>

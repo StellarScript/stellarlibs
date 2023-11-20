@@ -1,12 +1,85 @@
-import type { Tree } from '@nx/devkit';
-import { readProjectConfiguration } from '@nx/devkit';
-import { removeDirectoryRecursively } from '@aws-nx/utils';
+import { joinPathFragments, type Tree } from '@nx/devkit';
+import {
+  readConfiguration,
+  updateConfiguration,
+  removeDirectoryRecursively,
+} from '@aws-nx/utils';
+
 import { RemoveGeneratorSchema } from './schema';
+import { ProjectConfiguration as ProjectConfig } from '../shared/schema';
+
+interface NormalizedOptions {
+  root: string;
+  projectName: string;
+  projectRoot: string;
+  functionName?: string;
+}
 
 export default async function removeGenerator(
   tree: Tree,
   schema: RemoveGeneratorSchema
 ) {
-  const config = readProjectConfiguration(tree, schema.name);
-  removeDirectoryRecursively(tree, config.root);
+  if (!schema.name && !schema.project) {
+    throw new Error('You must specify a project name');
+  }
+
+  const options = normalizeOptions(tree, schema);
+
+  if (!options.functionName) {
+    removeDirectoryRecursively(tree, options.root);
+    return;
+  }
+
+  if (options.functionName) {
+    const functionPath = joinPathFragments(
+      options.projectRoot,
+      options.functionName
+    );
+    removeDirectoryRecursively(tree, functionPath);
+    updateProjectConfiguration(tree, options);
+    return;
+  }
+}
+
+function updateProjectConfiguration(tree: Tree, options: NormalizedOptions) {
+  updateConfiguration<ProjectConfig>(tree, options.projectName, (config) => {
+    config.functions = config.functions.filter((funcs) => {
+      if (
+        funcs.name !== options.functionName &&
+        funcs.project === options.projectName
+      ) {
+        return true;
+      }
+    });
+    config.targets.build.options.additionalEntryPoints =
+      config.targets.build.options.additionalEntryPoints.filter((entry) => {
+        const filesPath = joinPathFragments(
+          options.projectRoot,
+          options.functionName,
+          'index.ts'
+        );
+        if (entry !== filesPath) {
+          return true;
+        }
+      });
+    return config;
+  });
+}
+
+function normalizeOptions(
+  tree: Tree,
+  schema: RemoveGeneratorSchema
+): NormalizedOptions {
+  const functionName = schema.function;
+  const projectName = schema.name || schema.project;
+  const config = readConfiguration<ProjectConfig>(tree, projectName);
+
+  const root = config.root;
+  const projectRoot = config.sourceRoot;
+  return {
+    root,
+    projectName,
+    projectRoot,
+    functionName,
+  };
 }
