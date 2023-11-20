@@ -32,15 +32,25 @@ interface NormalizeOptions {
   args: NormalizedArguments;
 }
 
+export async function createFunction<T extends GeneratorSchema>(
+  tree: Tree,
+  schema: T
+): Promise<void> {}
+
 export async function createApplication<T extends GeneratorSchema>(
   tree: Tree,
   schema: T,
   projectType: ProjectType
-) {
+): Promise<void> {
   const options = await normalizeOptions(tree, schema, projectType);
+
   const config = createConfiguration(projectType, {
     projectRoot: options.projectRoot,
     tags: options.args.tags,
+  });
+  addProjectFiles(tree, joinPathFragments(__dirname, 'files', 'src'), {
+    projectRoot: joinPathFragments(options.projectRoot, 'src'),
+    projectName: options.projectName,
   });
 
   createLibConfiguration(tree, options);

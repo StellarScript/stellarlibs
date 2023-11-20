@@ -14,6 +14,11 @@
       "factory": "./src/generators/remove/generator",
       "schema": "./src/generators/remove/schema.json",
       "description": "remove generator"
+    },
+    "function": {
+      "factory": "./src/generators/function/generator",
+      "schema": "./src/generators/function/schema.json",
+      "description": "function generator"
     }
   }
 }
