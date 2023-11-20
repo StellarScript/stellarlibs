@@ -58,3 +58,25 @@ nx g @aws-nx/functions:lib <Function_Name> --project <Project_Name>
 
 <br>
 <br>
+
+## 3. Remove Application<a name="remove-application"></a>
+
+To remove an existing application, use the following command:
+
+```bash
+nx g @aws-nx/functions:remove <APP_NAME>
+```
+
+<br>
+<br>
+
+## 4. Remove Function<a name="remove-function"></a>
+
+To remove single function from an existing application, use the following command:
+
+```bash
+nx g @aws-nx/functions:remove --function <Function_Name> --project <Project_Name>
+```
+
+<br>
+<br>

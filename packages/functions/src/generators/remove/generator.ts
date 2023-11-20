@@ -5,8 +5,8 @@ import { RemoveGeneratorSchema } from './schema';
 
 export default async function removeGenerator(
   tree: Tree,
-  options: RemoveGeneratorSchema
+  schema: RemoveGeneratorSchema
 ) {
-  const config = readProjectConfiguration(tree, options.name);
+  const config = readProjectConfiguration(tree, schema.name);
   removeDirectoryRecursively(tree, config.root);
 }

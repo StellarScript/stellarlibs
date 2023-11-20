@@ -1,3 +1,5 @@
 export interface RemoveGeneratorSchema {
-  name: string;
+  name?: string;
+  project?: string;
+  function?: string;
 }
