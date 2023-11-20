@@ -1,22 +1,11 @@
-import {
-  addProjectConfiguration,
-  formatFiles,
-  generateFiles,
-  Tree,
-} from '@nx/devkit';
-import * as path from 'path';
+import type { Tree } from '@nx/devkit';
 import { LibGeneratorSchema } from './schema';
+import { ProjectType } from '../shared/config';
+import functionsGenerator from '../shared/generator';
 
-export async function libGenerator(tree: Tree, options: LibGeneratorSchema) {
-  const projectRoot = `libs/${options.name}`;
-  addProjectConfiguration(tree, options.name, {
-    root: projectRoot,
-    projectType: 'library',
-    sourceRoot: `${projectRoot}/src`,
-    targets: {},
-  });
-  generateFiles(tree, path.join(__dirname, 'files'), projectRoot, options);
-  await formatFiles(tree);
+export default async function libGenerator(
+  tree: Tree,
+  schema: LibGeneratorSchema
+) {
+  await functionsGenerator(tree, schema, ProjectType.Application);
 }
-
-export default libGenerator;
