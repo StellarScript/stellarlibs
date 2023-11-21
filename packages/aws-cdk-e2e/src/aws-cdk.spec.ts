@@ -5,7 +5,7 @@ import {
   ensureNxProject,
   runNxCommandAsync,
 } from '@nx/plugin/testing';
-import { ensureNxLocalLibs, cleanLocalLibs } from './utils';
+import { ensureNxLocalLibs, cleanLocalLibs } from '@aws-nx/utils';
 
 describe('"@aws-nx/aws-cdk" Generators', () => {
   beforeAll(() => {
