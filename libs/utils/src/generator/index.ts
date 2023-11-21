@@ -5,13 +5,16 @@ import {
   offsetFromRoot,
   joinPathFragments,
   runTasksInSerial,
+  getWorkspaceLayout,
   ProjectConfiguration,
   readProjectConfiguration,
   updateProjectConfiguration,
 } from '@nx/devkit';
 import type { Tree, GeneratorCallback } from '@nx/devkit';
 import { lintProjectGenerator } from '@nx/linter';
+
 import type { GeneratorOptions } from './types';
+import { ProjectType } from '../constants';
 
 /**
  *
@@ -132,12 +135,28 @@ export class GeneratorTasks extends Set<GeneratorCallback> {
   }
 }
 
-export function updateProjectConfig(
+export function updateConfiguration<T>(
   tree: Tree,
   projectName: string,
-  updater: (x: ProjectConfiguration) => ProjectConfiguration
+  updater: (x: T & ProjectConfiguration) => T & ProjectConfiguration
 ): void {
-  const workspace = readProjectConfiguration(tree, projectName);
+  const workspace = readConfiguration<T>(tree, projectName);
   const updatedWorkspace = updater(workspace);
   updateProjectConfiguration(tree, projectName, updatedWorkspace);
+}
+
+export function readConfiguration<T>(
+  tree: Tree,
+  projectName: string
+): T & ProjectConfiguration {
+  return readProjectConfiguration(tree, projectName) as T &
+    ProjectConfiguration;
+}
+
+export function appDirectory(tree: Tree, projectType: ProjectType): string {
+  const appdir = getWorkspaceLayout(tree);
+  if (projectType === ProjectType.Application) {
+    return appdir.appsDir;
+  }
+  return appdir.libsDir;
 }

@@ -11,12 +11,13 @@ import {
 } from '@nx/devkit';
 
 import {
+  ProjectType,
+  GeneratorTasks,
   addProjectFiles,
   updateLintConfig,
   lintingGenerator,
   addIgnoreFileName,
-  GeneratorTasks,
-  updateProjectConfig,
+  updateConfiguration,
 } from '@aws-nx/utils';
 
 import {
@@ -27,7 +28,6 @@ import {
 } from '../../util/constants';
 import { GeneratorSchema } from './schema';
 import { createConfiguration } from './config';
-import { ProjectType } from '../../util/enums';
 
 interface NormalizedOptions {
   name: string;
@@ -129,7 +129,10 @@ function projectConfiguration(
   const config = createConfiguration(projectType, options);
   addProjectConfiguration(tree, options.projectName, config);
 
-  updateProjectConfig(tree, options.projectName, (workspace) => workspace);
+  updateConfiguration(tree, options.projectName, (workspace) => {
+    workspace.tags = options.tags;
+    return workspace;
+  });
   addProjectFiles(tree, path.join(__dirname, 'files/app'), options);
 }
 

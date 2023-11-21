@@ -1,0 +1,12 @@
+{
+  "name": "@aws-nx/functions",
+  "version": "0.0.1",
+  "dependencies": {
+    "@nx/devkit": "17.1.2",
+    "tslib": "^2.3.0"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
+  "generators": "./generators.json"
+}
