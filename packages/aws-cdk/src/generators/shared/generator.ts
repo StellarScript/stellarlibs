@@ -129,7 +129,10 @@ function projectConfiguration(
   const config = createConfiguration(projectType, options);
   addProjectConfiguration(tree, options.projectName, config);
 
-  updateConfiguration(tree, options.projectName, (workspace) => workspace);
+  updateConfiguration(tree, options.projectName, (workspace) => {
+    workspace.tags = options.tags;
+    return workspace;
+  });
   addProjectFiles(tree, path.join(__dirname, 'files/app'), options);
 }
 

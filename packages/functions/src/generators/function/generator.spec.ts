@@ -1,10 +1,10 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
+import { ProjectType } from '@aws-nx/utils';
 
 import functionGenerator from './generator';
 import { FunctionGeneratorSchema } from './schema';
 import { createApplication } from '../../shared/generator/generator';
-import { ProjectType } from '@aws-nx/utils';
 
 describe('function generator', () => {
   let tree: Tree;
@@ -13,7 +13,7 @@ describe('function generator', () => {
     tree = createTreeWithEmptyWorkspace();
   });
 
-  it('should throw error when project is not defined', async () => {
+  it('throw error when project does not exists', async () => {
     const options: FunctionGeneratorSchema = {
       name: 'functionone',
       project: 'projectone',
@@ -21,7 +21,7 @@ describe('function generator', () => {
     expect(() => functionGenerator(tree, options)).rejects.toThrow();
   });
 
-  it('should run successfully', async () => {
+  it('generate function', async () => {
     const projectName = 'projectone';
     const functionName = 'functionone';
 
@@ -37,6 +37,7 @@ describe('function generator', () => {
     });
 
     const config = await readProjectConfiguration(tree, projectName);
+    expect(tree.exists(`${config.sourceRoot}/${functionName}`)).toBeTruthy();
     expect(config).toBeDefined();
   });
 });

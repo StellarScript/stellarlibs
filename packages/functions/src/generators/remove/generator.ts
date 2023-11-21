@@ -1,4 +1,4 @@
-import { joinPathFragments, type Tree } from '@nx/devkit';
+import { joinPathFragments, logger, type Tree } from '@nx/devkit';
 import {
   readConfiguration,
   updateConfiguration,
@@ -35,6 +35,9 @@ export default async function removeGenerator(
       options.projectRoot,
       options.functionName
     );
+    if (!tree.exists(functionPath)) {
+      throw new Error(`Function ${options.functionName} does not exist`);
+    }
     removeDirectoryRecursively(tree, functionPath);
     updateProjectConfiguration(tree, options);
     return;
