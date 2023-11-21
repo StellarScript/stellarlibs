@@ -1,16 +1,13 @@
+import { Tree, readProjectConfiguration } from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-import { Tree, joinPathFragments, readProjectConfiguration } from '@nx/devkit';
 
 import removeGenerator from './generator';
-import { RemoveGeneratorSchema } from './schema';
-
 import libraryGenerator from '../lib/generator';
 import applicationGenerator from '../app/generator';
 import functionGenerator from '../function/generator';
 
 describe('Remove Generator', () => {
   let tree: Tree;
-  const options: RemoveGeneratorSchema = { name: 'test' };
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
