@@ -6,10 +6,10 @@
 
 ## Table of Contents
 
-1. [Create App](#create-application)
-2. [Remove Lib](#remove-application)
+1. [Generate App](#create-application)
+2. [Generate Lib](#remove-application)
 3. [Generate Function](#bootstrap)
-4. [Build](#destroy)
+4. [Execute Build](#destroy)
 
 ---
 
@@ -61,7 +61,7 @@ nx g @aws-nx/functions:lib <Function_Name> --project <Project_Name>
 
 ## 3. Remove Application<a name="remove-application"></a>
 
-To remove an existing application, use the following command:
+To remove application, use the following command:
 
 ```bash
 nx g @aws-nx/functions:remove <APP_NAME>
@@ -87,7 +87,7 @@ nx g @aws-nx/functions:remove <Project_Name> --function <Function_Name>
 or
 
 ```bash
-nx g @aws-nx/functions:remove  --function <Function_Name> --project <Project_Name>
+nx g @aws-nx/functions:remove --function <Function_Name> --project <Project_Name>
 ```
 
 <br>

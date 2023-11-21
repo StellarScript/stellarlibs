@@ -1,4 +1,4 @@
-import { joinPathFragments, logger, type Tree } from '@nx/devkit';
+import { type Tree, joinPathFragments } from '@nx/devkit';
 import {
   readConfiguration,
   updateConfiguration,
