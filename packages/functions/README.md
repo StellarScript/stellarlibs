@@ -6,8 +6,8 @@
 
 ## Table of Contents
 
-1. [Generate App](#create-application)
-2. [Generate Lib](#remove-application)
+1. [Generate App](#generate-application)
+2. [Generate Lib](#generate-library)
 3. [Generate Function](#bootstrap)
 4. [Execute Build](#destroy)
 
@@ -25,9 +25,9 @@ npm i @aws-nx/functions
 
 <br>
 
-## 1. Create Application<a name="create-application"></a>
+## 1. Generate Application<a name="generate-application"></a>
 
-To create a new application, execute the following command:
+To generate a new application, execute the following command:
 
 ```bash
 nx g @aws-nx/functions:app <Function_Name> --project <Project_Name>
@@ -42,9 +42,9 @@ nx g @aws-nx/functions:app <Function_Name> --project <Project_Name>
 <br>
 <br>
 
-## 2. Create Library<a name="create-library"></a>
+## 2. Generate Library<a name="generate-library"></a>
 
-To create a new library, execute the following command:
+To generate a new library, execute the following command:
 
 ```bash
 nx g @aws-nx/functions:lib <Function_Name> --project <Project_Name>
