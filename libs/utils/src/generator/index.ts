@@ -9,6 +9,7 @@ import {
   ProjectConfiguration,
   readProjectConfiguration,
   updateProjectConfiguration,
+  readJson,
 } from '@nx/devkit';
 import type { Tree, GeneratorCallback } from '@nx/devkit';
 import { lintProjectGenerator } from '@nx/linter';
@@ -159,4 +160,9 @@ export function appDirectory(tree: Tree, projectType: ProjectType): string {
     return appdir.appsDir;
   }
   return appdir.libsDir;
+}
+
+export function getProjectName(tree: Tree): string {
+  const packageJson = readJson(tree, 'package.json');
+  return packageJson.name.split('/')[0];
 }

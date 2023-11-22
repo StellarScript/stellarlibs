@@ -2,10 +2,11 @@ import * as path from 'path';
 import {
   names,
   type Tree,
+  formatFiles,
+  GeneratorCallback,
   joinPathFragments,
   addProjectConfiguration,
-  GeneratorCallback,
-  formatFiles,
+  updateJson,
 } from '@nx/devkit';
 import {
   toArray,
@@ -16,6 +17,7 @@ import {
   GeneratorTasks,
   lintingGenerator,
   updateLintConfig,
+  getProjectName,
 } from '@aws-nx/utils';
 import { jestInitGenerator } from '@nx/jest';
 import { GeneratorAppSchema } from './schema';
@@ -53,6 +55,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
   });
   addProjectConfiguration(tree, options.name, config);
   updateProjectConfiguration(tree, options);
+  updateTsConfigBase(tree, options);
 
   // Jest
   const jestTask = await JestConfiguration(tree);
@@ -64,6 +67,23 @@ export async function createApplication<T extends GeneratorAppSchema>(
 
   await formatFiles(tree);
   return tasks.runInSerial();
+}
+
+/**
+ *
+ * @param tree
+ * @param options
+ */
+function updateTsConfigBase(tree: Tree, options: NormalizedOptions): void {
+  updateJson(tree, 'tsconfig.base.json', (json) => {
+    json.compilerOptions.paths = {
+      ...json.compilerOptions.paths,
+      [`${getProjectName(tree)}/${options.name}/*`]: [
+        `${options.projectRoot}/src/*`,
+      ],
+    };
+    return json;
+  });
 }
 
 /**
