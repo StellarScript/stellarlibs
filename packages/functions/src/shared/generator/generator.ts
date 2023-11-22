@@ -2,22 +2,22 @@ import * as path from 'path';
 import {
   names,
   type Tree,
+  updateJson,
   formatFiles,
   GeneratorCallback,
   joinPathFragments,
   addProjectConfiguration,
-  updateJson,
 } from '@nx/devkit';
 import {
   toArray,
   ProjectType,
   appDirectory,
   addProjectFiles,
-  updateConfiguration,
   GeneratorTasks,
   lintingGenerator,
   updateLintConfig,
   getProjectName,
+  updateConfiguration,
 } from '@aws-nx/utils';
 import { jestInitGenerator } from '@nx/jest';
 import { GeneratorAppSchema } from './schema';
