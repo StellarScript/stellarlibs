@@ -1,6 +1,6 @@
 {
   "name": "@aws-nx/functions",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "license": "MIT",
   "homepage": "https://github.com/StellarScript/aws-nx/blob/main/packages/functions/README.md",
   "author": {
