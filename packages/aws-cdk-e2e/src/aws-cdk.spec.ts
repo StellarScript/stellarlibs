@@ -43,7 +43,7 @@ describe('"@aws-nx/aws-cdk" Generators', () => {
         checkFilesExist(path.join(pluginName, 'cdk.json'));
         checkFilesExist(path.join(pluginName, 'tsconfig.json'));
         checkFilesExist(path.join(pluginName, 'tsconfig.app.json'));
-        checkFilesExist(path.join(pluginName, 'jest.config.js'));
+        checkFilesExist(path.join(pluginName, 'jest.config.ts'));
         // Check generated source files
         checkFilesExist(path.join(pluginName, 'src', 'bin/index.ts'));
         checkFilesExist(path.join(pluginName, 'src', 'stack/app.ts'));
