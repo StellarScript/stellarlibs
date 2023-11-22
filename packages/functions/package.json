@@ -1,6 +1,20 @@
 {
   "name": "@aws-nx/functions",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "license": "MIT",
+  "homepage": "https://github.com/StellarScript/aws-nx/blob/main/packages/functions/README.md",
+  "author": {
+    "name": "aws-nx"
+  },
+  "publishConfig": {
+    "access": "public",
+    "@aws-nx:functions": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "directory": "packages/functions",
+    "url": "https://github.com/StellarScript/aws-nx"
+  },
   "dependencies": {
     "@nx/devkit": "17.1.2",
     "tslib": "^2.3.0"
