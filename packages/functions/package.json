@@ -16,8 +16,10 @@
     "url": "https://github.com/StellarScript/aws-nx"
   },
   "dependencies": {
+    "tslib": "^2.3.0",
     "@nx/devkit": "17.1.2",
-    "tslib": "^2.3.0"
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",
