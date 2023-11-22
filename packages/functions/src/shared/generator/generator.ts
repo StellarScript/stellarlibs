@@ -78,7 +78,7 @@ function updateTsConfigBase(tree: Tree, options: NormalizedOptions): void {
   updateJson(tree, 'tsconfig.base.json', (json) => {
     json.compilerOptions.paths = {
       ...json.compilerOptions.paths,
-      [`${getProjectName(tree)}/${options.name}/*`]: [
+      [`${getProjectName(tree)}${options.name}/*`]: [
         `${options.projectRoot}/src/*`,
       ],
     };

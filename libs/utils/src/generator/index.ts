@@ -163,6 +163,9 @@ export function appDirectory(tree: Tree, projectType: ProjectType): string {
 }
 
 export function getProjectName(tree: Tree): string {
+  if (tree.exists('package.json')) {
+    return '@';
+  }
   const packageJson = readJson(tree, 'package.json');
-  return packageJson.name.split('/')[0];
+  return `${packageJson.name.split('/')[0]}/`;
 }
