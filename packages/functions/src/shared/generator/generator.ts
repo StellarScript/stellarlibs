@@ -55,7 +55,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
   updateProjectConfiguration(tree, options);
 
   // Jest
-  const jestTask = await JestConfiguration(tree, options);
+  const jestTask = await JestConfiguration(tree);
   tasks.register(jestTask);
 
   // Eslint
@@ -74,8 +74,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
  * @returns
  */
 async function JestConfiguration(
-  tree: Tree,
-  options: NormalizedOptions
+  tree: Tree
 ): Promise<GeneratorCallback | undefined> {
   // if (!options.unitTest) {
   //   return;
@@ -87,7 +86,6 @@ async function JestConfiguration(
     skipPackageJson: false,
     testEnvironment: 'node',
   });
-  addProjectFiles(tree, path.join(__dirname, 'files/unitTest'), options);
   return jestTask;
 }
 
