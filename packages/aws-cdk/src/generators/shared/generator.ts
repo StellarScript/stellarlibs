@@ -49,7 +49,7 @@ export default async function generate<T extends GeneratorSchema>(
   tree: Tree,
   schema: T,
   projectType: ProjectType
-) {
+): Promise<GeneratorCallback> {
   const tasks = new GeneratorTasks();
 
   const options = normalizeOptions(tree, projectType, schema);
