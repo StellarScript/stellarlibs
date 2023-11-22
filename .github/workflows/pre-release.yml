@@ -32,11 +32,11 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
-      # - name: Set Version
-      #   run: npm --prefix ./packages/aws-cdk version ${{ github.ref_name }}
+      - name: Set Version
+        run: npm --prefix ./packages/${{github.event.release.name}} version ${{ github.ref_name }}
 
       - name: Build Plugin
-        run: npx nx run aws-cdk:build --outputPath ./build/aws-cdk
+        run: npx nx run ${{github.event.release.name}}:build --outputPath ./build/${{github.event.release.name}}
 
       - name: Npm Auth
         uses: actions/setup-node@v3
@@ -46,6 +46,6 @@ jobs:
           scope: '@aws-nx'
 
       - name: Publish Plugin
-        run: npx nx run aws-cdk:publish  --ver=${{ github.ref_name }} --tag=beta
+        run: npx nx run ${{github.event.release.name}}:publish  --ver=${{ github.ref_name }} --tag=beta
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
