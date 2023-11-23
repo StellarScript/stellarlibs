@@ -9,6 +9,7 @@ import {
   ProjectConfiguration,
   readProjectConfiguration,
   updateProjectConfiguration,
+  readJson,
 } from '@nx/devkit';
 import type { Tree, GeneratorCallback } from '@nx/devkit';
 import { lintProjectGenerator } from '@nx/linter';
@@ -162,4 +163,45 @@ export function workspaceDirectory(
     return appdir.appsDir;
   }
   return appdir.libsDir;
+}
+
+/**
+ *
+ * @param tree
+ * @param projectRoot
+ * @param projectName
+ * @description Add library path to tsconfig.base.json
+ */
+export function addTsConfigPath(
+  tree: Tree,
+  projectRoot: string,
+  projectName: string
+): void {
+  const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
+  const projectTarget = `${workspaceName}/${projectName}`;
+  const libPackagePath = { [`${projectTarget}/*`]: [`${projectRoot}/*`] };
+
+  updateJson(tree, 'tsconfig.base.json', (json) => {
+    json.compilerOptions.paths = {
+      ...libPackagePath,
+      ...json.compilerOptions.paths,
+    };
+    return json;
+  });
+}
+
+/**
+ *
+ * @param tree
+ * @param projectName
+ * @description Remove library path from tsconfig.base.json
+ */
+export function removeTsConfigPath(tree: Tree, projectName: string): void {
+  const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
+  const key = `${workspaceName}/${projectName}/*`;
+
+  updateJson(tree, 'tsconfig.base.json', (json) => {
+    delete json.compilerOptions.paths[key];
+    return json;
+  });
 }

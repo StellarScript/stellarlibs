@@ -1,12 +1,11 @@
 import * as path from 'path';
+import { type Tree, type GeneratorCallback, formatFiles } from '@nx/devkit';
 import {
-  type Tree,
-  type GeneratorCallback,
-  readJson,
-  updateJson,
-  formatFiles,
-} from '@nx/devkit';
-import { ProjectType, GeneratorTasks, addIgnoreFileName } from '@aws-nx/utils';
+  ProjectType,
+  GeneratorTasks,
+  addTsConfigPath,
+  addIgnoreFileName,
+} from '@aws-nx/utils';
 
 import {
   addDependencies,
@@ -14,7 +13,6 @@ import {
   JestConfiguration,
   lintingConfiguration,
   projectConfiguration,
-  NormalizedOptions,
 } from '../shared/generator';
 import { LibGeneratorSchema } from './schema';
 
@@ -35,7 +33,7 @@ export default async function libraryGenerator<T extends LibGeneratorSchema>(
 
   const appFilesDir = path.join(__dirname, 'files');
   projectConfiguration(tree, appFilesDir, projectType, options);
-  addTsConfigPaths(tree, options);
+  addTsConfigPath(tree, options.projectRoot, options.projectName);
 
   // Jest
   const jestTask = await JestConfiguration(tree, options);
@@ -51,20 +49,4 @@ export default async function libraryGenerator<T extends LibGeneratorSchema>(
 
   await formatFiles(tree);
   return tasks.runInSerial();
-}
-
-function addTsConfigPaths(tree: Tree, options: NormalizedOptions): void {
-  const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
-
-  const projectRoot = `${options.projectRoot}/src/*`;
-  const projectTarget = `${workspaceName}/${options.projectName}/*`;
-  const libPackagePath = { [`${projectTarget}`]: [`${projectRoot}`] };
-
-  updateJson(tree, 'tsconfig.base.json', (json) => {
-    json.compilerOptions.paths = {
-      ...libPackagePath,
-      ...json.compilerOptions.paths,
-    };
-    return json;
-  });
 }
