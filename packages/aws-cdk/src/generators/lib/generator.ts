@@ -1,5 +1,10 @@
 import * as path from 'path';
-import { type Tree, type GeneratorCallback, formatFiles } from '@nx/devkit';
+import {
+  type Tree,
+  type GeneratorCallback,
+  formatFiles,
+  joinPathFragments,
+} from '@nx/devkit';
 import {
   ProjectType,
   GeneratorTasks,
@@ -33,7 +38,11 @@ export default async function libraryGenerator<T extends LibGeneratorSchema>(
 
   const appFilesDir = path.join(__dirname, 'files');
   projectConfiguration(tree, appFilesDir, projectType, options);
-  addTsConfigPath(tree, options.projectRoot, options.projectName);
+  addTsConfigPath(
+    tree,
+    joinPathFragments(options.projectRoot, 'src'),
+    options.projectName
+  );
 
   // Jest
   const jestTask = await JestConfiguration(tree, options);
