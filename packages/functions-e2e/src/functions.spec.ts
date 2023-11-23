@@ -163,6 +163,7 @@ describe('functions', () => {
       );
 
       expect(() => checkFilesExist(projectName)).not.toThrow();
+
       expect(() => checkFilesExist(`${projectName}/${functionName}`)).toThrow();
     }, 100000);
   });
