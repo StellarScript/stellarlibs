@@ -57,7 +57,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
   updateProjectConfiguration(tree, options);
 
   // Jest
-  const jestTask = await JestConfiguration(tree);
+  const jestTask = await JestConfiguration(tree, options);
   tasks.register(jestTask);
 
   // Eslint
@@ -77,7 +77,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
  */
 async function JestConfiguration(
   tree: Tree,
-  options?: NormalizedOptions
+  options: NormalizedOptions
 ): Promise<GeneratorCallback | undefined> {
   if (!options.unitTest) {
     return;
@@ -141,11 +141,9 @@ async function normalizeOptions(
     ? joinPathFragments(schema.directory, schema.name)
     : name;
 
-  const projectRoot = `${workspaceDirectory(
-    tree,
-    projectType
-  )}/${projectDirectory}`;
   const projectName = schema.name;
+  const workspaceDir = workspaceDirectory(tree, projectType);
+  const projectRoot = `${workspaceDir}/${projectDirectory}`;
   const root = joinPathFragments(projectRoot, 'src', name);
 
   const unitTest = schema.jest === undefined ?? true;

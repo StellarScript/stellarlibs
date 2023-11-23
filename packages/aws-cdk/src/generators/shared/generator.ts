@@ -178,7 +178,6 @@ export function normalizeOptions<T extends GeneratorSchema>(
   const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
   const linting = schema.linting === undefined ?? true;
   const unitTest = schema.jest === undefined ?? true;
-  const tags = toArray(schema.tag);
 
   return {
     name,
@@ -186,6 +185,6 @@ export function normalizeOptions<T extends GeneratorSchema>(
     unitTest,
     projectName,
     projectRoot,
-    tags,
+    tags: toArray(schema.tag),
   };
 }
