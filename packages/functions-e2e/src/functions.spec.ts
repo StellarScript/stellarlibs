@@ -55,7 +55,7 @@ describe('functions', () => {
       ).toBeTruthy();
 
       const { projectSource, paths } = readTsConfig();
-      expect(paths.includes(`${projectSource}/${projectName}`)).toBeTruthy();
+      expect(paths.includes(`${projectSource}/${projectName}/*`)).toBeTruthy();
     }, 100000);
   });
 
@@ -89,7 +89,7 @@ describe('functions', () => {
       ).toBeTruthy();
 
       const { projectSource, paths } = readTsConfig();
-      expect(paths.includes(`${projectSource}/${projectName}`)).toBeTruthy();
+      expect(paths.includes(`${projectSource}/${projectName}/*`)).toBeTruthy();
     }, 100000);
   });
 

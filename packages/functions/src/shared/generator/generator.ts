@@ -79,7 +79,7 @@ function updateTsConfig(tree: Tree, options: NormalizedOptions): void {
   try {
     const projectName = readProjectSourceName(tree);
     const constructObj = (projectName: string, name: string) => ({
-      [`${projectName}${name}`]: [`${projectName}/src/*`],
+      [`${projectName}${name}/*`]: [`${projectName}/src/*`],
     });
 
     updateJson(tree, 'tsconfig.base.json', (json) => {
