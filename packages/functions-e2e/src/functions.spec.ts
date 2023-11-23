@@ -4,8 +4,15 @@ import {
   checkFilesExist,
   ensureNxProject,
   runNxCommandAsync,
+  readJson,
 } from '@nx/plugin/testing';
 import { ensureNxLocalLibs, cleanLocalLibs } from '@aws-nx/utils';
+
+function readTsConfig() {
+  const projectSource = readJson('package.json').name.split('/')[0];
+  const paths = readJson('tsconfig.base.json').compilerOptions.paths;
+  return { projectSource, paths: Object.keys(paths) };
+}
 
 describe('functions', () => {
   beforeAll(() => {
@@ -46,6 +53,9 @@ describe('functions', () => {
       expect(() =>
         checkFilesExist(`${projectName}/${functionName}`)
       ).toBeTruthy();
+
+      const { projectSource, paths } = readTsConfig();
+      expect(paths.includes(`${projectSource}/${projectName}`)).toBeTruthy();
     }, 100000);
   });
 
@@ -77,6 +87,9 @@ describe('functions', () => {
       expect(() =>
         checkFilesExist(`${projectName}/${functionName}`)
       ).toBeTruthy();
+
+      const { projectSource, paths } = readTsConfig();
+      expect(paths.includes(`${projectSource}/${projectName}`)).toBeTruthy();
     }, 100000);
   });
 
