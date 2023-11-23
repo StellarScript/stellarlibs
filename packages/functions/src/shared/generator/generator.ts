@@ -10,7 +10,7 @@ import {
 import {
   toArray,
   ProjectType,
-  appDirectory,
+  workspaceDirectory,
   addProjectFiles,
   updateConfiguration,
   GeneratorTasks,
@@ -141,7 +141,10 @@ async function normalizeOptions(
     ? joinPathFragments(schema.directory, schema.name)
     : name;
 
-  const projectRoot = `${appDirectory(tree, projectType)}/${projectDirectory}`;
+  const projectRoot = `${workspaceDirectory(
+    tree,
+    projectType
+  )}/${projectDirectory}`;
   const projectName = schema.name;
   const root = joinPathFragments(projectRoot, 'src', name);
 
