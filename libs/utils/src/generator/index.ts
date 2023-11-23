@@ -177,17 +177,21 @@ export function addTsConfigPath(
   projectRoot: string,
   projectName: string
 ): void {
-  const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
-  const projectTarget = `${workspaceName}/${projectName}`;
-  const libPackagePath = { [`${projectTarget}/*`]: [`${projectRoot}/*`] };
+  try {
+    const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
+    const projectTarget = `${workspaceName}/${projectName}`;
+    const libPackagePath = { [`${projectTarget}/*`]: [`${projectRoot}/*`] };
 
-  updateJson(tree, 'tsconfig.base.json', (json) => {
-    json.compilerOptions.paths = {
-      ...libPackagePath,
-      ...json.compilerOptions.paths,
-    };
-    return json;
-  });
+    updateJson(tree, 'tsconfig.base.json', (json) => {
+      json.compilerOptions.paths = {
+        ...libPackagePath,
+        ...json.compilerOptions.paths,
+      };
+      return json;
+    });
+  } catch (e) {
+    return;
+  }
 }
 
 /**
@@ -197,11 +201,15 @@ export function addTsConfigPath(
  * @description Remove library path from tsconfig.base.json
  */
 export function removeTsConfigPath(tree: Tree, projectName: string): void {
-  const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
-  const key = `${workspaceName}/${projectName}/*`;
+  try {
+    const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
+    const key = `${workspaceName}/${projectName}/*`;
 
-  updateJson(tree, 'tsconfig.base.json', (json) => {
-    delete json.compilerOptions.paths[key];
-    return json;
-  });
+    updateJson(tree, 'tsconfig.base.json', (json) => {
+      delete json.compilerOptions.paths[key];
+      return json;
+    });
+  } catch (e) {
+    return;
+  }
 }
