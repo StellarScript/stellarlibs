@@ -162,7 +162,7 @@ export function appDirectory(tree: Tree, projectType: ProjectType): string {
   return appdir.libsDir;
 }
 
-export function getProjectName(tree: Tree): string {
+export function readProjectSourceName(tree: Tree): string {
   if (!tree.exists('package.json')) {
     return '@';
   }

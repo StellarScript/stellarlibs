@@ -12,7 +12,7 @@ import {
   toArray,
   ProjectType,
   appDirectory,
-  getProjectName,
+  readProjectSourceName,
   addProjectFiles,
   GeneratorTasks,
   lintingGenerator,
@@ -77,11 +77,11 @@ export async function createApplication<T extends GeneratorAppSchema>(
  */
 function updateTsConfig(tree: Tree, options: NormalizedOptions): void {
   try {
-    const projectName = getProjectName(tree);
-
+    const projectName = readProjectSourceName(tree);
     const constructObj = (projectName: string, name: string) => ({
       [`${projectName}${name}`]: [`${projectName}/src/*`],
     });
+
     updateJson(tree, 'tsconfig.base.json', (json) => {
       json.compilerOptions.paths = {
         ...json.compilerOptions.paths,
