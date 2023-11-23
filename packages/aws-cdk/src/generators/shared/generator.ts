@@ -69,7 +69,7 @@ export async function JestConfiguration(
     return;
   }
   const jestTask = await jestInitGenerator(tree, {
-    js: true,
+    js: false,
     compiler: 'tsc',
     babelJest: false,
     skipPackageJson: false,
