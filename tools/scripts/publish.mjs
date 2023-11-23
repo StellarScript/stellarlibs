@@ -62,6 +62,5 @@ try {
   console.error(`Error reading package.json file from library build output.`);
 }
 
-execSync(`npm --prefix . version ${version}`);
 // Execute "npm publish" to publish
 execSync(`npm publish --access public --tag ${tag}`);
