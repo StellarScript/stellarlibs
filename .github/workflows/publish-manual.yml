@@ -1,10 +1,30 @@
-name: Released
+name: Publish
 
 on:
-  release:
-    types: [released]
+  workflow_dispatch:
+    inputs:
+      plugin:
+        description: 'Name'
+        required: true
+        type: choice
+        default: 'aws-cdk'
+        options:
+          - 'aws-cdk'
+          - 'functions'
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+      tag:
+        description: 'Tag'
+        required: true
+        type: choice
+        default: 'latest'
+        options:
+          - 'latest'
+          - 'beta'
+
+      version:
+        description: 'Version'
+        required: true
+        type: string
 
 jobs:
   release:
@@ -15,7 +35,7 @@ jobs:
     steps:
       - name: Info
         run: |
-          echo Runing release
+          echo Runing Publish
 
       - uses: actions/checkout@v3
 
@@ -28,15 +48,12 @@ jobs:
           restore-keys: |
             nodeModules-
 
-      - name: Install Deps
+      - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
-      - name: Set Version
-        run: npm --prefix ./packages/${{github.event.release.name}} version ${{ github.ref_name }}
-
       - name: Build Plugin
-        run: npx nx run ${{github.event.release.name}}:build --outputPath ./build/${{github.event.release.name}}
+        run: npx nx run ${{ github.event.inputs.plugin }}:build --outputPath ./build/${{ github.event.inputs.plugin }}
 
       - name: Npm Auth
         uses: actions/setup-node@v3
@@ -46,6 +63,6 @@ jobs:
           scope: '@aws-nx'
 
       - name: Publish Plugin
-        run: npx nx run ${{ github.event.release.name }}:publish  --ver=${{ github.ref_name }} --tag=latest
+        run: npx nx run ${{ github.event.inputs.plugin }}:publish  --ver=${{ github.event.inputs.version }} --tag=${{ github.event.inputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
