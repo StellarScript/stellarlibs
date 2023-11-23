@@ -2,6 +2,8 @@ import { ProjectConfiguration as ProjectConfig } from '@nx/devkit';
 
 export interface GeneratorAppSchema {
   name: string;
+  jest?: boolean;
+  linting?: boolean;
   bundle?: boolean;
   directory?: string;
   tag?: string | string[];

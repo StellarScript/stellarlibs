@@ -28,6 +28,8 @@ interface NormalizedOptions {
   projectRoot: string;
   tags: string[];
   bundle: boolean;
+  unitTest: boolean;
+  linting: boolean;
 }
 
 export async function createApplication<T extends GeneratorAppSchema>(
@@ -74,13 +76,14 @@ export async function createApplication<T extends GeneratorAppSchema>(
  * @returns
  */
 async function JestConfiguration(
-  tree: Tree
+  tree: Tree,
+  options?: NormalizedOptions
 ): Promise<GeneratorCallback | undefined> {
-  // if (!options.unitTest) {
-  //   return;
-  // }
+  if (!options.unitTest) {
+    return;
+  }
   const jestTask = await jestInitGenerator(tree, {
-    js: true,
+    js: false,
     compiler: 'tsc',
     babelJest: false,
     skipPackageJson: false,
@@ -94,15 +97,14 @@ async function JestConfiguration(
  * @param tree
  * @param options
  * @description Linting configuration
- * @returns
  */
 async function lintingConfiguration(
   tree: Tree,
   options: NormalizedOptions
 ): Promise<GeneratorCallback | undefined> {
-  // if (!options.linting) {
-  //   return;
-  // }
+  if (!options.linting) {
+    return;
+  }
   const lintTask = await lintingGenerator(tree, options);
   updateLintConfig(tree, options);
   return lintTask;
@@ -143,9 +145,14 @@ async function normalizeOptions(
   const projectName = schema.name;
   const root = joinPathFragments(projectRoot, 'src', name);
 
+  const unitTest = schema.jest === undefined ?? true;
+  const linting = schema.linting === undefined ?? true;
+
   return {
     name,
     root,
+    linting,
+    unitTest,
     projectName,
     projectRoot,
     bundle: schema.bundle,
