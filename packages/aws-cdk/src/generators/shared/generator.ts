@@ -5,7 +5,6 @@ import type { Tree, GeneratorCallback } from '@nx/devkit';
 import {
   names,
   formatFiles,
-  getWorkspaceLayout,
   addProjectConfiguration,
   addDependenciesToPackageJson,
 } from '@nx/devkit';
@@ -18,6 +17,8 @@ import {
   lintingGenerator,
   addIgnoreFileName,
   updateConfiguration,
+  workspaceDirectory,
+  toArray,
 } from '@aws-nx/utils';
 
 import {
@@ -166,32 +167,24 @@ export function normalizeOptions<T extends GeneratorSchema>(
   projectType: ProjectType,
   schema: T
 ): NormalizedOptions {
-  const getProjectDir = () => {
-    if (projectType === ProjectType.Application)
-      return getWorkspaceLayout(tree).appsDir;
-    return getWorkspaceLayout(tree).libsDir;
-  };
-
   const name = names(schema.name).fileName;
   const projectDirectory = schema.directory
     ? `${names(schema.directory).fileName}/${name}`
     : name;
-  const projectRoot = `${getProjectDir()}/${projectDirectory}`;
+
+  const workspaceDir = workspaceDirectory(tree, projectType);
+  const projectRoot = `${workspaceDir}/${projectDirectory}`;
+
   const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
   const linting = schema.linting === undefined ?? true;
   const unitTest = schema.jest === undefined ?? true;
 
-  const createTag = () => {
-    if (!schema.tag) return [];
-    if (Array.isArray(schema.tag)) return schema.tag;
-    else return [schema.tag];
-  };
   return {
     name,
     linting,
     unitTest,
     projectName,
     projectRoot,
-    tags: createTag(),
+    tags: toArray(schema.tag),
   };
 }

@@ -19,7 +19,7 @@ describe('Application Generator', () => {
     expect(tree.exists(config.sourceRoot)).toBeTruthy();
   });
 
-  it('option directory', async () => {
+  it('generate application with directory argument', async () => {
     const directory = 'dir';
     const _options = { ...options, directory };
     const _projectName = `${_options.directory}-${_options.name}`;

@@ -153,7 +153,10 @@ export function readConfiguration<T>(
     ProjectConfiguration;
 }
 
-export function appDirectory(tree: Tree, projectType: ProjectType): string {
+export function workspaceDirectory(
+  tree: Tree,
+  projectType: ProjectType
+): string {
   const appdir = getWorkspaceLayout(tree);
   if (projectType === ProjectType.Application) {
     return appdir.appsDir;

@@ -8,7 +8,7 @@ import {
 } from '@nx/devkit';
 import {
   ProjectType,
-  appDirectory,
+  workspaceDirectory,
   addProjectFiles,
   readConfiguration,
   updateConfiguration,
@@ -101,7 +101,7 @@ function normalizeOptions(
   const projectType = config.projectType as ProjectType;
 
   const name = names(schema.name).fileName;
-  const appdir = appDirectory(tree, projectType);
+  const appdir = workspaceDirectory(tree, projectType);
 
   const projectName = schema.project;
   const projectRoot = joinPathFragments(appdir, projectName);

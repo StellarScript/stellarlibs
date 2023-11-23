@@ -1,21 +1,21 @@
 import * as path from 'path';
 import {
   names,
-  type Tree,
+  formatFiles,
   joinPathFragments,
   addProjectConfiguration,
-  GeneratorCallback,
-  formatFiles,
 } from '@nx/devkit';
+import { type Tree, type GeneratorCallback } from '@nx/devkit';
+
 import {
   toArray,
   ProjectType,
-  appDirectory,
   addProjectFiles,
-  updateConfiguration,
   GeneratorTasks,
   lintingGenerator,
   updateLintConfig,
+  workspaceDirectory,
+  updateConfiguration,
 } from '@aws-nx/utils';
 import { jestInitGenerator } from '@nx/jest';
 import { GeneratorAppSchema } from './schema';
@@ -28,9 +28,11 @@ interface NormalizedOptions {
   projectRoot: string;
   tags: string[];
   bundle: boolean;
+  unitTest: boolean;
+  linting: boolean;
 }
 
-export async function createApplication<T extends GeneratorAppSchema>(
+export async function generatePackage<T extends GeneratorAppSchema>(
   tree: Tree,
   schema: T,
   projectType: ProjectType
@@ -55,7 +57,7 @@ export async function createApplication<T extends GeneratorAppSchema>(
   updateProjectConfiguration(tree, options);
 
   // Jest
-  const jestTask = await JestConfiguration(tree);
+  const jestTask = await JestConfiguration(tree, options);
   tasks.register(jestTask);
 
   // Eslint
@@ -74,13 +76,14 @@ export async function createApplication<T extends GeneratorAppSchema>(
  * @returns
  */
 async function JestConfiguration(
-  tree: Tree
+  tree: Tree,
+  options: NormalizedOptions
 ): Promise<GeneratorCallback | undefined> {
-  // if (!options.unitTest) {
-  //   return;
-  // }
+  if (!options.unitTest) {
+    return;
+  }
   const jestTask = await jestInitGenerator(tree, {
-    js: true,
+    js: false,
     compiler: 'tsc',
     babelJest: false,
     skipPackageJson: false,
@@ -94,15 +97,14 @@ async function JestConfiguration(
  * @param tree
  * @param options
  * @description Linting configuration
- * @returns
  */
 async function lintingConfiguration(
   tree: Tree,
   options: NormalizedOptions
 ): Promise<GeneratorCallback | undefined> {
-  // if (!options.linting) {
-  //   return;
-  // }
+  if (!options.linting) {
+    return;
+  }
   const lintTask = await lintingGenerator(tree, options);
   updateLintConfig(tree, options);
   return lintTask;
@@ -139,13 +141,19 @@ async function normalizeOptions(
     ? joinPathFragments(schema.directory, schema.name)
     : name;
 
-  const projectRoot = `${appDirectory(tree, projectType)}/${projectDirectory}`;
   const projectName = schema.name;
+  const workspaceDir = workspaceDirectory(tree, projectType);
+  const projectRoot = `${workspaceDir}/${projectDirectory}`;
   const root = joinPathFragments(projectRoot, 'src', name);
+
+  const unitTest = schema.jest === undefined ?? true;
+  const linting = schema.linting === undefined ?? true;
 
   return {
     name,
     root,
+    linting,
+    unitTest,
     projectName,
     projectRoot,
     bundle: schema.bundle,
