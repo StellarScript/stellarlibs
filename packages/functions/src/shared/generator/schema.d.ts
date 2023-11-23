@@ -20,5 +20,19 @@ export interface ProjectConfiguration extends ProjectConfig {
         additionalEntryPoints: string[];
       };
     };
+    test: {
+      executor: string;
+      outputs: string[];
+      options: {
+        jestConfig: string;
+      };
+    };
+    lint: {
+      executor: string;
+      outputs: string[];
+      options: {
+        lintFilePatterns: string[];
+      };
+    };
   };
 }
