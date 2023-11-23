@@ -4,6 +4,12 @@
   "projectType": "application",
   "sourceRoot": "packages/functions-e2e/src",
   "targets": {
+    "version": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm --prefix packages/functions version 1.0.1"
+      }
+    },
     "e2e": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
@@ -11,7 +17,7 @@
         "jestConfig": "packages/functions-e2e/jest.config.ts",
         "runInBand": true
       },
-      "dependsOn": ["^build"]
+      "dependsOn": ["^version", "^build"]
     },
     "lint": {
       "executor": "@nx/eslint:lint",
