@@ -1,24 +1,20 @@
-import * as path from 'path';
 import { jestInitGenerator } from '@nx/jest';
 import type { Tree, GeneratorCallback } from '@nx/devkit';
 
 import {
   names,
-  formatFiles,
   addProjectConfiguration,
   addDependenciesToPackageJson,
 } from '@nx/devkit';
 
 import {
+  toArray,
   ProjectType,
-  GeneratorTasks,
   addProjectFiles,
   updateLintConfig,
   lintingGenerator,
-  addIgnoreFileName,
   updateConfiguration,
   workspaceDirectory,
-  toArray,
 } from '@aws-nx/utils';
 
 import {
@@ -30,7 +26,7 @@ import {
 import { GeneratorSchema } from './schema';
 import { createConfiguration } from './config';
 
-interface NormalizedOptions {
+export interface NormalizedOptions {
   name: string;
   linting: boolean;
   unitTest: boolean;
@@ -42,44 +38,11 @@ interface NormalizedOptions {
 /**
  *
  * @param tree
- * @param schema
- * @description Main generator for the application generator
- * @returns
- */
-export default async function generate<T extends GeneratorSchema>(
-  tree: Tree,
-  schema: T,
-  projectType: ProjectType
-): Promise<GeneratorCallback> {
-  const tasks = new GeneratorTasks();
-
-  const options = normalizeOptions(tree, projectType, schema);
-  projectConfiguration(tree, projectType, options);
-
-  // Jest
-  const jestTask = await JestConfiguration(tree, options);
-  tasks.register(jestTask);
-
-  // Eslint
-  const lintTask = await lintingConfiguration(tree, options);
-  tasks.register(lintTask);
-
-  // Gitignore
-  addIgnoreFileName(tree, '# AWS CDK', ['cdk.out']);
-  tasks.register(addDependencies(tree));
-
-  await formatFiles(tree);
-  return tasks.runInSerial();
-}
-
-/**
- *
- * @param tree
  * @param options
  * @description Linting configuration
  * @returns
  */
-async function lintingConfiguration(
+export async function lintingConfiguration(
   tree: Tree,
   options: NormalizedOptions
 ): Promise<GeneratorCallback | undefined> {
@@ -98,21 +61,23 @@ async function lintingConfiguration(
  * @description  Generate jest configuration
  * @returns
  */
-async function JestConfiguration(
+export async function JestConfiguration(
   tree: Tree,
-  options: NormalizedOptions
+  options: NormalizedOptions & { filePath?: string }
 ): Promise<GeneratorCallback | undefined> {
   if (!options.unitTest) {
     return;
   }
   const jestTask = await jestInitGenerator(tree, {
-    js: true,
+    js: false,
     compiler: 'tsc',
     babelJest: false,
     skipPackageJson: false,
     testEnvironment: 'node',
   });
-  addProjectFiles(tree, path.join(__dirname, 'files/unitTest'), options);
+  if (options.filePath) {
+    addProjectFiles(tree, options.filePath, options);
+  }
   return jestTask;
 }
 
@@ -122,8 +87,9 @@ async function JestConfiguration(
  * @param options
  * @description Creates the project configuration for the application
  */
-function projectConfiguration(
+export function projectConfiguration(
   tree: Tree,
+  fileDir: string,
   projectType: ProjectType,
   options: NormalizedOptions
 ): void {
@@ -134,7 +100,7 @@ function projectConfiguration(
     workspace.tags = options.tags;
     return workspace;
   });
-  addProjectFiles(tree, path.join(__dirname, 'files/app'), options);
+  addProjectFiles(tree, fileDir, options);
 }
 
 /**
@@ -143,7 +109,7 @@ function projectConfiguration(
  * @description Adds the dependencies to the package.json
  * @returns
  */
-function addDependencies(tree: Tree): GeneratorCallback {
+export function addDependencies(tree: Tree): GeneratorCallback {
   const dependencies: Record<string, string> = {};
   const devDependencies: Record<string, string> = {
     'aws-cdk': CDK_VERSION,
