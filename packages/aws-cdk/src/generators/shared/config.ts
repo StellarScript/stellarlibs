@@ -29,6 +29,20 @@ export const createConfiguration = (
       executor: '@aws-nx/aws-cdk:synth',
       options: {},
     },
+    test: {
+      executor: '@nx/jest:jest',
+      outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
+      options: {
+        jestConfig: `${options.projectRoot}/jest.config.ts`,
+      },
+    },
+    lint: {
+      executor: '@nx/eslint:lint',
+      outputs: ['{options.outputFile}'],
+      options: {
+        lintFilePatterns: [`${options.projectRoot}/**/*.ts`],
+      },
+    },
   },
   tags: options.tags,
 });
