@@ -1,21 +1,21 @@
 import * as path from 'path';
 import {
   names,
-  type Tree,
+  formatFiles,
   joinPathFragments,
   addProjectConfiguration,
-  GeneratorCallback,
-  formatFiles,
 } from '@nx/devkit';
+import { type Tree, type GeneratorCallback } from '@nx/devkit';
+
 import {
   toArray,
   ProjectType,
-  workspaceDirectory,
   addProjectFiles,
-  updateConfiguration,
   GeneratorTasks,
   lintingGenerator,
   updateLintConfig,
+  workspaceDirectory,
+  updateConfiguration,
 } from '@aws-nx/utils';
 import { jestInitGenerator } from '@nx/jest';
 import { GeneratorAppSchema } from './schema';
@@ -32,7 +32,7 @@ interface NormalizedOptions {
   linting: boolean;
 }
 
-export async function createApplication<T extends GeneratorAppSchema>(
+export async function generatePackage<T extends GeneratorAppSchema>(
   tree: Tree,
   schema: T,
   projectType: ProjectType

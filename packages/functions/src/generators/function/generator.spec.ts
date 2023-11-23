@@ -4,7 +4,7 @@ import { ProjectType } from '@aws-nx/utils';
 
 import functionGenerator from './generator';
 import { FunctionGeneratorSchema } from './schema';
-import { createApplication } from '../../shared/generator/generator';
+import { generatePackage } from '../../shared/generator/generator';
 
 describe('function generator', () => {
   let tree: Tree;
@@ -25,11 +25,7 @@ describe('function generator', () => {
     const projectName = 'projectone';
     const functionName = 'functionone';
 
-    await createApplication(
-      tree,
-      { name: projectName },
-      ProjectType.Application
-    );
+    await generatePackage(tree, { name: projectName }, ProjectType.Application);
 
     await functionGenerator(tree, {
       name: functionName,
