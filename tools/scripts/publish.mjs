@@ -63,4 +63,5 @@ try {
 }
 
 // Execute "npm publish" to publish
+execSync('pgrep -f "processChild.js" | xargs kill');
 execSync(`npm publish --access public --tag ${tag}`);
