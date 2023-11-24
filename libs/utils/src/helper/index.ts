@@ -69,11 +69,6 @@ export function createArguments(args: object): string {
   return commands.join(' ');
 }
 
-export function toArray(value: string | string[] | undefined): string[] {
-  if (value === undefined) return [];
-  return Array.isArray(value) ? value : [value];
-}
-
 export async function classInstance<T extends object>(
   objClass: { new (): T },
   obj: object
@@ -87,4 +82,9 @@ export async function classInstance<T extends object>(
     throw new Error(validation.constraints[error]);
   }
   return instance;
+}
+
+export function toArray(value: string | string[] | undefined): string[] {
+  if (value === undefined) return [];
+  return Array.isArray(value) ? value : [value];
 }

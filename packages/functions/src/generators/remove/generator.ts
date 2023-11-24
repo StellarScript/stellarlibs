@@ -1,11 +1,13 @@
 import { type Tree, joinPathFragments } from '@nx/devkit';
 import {
+  classInstance,
   readConfiguration,
   updateConfiguration,
   removeDirectoryRecursively,
 } from '@aws-nx/utils';
 
 import { RemoveGeneratorSchema } from './schema';
+import { GeneratorArguments } from './arguments';
 import { ProjectConfiguration as ProjectConfig } from '../../shared/generator/schema';
 
 interface NormalizedOptions {
@@ -23,7 +25,7 @@ export default async function removeGenerator(
     throw new Error('You must specify a project name');
   }
 
-  const options = normalizeOptions(tree, schema);
+  const options = await normalizeOptions(tree, schema);
 
   if (!options.functionName) {
     removeDirectoryRecursively(tree, options.root);
@@ -69,20 +71,18 @@ function updateProjectConfiguration(tree: Tree, options: NormalizedOptions) {
   });
 }
 
-function normalizeOptions(
+async function normalizeOptions(
   tree: Tree,
   schema: RemoveGeneratorSchema
-): NormalizedOptions {
-  const functionName = schema.function;
-  const projectName = schema.name || schema.project;
-  const config = readConfiguration<ProjectConfig>(tree, projectName);
-
-  const root = config.root;
-  const projectRoot = config.sourceRoot;
+): Promise<NormalizedOptions> {
+  const options = await classInstance(GeneratorArguments, schema);
+  const { root, sourceRoot } = readConfiguration<ProjectConfig>(
+    tree,
+    options.projectName
+  );
   return {
+    ...options,
     root,
-    projectName,
-    projectRoot,
-    functionName,
+    projectRoot: sourceRoot,
   };
 }
