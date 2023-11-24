@@ -137,7 +137,8 @@ export async function normalizeOptions<T extends GeneratorSchema>(
   const options = await classInstance(GeneratorArguments, schema);
 
   const workspaceDir = workspaceDirectory(tree, projectType);
-  const projectRoot = `${workspaceDir}/${options.directory}`;
+  const _workspaceDir = schema.directory ? '' : `${workspaceDir}/`;
+  const projectRoot = `${_workspaceDir}${options.directory}`;
 
   return {
     ...options,
