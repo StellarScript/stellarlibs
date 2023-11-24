@@ -1,6 +1,5 @@
 import * as path from 'path';
 import {
-  names,
   formatFiles,
   joinPathFragments,
   addProjectConfiguration,
@@ -16,10 +15,12 @@ import {
   updateLintConfig,
   workspaceDirectory,
   updateConfiguration,
+  classInstance,
 } from '@aws-nx/utils';
 import { jestInitGenerator } from '@nx/jest';
 import { GeneratorAppSchema } from './schema';
 import { createConfiguration } from './config';
+import { GeneratorArguments } from './arguments';
 
 interface NormalizedOptions {
   name: string;
@@ -136,25 +137,15 @@ async function normalizeOptions(
   schema: GeneratorAppSchema,
   projectType: ProjectType
 ): Promise<NormalizedOptions> {
-  const name = names(schema.name).fileName;
-  const projectDirectory = schema.directory
-    ? joinPathFragments(schema.directory, schema.name)
-    : name;
+  const options = await classInstance(GeneratorArguments, schema);
 
-  const projectName = schema.name;
   const workspaceDir = workspaceDirectory(tree, projectType);
-  const projectRoot = `${workspaceDir}/${projectDirectory}`;
-  const root = joinPathFragments(projectRoot, 'src', name);
-
-  const unitTest = schema.jest === undefined ?? true;
-  const linting = schema.linting === undefined ?? true;
+  const projectRoot = `${workspaceDir}/${options.directory}`;
+  const root = joinPathFragments(projectRoot, 'src', options.name);
 
   return {
-    name,
+    ...options,
     root,
-    linting,
-    unitTest,
-    projectName,
     projectRoot,
     bundle: schema.bundle,
     tags: toArray(schema.tag),
