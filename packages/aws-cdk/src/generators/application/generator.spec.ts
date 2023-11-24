@@ -22,10 +22,9 @@ describe('Application Generator', () => {
   it('generate application with directory argument', async () => {
     const directory = 'dir';
     const _options = { ...options, directory };
-    const _projectName = `${_options.directory}-${_options.name}`;
 
     await applicationGenerator(tree, _options);
-    const config = await readProjectConfiguration(tree, _projectName);
+    const config = await readProjectConfiguration(tree, _options.name);
     expect(config).toBeDefined();
     expect(tree.exists(config.sourceRoot)).toBeTruthy();
   });

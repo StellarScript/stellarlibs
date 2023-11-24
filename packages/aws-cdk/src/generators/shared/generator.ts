@@ -2,7 +2,6 @@ import { jestInitGenerator } from '@nx/jest';
 import type { Tree, GeneratorCallback } from '@nx/devkit';
 
 import {
-  names,
   addProjectConfiguration,
   addDependenciesToPackageJson,
 } from '@nx/devkit';
@@ -10,6 +9,7 @@ import {
 import {
   toArray,
   ProjectType,
+  classInstance,
   addProjectFiles,
   updateLintConfig,
   lintingGenerator,
@@ -24,6 +24,7 @@ import {
   SOURCE_MAP_VERSION,
 } from '../../util/constants';
 import { GeneratorSchema } from './schema';
+import { GeneratorArguments } from './arguments';
 import { createConfiguration } from './config';
 
 export interface NormalizedOptions {
@@ -128,28 +129,19 @@ export function addDependencies(tree: Tree): GeneratorCallback {
  * @description Normalizes the options for the application generator
  * @returns
  */
-export function normalizeOptions<T extends GeneratorSchema>(
+export async function normalizeOptions<T extends GeneratorSchema>(
   tree: Tree,
   projectType: ProjectType,
   schema: T
-): NormalizedOptions {
-  const name = names(schema.name).fileName;
-  const projectDirectory = schema.directory
-    ? `${names(schema.directory).fileName}/${name}`
-    : name;
+): Promise<NormalizedOptions> {
+  const options = await classInstance(GeneratorArguments, schema);
 
   const workspaceDir = workspaceDirectory(tree, projectType);
-  const projectRoot = `${workspaceDir}/${projectDirectory}`;
-
-  const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
-  const linting = schema.linting === undefined ?? true;
-  const unitTest = schema.jest === undefined ?? true;
+  const _workspaceDir = schema.directory ? '' : `${workspaceDir}/`;
+  const projectRoot = `${_workspaceDir}${options.directory}`;
 
   return {
-    name,
-    linting,
-    unitTest,
-    projectName,
+    ...options,
     projectRoot,
     tags: toArray(schema.tag),
   };
