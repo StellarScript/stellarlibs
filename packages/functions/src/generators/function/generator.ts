@@ -8,13 +8,15 @@ import {
 } from '@nx/devkit';
 import {
   ProjectType,
-  workspaceDirectory,
+  classInstance,
   addProjectFiles,
   readConfiguration,
   updateConfiguration,
+  workspaceDirectory,
 } from '@aws-nx/utils';
 
 import { FunctionGeneratorSchema } from './schema';
+import { GeneratorArguments } from '../../shared/generator/arguments';
 import { ProjectConfiguration as ProjectConfig } from '../../shared/generator/schema';
 
 interface NormalizedOptions {
@@ -28,7 +30,7 @@ export default async function functionGenerator(
   tree: Tree,
   schema: FunctionGeneratorSchema
 ) {
-  const options = normalizeOptions(tree, schema);
+  const options = await normalizeOptions(tree, schema);
   generatorValidation(tree, options);
 
   addProjectFiles(tree, joinPathFragments(__dirname, 'files'), {
@@ -93,18 +95,20 @@ export function updateLibConfiguration(
   });
 }
 
-function normalizeOptions(
+async function normalizeOptions(
   tree: Tree,
   schema: FunctionGeneratorSchema
-): NormalizedOptions {
+): Promise<NormalizedOptions> {
+  const options = await classInstance(GeneratorArguments, schema);
+
   const config = readProjectConfiguration(tree, schema.project);
   const projectType = config.projectType as ProjectType;
 
   const name = names(schema.name).fileName;
-  const appdir = workspaceDirectory(tree, projectType);
+  const projectName = options.projectName;
+  const workspaceDir = workspaceDirectory(tree, projectType);
 
-  const projectName = schema.project;
-  const projectRoot = joinPathFragments(appdir, projectName);
+  const projectRoot = joinPathFragments(workspaceDir, options.directory);
   const root = joinPathFragments(projectRoot, 'src', name);
 
   return {

@@ -1,6 +1,6 @@
 import { names } from '@nx/devkit';
 import { Expose, Transform } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class GeneratorArguments {
   @IsString()
@@ -19,12 +19,11 @@ export class GeneratorArguments {
   projectName: string;
 
   @IsString()
-  @IsOptional()
   @Expose({ name: 'directory' })
   @Transform(({ value, obj }) => {
     return value ? `${names(value).fileName}/${obj['name']}` : obj['name'];
   })
-  directory?: string;
+  directory: string;
 
   @IsBoolean()
   @Expose({ name: 'linting' })
