@@ -1,6 +1,5 @@
 import {
   Tree,
-  names,
   updateJson,
   formatFiles,
   joinPathFragments,
@@ -8,16 +7,16 @@ import {
 } from '@nx/devkit';
 import {
   ProjectType,
-  classInstance,
+  workspaceDirectory,
   addProjectFiles,
   readConfiguration,
   updateConfiguration,
-  workspaceDirectory,
+  classInstance,
 } from '@aws-nx/utils';
 
 import { FunctionGeneratorSchema } from './schema';
-import { GeneratorArguments } from '../../shared/generator/arguments';
 import { ProjectConfiguration as ProjectConfig } from '../../shared/generator/schema';
+import { GeneratorArguments } from './arguments';
 
 interface NormalizedOptions {
   name: string;
@@ -100,21 +99,17 @@ async function normalizeOptions(
   schema: FunctionGeneratorSchema
 ): Promise<NormalizedOptions> {
   const options = await classInstance(GeneratorArguments, schema);
-
   const config = readProjectConfiguration(tree, schema.project);
+
   const projectType = config.projectType as ProjectType;
+  const appdir = workspaceDirectory(tree, projectType);
 
-  const name = names(schema.name).fileName;
-  const projectName = options.projectName;
-  const workspaceDir = workspaceDirectory(tree, projectType);
-
-  const projectRoot = joinPathFragments(workspaceDir, options.directory);
-  const root = joinPathFragments(projectRoot, 'src', name);
+  const projectRoot = joinPathFragments(appdir, options.projectName);
+  const root = joinPathFragments(projectRoot, 'src', options.name);
 
   return {
-    name,
     root,
-    projectName,
     projectRoot,
+    ...options,
   };
 }
