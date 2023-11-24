@@ -23,7 +23,7 @@ export default async function libraryGenerator<
   const projectType = ProjectType.Application;
   const tasks = new GeneratorTasks();
 
-  const options = normalizeOptions(tree, projectType, schema);
+  const options = await normalizeOptions(tree, projectType, schema);
   const appFilesDir = path.join(__dirname, 'files', 'app');
   projectConfiguration(tree, appFilesDir, projectType, options);
 

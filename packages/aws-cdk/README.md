@@ -35,13 +35,13 @@ To create a new application, execute the following command:
 nx g @aws-nx/aws-cdk:application <APP_NAME>
         [--jest <true or false>]
         [--linting <true or false>]
-        [--tags <Tag_Name>]
+        [--tag <Tag_Name>]
         [--directory <Path_To_Directory>]
 ```
 
 #### Options:
 
-- `--tags` (optional): Specify tags for the application.
+- `--tag` (optional): Specify tags, multiple tag argument can be passed.
 - `--directory` (optional): Specify the directory path for the application.
 - `--jest` (optional): Include Jest for testing.
 - `--linting` (optional): Enable linting for the application.
