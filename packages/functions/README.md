@@ -2,14 +2,17 @@
 
 # Functions Documentation
 
+The @aws-nx/functions is a tool within Nx workspaces to build, bundle, and package serverless functions.
+
 <br>
 
 ## Table of Contents
 
 1. [Generate App](#generate-application)
-2. [Generate Lib](#generate-library)
-3. [Generate Function](#bootstrap)
-4. [Execute Build](#destroy)
+2. [Generate Library](#generate-library)
+3. [Remove Application](#remove-application)
+4. [Remove Function](#remove-function)
+5. [Execute Build](#execute-build)
 
 ---
 
@@ -17,12 +20,13 @@
 
 ## Installation
 
-[npm library](https://www.npmjs.com/package/@aws-nx/functions)
+The [`@aws-nx/functions`](https://www.npmjs.com/package/@aws-nx/functions) library can be installed via npm. It provides tools for generating, managing, and removing AWS CDK applications and functions within Nx workspaces. To install, use the following command:
 
 ```bash
 npm i @aws-nx/functions
 ```
 
+<br>
 <br>
 
 ## 1. Generate Application<a name="generate-application"></a>
@@ -44,6 +48,12 @@ nx g @aws-nx/functions:app <Function_Name> --project <Project_Name>
 
 ## 2. Generate Library<a name="generate-library"></a>
 
+Generate through prompt:
+
+```bash
+nx g lib
+```
+
 To generate a new library, execute the following command:
 
 ```bash
@@ -61,7 +71,7 @@ nx g @aws-nx/functions:lib <Function_Name> --project <Project_Name>
 
 ## 3. Remove Application<a name="remove-application"></a>
 
-To remove application, use the following command:
+To remove an application, use one of the following commands:
 
 ```bash
 nx g @aws-nx/functions:remove <APP_NAME>
@@ -78,7 +88,7 @@ nx g @aws-nx/functions:remove --project <APP_NAME>
 
 ## 4. Remove Function<a name="remove-function"></a>
 
-To remove single function from an existing application, use the following command:
+To remove a single function from an existing application, use one of the following commands:
 
 ```bash
 nx g @aws-nx/functions:remove <Project_Name> --function <Function_Name>

@@ -2,6 +2,8 @@
 
 # Nx Aws Cdk Documentation
 
+AWS Cloud Development Kit (CDK) applications within Nx workspaces.
+
 <br>
 
 ## Table of Contents
