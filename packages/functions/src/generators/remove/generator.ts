@@ -1,10 +1,10 @@
-import { type Tree, joinPathFragments } from '@nx/devkit';
 import {
   classInstance,
   readConfiguration,
   updateConfiguration,
   removeDirectoryRecursively,
 } from '@aws-nx/utils';
+import { type Tree, joinPathFragments } from '@nx/devkit';
 
 import { RemoveGeneratorSchema } from './schema';
 import { GeneratorArguments } from './arguments';
