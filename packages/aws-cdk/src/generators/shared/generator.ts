@@ -24,7 +24,7 @@ import {
   SOURCE_MAP_VERSION,
 } from '../../util/constants';
 import { GeneratorSchema } from './schema';
-import { GeneratorOptions } from './options';
+import { GeneratorArguments } from './arguments';
 import { createConfiguration } from './config';
 
 export interface NormalizedOptions {
@@ -134,7 +134,7 @@ export async function normalizeOptions<T extends GeneratorSchema>(
   projectType: ProjectType,
   schema: T
 ): Promise<NormalizedOptions> {
-  const options = await classInstance(GeneratorOptions, schema);
+  const options = await classInstance(GeneratorArguments, schema);
 
   const workspaceDir = workspaceDirectory(tree, projectType);
   const projectRoot = `${workspaceDir}/${options.directory}`;

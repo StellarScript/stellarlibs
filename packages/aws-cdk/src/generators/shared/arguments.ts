@@ -2,7 +2,7 @@ import { names } from '@nx/devkit';
 import { Expose, Transform } from 'class-transformer';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class GeneratorOptions {
+export class GeneratorArguments {
   @IsString()
   @IsNotEmpty()
   @Expose({ name: 'name' })
