@@ -14,14 +14,26 @@ export default async () => {
   global.stopLocalRegistry = await startLocalRegistry({
     localRegistryTarget,
     storage,
-    verbose: false,
+    verbose: true,
   });
 
   const nx = require.resolve('nx');
-  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', version()], {
-    env: process.env,
-    stdio: 'inherit',
-  });
+  execFileSync(
+    nx,
+    [
+      'run-many',
+      '--targets',
+      'publish',
+      '--ver',
+      version(),
+      '--no-cloud',
+      '--skip-nx-cache',
+    ],
+    {
+      env: process.env,
+      stdio: 'inherit',
+    }
+  );
 };
 
 function version() {
