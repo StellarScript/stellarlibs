@@ -16,7 +16,7 @@ export default async function runExecutor(
   schema: DeployExecutorSchema,
   context: ExecutorContext
 ) {
-  const args = classInstance(DeployArguments, schema);
+  const args = await classInstance(DeployArguments, schema);
   const options = normalizeOptions(args, context);
 
   const command = createCommand('deploy', options);
