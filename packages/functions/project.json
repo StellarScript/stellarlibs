@@ -14,6 +14,7 @@
         "tsConfig": "packages/functions/tsconfig.lib.json",
         "assets": [
           "packages/functions/*.md",
+          "packages/functions/migrations.json",
           {
             "input": "./packages/functions/src",
             "glob": "**/!(*.ts)",
@@ -40,6 +41,9 @@
     "publish": {
       "command": "node tools/scripts/publish.mjs functions {args.ver} {args.tag}",
       "dependsOn": ["build"]
+    },
+    "update-migration": {
+      "command": "npx ts-node tools/scripts/migration.ts functions {args.scope} {args.ver}"
     },
     "lint": {
       "executor": "@nx/eslint:lint",

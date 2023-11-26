@@ -1,13 +1,1 @@
-{
-  "packageJsonUpdates": {
-    "1.0.0": {
-      "version": "1.0.0",
-      "packages": {
-        "@aws-nx/functions": {
-          "version": "1.0.0",
-          "alwaysAddToPackageJson": true
-        }
-      }
-    }
-  }
-}
+{"packageJsonUpdates":{"1.0.2":{"version":"1.0.2","packages":{"@aws-nx/functions":{"alwaysAddToPackageJson":true,"version":"1.0.2"}}}}}
