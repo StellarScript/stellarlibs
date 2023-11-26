@@ -52,7 +52,8 @@
         "lintFilePatterns": [
           "packages/functions/**/*.ts",
           "packages/functions/package.json",
-          "packages/functions/generators.json"
+          "packages/functions/generators.json",
+          "packages/functions/migrations.json"
         ]
       }
     },
