@@ -20,7 +20,15 @@ export default async () => {
   const nx = require.resolve('nx');
   execFileSync(
     nx,
-    ['run-many', '--targets', 'publish', '--ver', version(), '--clear','--verbose'],
+    [
+      'run-many',
+      '--targets',
+      'publish',
+      '--ver',
+      version(),
+      '--clear',
+      '--verbose',
+    ],
     {
       env: process.env,
       stdio: 'inherit',
