@@ -26,7 +26,7 @@ export class BootstrapArguments {
   @IsOptional()
   @Expose({ name: 'tag' })
   @IsString({ each: true, message: 'tags must be a string' })
-  @Transform(({ obj }) => toArray(obj['tag']))
+  @Transform(({ value, obj }) => value && toArray(obj['tag']))
   ['tags']?: string[];
 
   @IsOptional()
