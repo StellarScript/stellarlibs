@@ -43,7 +43,10 @@
       "dependsOn": ["build"]
     },
     "update-migration": {
-      "command": "npx ts-node tools/scripts/migration.ts functions {args.scope} {args.ver}"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/migration.js functions {args.scope} {args.ver}"
+      }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
