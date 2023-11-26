@@ -52,6 +52,10 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
+      - name: Update Migration
+        run: |
+          npx nx run ${{ github.event.inputs.plugin }}:update-migration --scope=@aws-nx --ver=${{ github.event.inputs.version }}
+
       - name: Build Plugin
         run: npx nx run ${{ github.event.inputs.plugin }}:build --outputPath ./build/${{ github.event.inputs.plugin }}
 
