@@ -35,6 +35,7 @@ export async function runCommand(
   try {
     await execSync(command, {
       cwd: cwd,
+      env: process.env,
       maxBuffer: LARGE_BUFFER,
       stdio: ['inherit', process.stdin, process.stderr],
     });
