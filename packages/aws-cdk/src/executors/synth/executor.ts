@@ -16,7 +16,7 @@ export default async function runExecutor(
   schema: SynthExecutorSchema,
   context: ExecutorContext
 ) {
-  const args = classInstance(SynthArguments, schema);
+  const args = await classInstance(SynthArguments, schema);
   const options = normalizeOptions(args, context);
 
   const command = createCommand('synth', options);
