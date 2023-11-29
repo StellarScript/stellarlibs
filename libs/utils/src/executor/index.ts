@@ -37,7 +37,7 @@ export async function runCommand(
       cwd: cwd,
       env: process.env,
       maxBuffer: LARGE_BUFFER,
-      stdio: ['inherit', process.stdin, process.stderr],
+      stdio: ['inherit', process.stdin, process.stderr, process.stdout],
     });
     return { success: true };
   } catch (error) {
