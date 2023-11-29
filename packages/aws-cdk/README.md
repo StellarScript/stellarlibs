@@ -142,11 +142,13 @@ To destroy the application/stack, execute:
 ```bash
 nx destroy <Stack_Name>
     [--stack <Stack_Name>]
+    [--all <Boolean>]
 ```
 
 #### Options:
 
 - `--stack` (optional): Specifies the stack name to destroy. You can pass multiple --stack arguments.
+- `--all` (optional): Pass --all to destory all stack.
 
 #### Example:
 
