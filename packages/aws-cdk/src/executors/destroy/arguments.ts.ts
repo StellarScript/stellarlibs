@@ -1,4 +1,4 @@
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsIn, IsOptional, IsString } from 'class-validator';
 import { Transform, Expose } from 'class-transformer';
 import { toArray } from '@aws-nx/utils';
 
@@ -19,4 +19,9 @@ export class DestroyArguments {
   })
   @IsIn(['always', 'never'])
   ['require-approval']?: 'always' | 'never';
+
+  @Expose({ name: 'all' })
+  @IsOptional()
+  @IsBoolean()
+  ['all']?: boolean;
 }
