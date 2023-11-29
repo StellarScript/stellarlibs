@@ -34,8 +34,7 @@ describe('destroy Executor', () => {
     });
 
     it('run destroy executor command', async () => {
-      const projectName = 'test-app';
-      const execution = await destroyExecutor({ name: projectName }, context);
+      const execution = await destroyExecutor({}, context);
 
       const options = normalizeOptions({}, context);
       const command = createCommand('destroy', options);
