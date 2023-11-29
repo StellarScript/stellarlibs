@@ -83,4 +83,14 @@ describe('destroy Executor', () => {
       expect(command).toContain(`destroy --require-approval always`);
     });
   });
+
+  describe('All Argument', () => {
+    it('pass all argument', async () => {
+      const args = await normalizeArguments({ all: true });
+      const options = normalizeOptions(args, context);
+
+      const command = createCommand('destroy', options);
+      expect(command).toContain(`destroy --all`);
+    });
+  });
 });
