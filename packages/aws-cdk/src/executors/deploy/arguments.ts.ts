@@ -1,5 +1,5 @@
 import { Transform, Expose } from 'class-transformer';
-import { IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { toArray } from '@aws-nx/utils';
 
 export class DeployArguments {
@@ -18,4 +18,9 @@ export class DeployArguments {
     return obj['approval'];
   })
   ['require-approval']?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  @Expose({ name: 'all' })
+  ['all']?: boolean;
 }

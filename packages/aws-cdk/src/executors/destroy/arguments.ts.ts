@@ -20,8 +20,8 @@ export class DestroyArguments {
   @IsIn(['always', 'never'])
   ['require-approval']?: 'always' | 'never';
 
-  @Expose({ name: 'all' })
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
+  @Expose({ name: 'all' })
   ['all']?: boolean;
 }

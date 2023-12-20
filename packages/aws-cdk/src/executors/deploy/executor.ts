@@ -1,8 +1,8 @@
 import { ExecutorContext } from '@nx/devkit';
 import { runCommand, normalizeOptions, classInstance } from '@aws-nx/utils';
 
-import { DeployArguments } from './arguments.ts';
 import { DeployExecutorSchema } from './schema';
+import { DeployArguments } from './arguments.ts';
 import { createCommand } from '../../util/executor';
 
 /**
