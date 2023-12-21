@@ -1,0 +1,63 @@
+{
+  "name": "aws-ecr",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/aws-ecr/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/aws-ecr",
+        "main": "packages/aws-ecr/src/index.ts",
+        "tsConfig": "packages/aws-ecr/tsconfig.lib.json",
+        "assets": [
+          "packages/aws-ecr/*.md",
+          {
+            "input": "./packages/aws-ecr/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/aws-ecr/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./packages/aws-ecr",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./packages/aws-ecr",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs aws-ecr {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "packages/aws-ecr/**/*.ts",
+          "packages/aws-ecr/package.json",
+          "packages/aws-ecr/generators.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "packages/aws-ecr/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
