@@ -10,6 +10,7 @@ on:
         default: 'aws-cdk'
         options:
           - 'aws-cdk'
+          - 'aws-ecr'
           - 'functions'
 
       tag:
