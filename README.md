@@ -14,6 +14,8 @@ This repository contains a collection of Nx plugins designed to work with AWS.
 
 2. [**functions**](https://github.com/StellarScript/aws-nx/tree/main/packages/functions#functions-documentation) - This plugin provides support for aws lambda to build, bundle and package funcitons.
 
+3. [**aws-ecr**](https://github.com/StellarScript/aws-nx/tree/main/packages/aws-ecr#nx-aws-ecr-documentation) - This plugin provides support for AWS Elastic Container (ECR).
+
 <br>
 
 ## Workspace
