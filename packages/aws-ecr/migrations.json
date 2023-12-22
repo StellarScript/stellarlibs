@@ -1,0 +1,13 @@
+{
+  "packageJsonUpdates": {
+    "1.0.0": {
+      "version": "1.0.0",
+      "packages": {
+        "@aws-nx/aws-ecr": {
+          "version": "1.0.0",
+          "alwaysAddToPackageJson": true
+        }
+      }
+    }
+  }
+}
