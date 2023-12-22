@@ -31,7 +31,7 @@ describe('Auth Executor', () => {
     });
   });
 
-  describe('Tag Exexutor Fail', () => {
+  describe('Tag Executor Fail', () => {
     afterEach(() => jest.clearAllMocks());
 
     beforeAll(() => {
@@ -39,7 +39,7 @@ describe('Auth Executor', () => {
       jest.spyOn(childProcess, 'execSync');
     });
 
-    it('run tag exexutor without envs', () => {
+    it('run tag executor without envs', () => {
       expect(async () => await executor(options, context)).rejects.toThrow(
         'AWS_ACCOUNT_ID environmental variable is not set'
       );

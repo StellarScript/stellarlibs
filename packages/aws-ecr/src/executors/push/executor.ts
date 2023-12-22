@@ -16,7 +16,7 @@ export default async function runExecutor(
   return await runCommand(command, context.root);
 }
 
-async function normalizeOptions(
+export async function normalizeOptions(
   parsedArgs: PushArguments,
   context: ExecutorContext
 ) {
