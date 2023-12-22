@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "auth": {
+      "implementation": "./src/executors/auth/executor",
+      "schema": "./src/executors/auth/schema.json",
+      "description": "auth executor"
+    }
+  }
+}

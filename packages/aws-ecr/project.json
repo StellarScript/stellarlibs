@@ -47,7 +47,8 @@
         "lintFilePatterns": [
           "packages/aws-ecr/**/*.ts",
           "packages/aws-ecr/package.json",
-          "packages/aws-ecr/generators.json"
+          "packages/aws-ecr/generators.json",
+          "packages/aws-ecr/executors.json"
         ]
       }
     },
