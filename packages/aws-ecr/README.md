@@ -26,18 +26,22 @@ npm i @aws-nx/aws-ecr
 
 ## 1. Configure Application<a name="configure-application"></a>
 
-To configure an application, use the following command. This command will generate dockerfile and project targets to manage containers.
+Command is used to configure an application. This command will generate a Dockerfile and project targets to manage containers.
 
 ```bash
 nx g @aws-nx/aws-ecr:configure <APP_NAME>
     [--tag <String | String[]>]
 ```
 
+#### Options:
+
+- `--tag` (optional): Tags can be used to categorize your applications. You can pass multiple --tag arguments. For example, --tag frontend --tag experimental.
+
 <br>
 
 ## 2. Auth Ecr<a name="auth-ecr"></a>
 
-To authenticate aws ecr, use the following command:
+Command is used to authenticate with AWS ECR.
 
 ```bash
 nx auth <App_Name>
@@ -47,7 +51,7 @@ nx auth <App_Name>
 
 ## 3. Build Container<a name="build-container"></a>
 
-To build docker container, use the following command:
+Command is used to build a Docker container for the specified application.
 
 ```bash
 nx docker-build <APP_NAME>
