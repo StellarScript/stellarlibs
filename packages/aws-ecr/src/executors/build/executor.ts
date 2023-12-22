@@ -13,7 +13,7 @@ export default async function runExecutor(
   const options = normalizeOptions(args, context);
 
   const command = creaetBuildCommand(options);
-  await runCommand(command, options.root);
+  return await runCommand(command, options.root);
 }
 
 export function normalizeOptions(

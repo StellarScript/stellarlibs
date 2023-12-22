@@ -35,10 +35,10 @@ describe('Configure Generator', () => {
     await configureGenerator(tree, options);
     const config_after = readProjectConfiguration(tree, options.name);
     expect(Object.keys(config_after.targets)).toEqual([
-      'auth',
-      'tag',
-      'push',
-      'docker-build',
+      'ecr-auth',
+      'ecr-tag',
+      'ecr-push',
+      'ecr-build',
     ]);
   }, 100000);
 
