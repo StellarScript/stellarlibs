@@ -1,0 +1,19 @@
+{
+  "executors": {
+    "auth": {
+      "implementation": "./src/executors/auth/executor",
+      "schema": "./src/executors/auth/schema.json",
+      "description": "auth executor"
+    },
+    "tag": {
+      "implementation": "./src/executors/tag/executor",
+      "schema": "./src/executors/tag/schema.json",
+      "description": "tag executor"
+    },
+    "push": {
+      "implementation": "./src/executors/push/executor",
+      "schema": "./src/executors/push/schema.json",
+      "description": "push executor"
+    }
+  }
+}
