@@ -14,6 +14,11 @@
       "implementation": "./src/executors/push/executor",
       "schema": "./src/executors/push/schema.json",
       "description": "push executor"
+    },
+    "build": {
+      "implementation": "./src/executors/build/executor",
+      "schema": "./src/executors/build/schema.json",
+      "description": "build executor"
     }
   }
 }

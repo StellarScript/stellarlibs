@@ -11,6 +11,10 @@ interface CreateCommand {
   projectName: string;
 }
 
+interface CreateBuildCommand extends CreateCommand {
+  args: { tag: string; env?: string[]; injectEnvs?: string[] };
+}
+
 export function createCommand(command: string, options: CreateCommand) {
   const creds = getCredentials();
 
@@ -19,6 +23,21 @@ export function createCommand(command: string, options: CreateCommand) {
   commands.add(command);
   commands.add(
     `${creds.accountId}.dkr.ecr.${creds.region}.amazonaws.com/${options.projectName}:${options.args.tag}`
+  );
+  return commands.command;
+}
+
+export function creaetBuildCommand(options: CreateBuildCommand) {
+  const commands = new Commands();
+  commands.add('docker');
+  commands.add('build');
+  commands.add('-t');
+  commands.add(`${options.args.tag}`);
+  commands.add(`${options.root}`);
+
+  options.args.env?.forEach((e) => commands.add(`-e ${e}`));
+  options.args.injectEnvs?.forEach((envVar) =>
+    commands.add(`-e ${process.env[envVar]}`)
   );
   return commands.command;
 }

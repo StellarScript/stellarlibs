@@ -28,24 +28,27 @@ export async function configureGenerator(
 }
 
 function configureProject(tree: Tree, options: NormalizedOptions) {
-  const dockerFilePath = joinPathFragments(options.projectRoot, 'Dockerfile');
   const configuration = {
-    auth: {
+    'ecr-auth': {
       executor: '@aws-nx/ecr:auth',
       options: {},
     },
-    tag: {
-      dependsOn: ['auth', 'docker-build'],
+    'ecr-tag': {
+      dependsOn: ['ecr-auth', 'build'],
       executor: '@aws-nx/ecr:tag',
       options: {},
     },
-    push: {
-      dependsOn: ['tag'],
+    'ecr-push': {
+      dependsOn: ['ecer-tag'],
       executor: '@aws-nx/ecr:push',
+      options: {},
     },
-    'docker-build': {
+    'ecr-build': {
       dependsOn: ['build'],
-      command: `docker build -f ${dockerFilePath} . -t server`,
+      executor: '@aws-nx/ecr:build',
+      options: {
+        injectEnvs: ['NODE_ENV'],
+      },
     },
   };
   updateConfiguration(tree, options.projectName, (workspace) => {
