@@ -1,65 +1,42 @@
-import { execSync } from 'child_process';
-import { join, dirname } from 'path';
-import { mkdirSync, rmSync } from 'fs';
+import * as path from 'path';
+import {
+  uniq,
+  checkFilesExist,
+  ensureNxProject,
+  runNxCommandAsync,
+} from '@nx/plugin/testing';
+import { ensureNxLocalLibs, cleanLocalLibs } from '@aws-nx/utils';
+import { joinPathFragments } from '@nx/devkit';
 
 describe('aws-ecr', () => {
-  let projectDirectory: string;
-
   beforeAll(() => {
-    projectDirectory = createTestProject();
-
-    // The plugin has been built and published to a local registry in the jest globalSetup
-    // Install the plugin built with the latest source code into the test repo
-    execSync(`npm install @aws-nx/aws-ecr@e2e`, {
-      cwd: projectDirectory,
-      stdio: 'inherit',
-      env: process.env,
-    });
+    ensureNxLocalLibs();
+    ensureNxProject('@aws-nx/aws-ecr', 'dist/packages/aws-ecr');
   });
 
   afterAll(() => {
-    // Cleanup the test project
-    rmSync(projectDirectory, {
-      recursive: true,
-      force: true,
-    });
+    cleanLocalLibs();
   });
 
-  it('should be installed', () => {
-    // npm ls will fail if the package is not installed properly
-    execSync('npm ls @aws-nx/aws-ecr', {
-      cwd: projectDirectory,
-      stdio: 'inherit',
+  describe('Configure generator', () => {
+    it('configure none-existing application (failure)', async () => {
+      const appName = uniq('aws-ecr');
+      expect(
+        async () =>
+          await runNxCommandAsync(
+            `generate @aws-nx/aws-ecr:configure ${appName}`
+          )
+      );
     });
+
+    it('configure application (success)', async () => {
+      const appName = uniq('aws-ecr');
+      await runNxCommandAsync(`generate @nx/js:lib ${appName}`);
+      await runNxCommandAsync(`generate @aws-nx/aws-ecr:configure ${appName}`);
+      expect(() => {
+        checkFilesExist(path.join(appName));
+        checkFilesExist(path.join(joinPathFragments(appName, 'Dockerfile')));
+      });
+    }, 100000);
   });
 });
-
-/**
- * Creates a test project with create-nx-workspace and installs the plugin
- * @returns The directory where the test project was created
- */
-function createTestProject() {
-  const projectName = 'test-project';
-  const projectDirectory = join(process.cwd(), 'tmp', projectName);
-
-  // Ensure projectDirectory is empty
-  rmSync(projectDirectory, {
-    recursive: true,
-    force: true,
-  });
-  mkdirSync(dirname(projectDirectory), {
-    recursive: true,
-  });
-
-  execSync(
-    `npx --yes create-nx-workspace@latest ${projectName} --preset apps --no-nxCloud --no-interactive`,
-    {
-      cwd: dirname(projectDirectory),
-      stdio: 'inherit',
-      env: process.env,
-    }
-  );
-  console.log(`Created test project in "${projectDirectory}"`);
-
-  return projectDirectory;
-}

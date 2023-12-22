@@ -49,9 +49,9 @@ function configureProject(tree: Tree, options: NormalizedOptions) {
     },
   };
   updateConfiguration(tree, options.projectName, (workspace) => {
-    workspace.tags = [...workspace.tags, ...options.tags];
+    workspace.tags = [...(workspace?.tags || []), ...(options?.tags || [])];
     workspace.targets = {
-      ...workspace.targets,
+      ...workspace?.targets,
       ...configuration,
     };
     return workspace;
