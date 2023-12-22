@@ -5,6 +5,24 @@ interface EcrCredentials {
   accountId: string;
 }
 
+interface CreateCommand {
+  args: { tag: string };
+  root: string;
+  projectName: string;
+}
+
+export function createCommand(command: string, options: CreateCommand) {
+  const creds = getCredentials();
+
+  const commands = new Commands();
+  commands.add('docker');
+  commands.add(command);
+  commands.add(
+    `${creds.accountId}.dkr.ecr.${creds.region}.amazonaws.com/${options.projectName}:${options.args.tag}`
+  );
+  return commands.command;
+}
+
 export function createAuthCommand() {
   AwsCli.verifyCli();
   const creds = getCredentials();

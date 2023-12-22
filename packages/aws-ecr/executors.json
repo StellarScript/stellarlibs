@@ -4,6 +4,11 @@
       "implementation": "./src/executors/auth/executor",
       "schema": "./src/executors/auth/schema.json",
       "description": "auth executor"
+    },
+    "tag": {
+      "implementation": "./src/executors/tag/executor",
+      "schema": "./src/executors/tag/schema.json",
+      "description": "tag executor"
     }
   }
 }

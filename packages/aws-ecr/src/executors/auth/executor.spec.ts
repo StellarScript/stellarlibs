@@ -18,13 +18,13 @@ describe('Auth Executor', () => {
 
   beforeAll(() => {
     context = ExecutionContextMock({
-      executor: 'bootstrap',
+      executor: 'auth',
       projectName: projectName,
       plugin: '@aws-nx/aws-ecr',
     });
   });
 
-  describe('Prepare Auth Fail', () => {
+  describe('Execute Auth Fail', () => {
     afterEach(() => jest.clearAllMocks());
 
     beforeAll(() => {
