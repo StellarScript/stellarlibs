@@ -16,7 +16,10 @@ export default async function runExecutor(
   return await runCommand(command, context.root);
 }
 
-export function normalizeOptions(parsedArgs: TagArguments, context: ExecutorContext) {
+export function normalizeOptions(
+  parsedArgs: TagArguments,
+  context: ExecutorContext
+) {
   const cxtOpts = context?.workspace?.projects[
     context.projectName!
   ] as ProjectConfiguration;

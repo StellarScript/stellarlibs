@@ -1,5 +1,4 @@
 export interface PushExecutorSchema {
-    tag: string;
-    name: string;
-  }
-  
+  tag: string;
+  name: string;
+}
