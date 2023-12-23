@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "@aws-nx/aws-cdk": ["packages/aws-cdk/src/index.ts"],
-      "@aws-nx/aws-ecr": ["packages/aws-ecr/src/index.ts"],
       "@aws-nx/functions": ["packages/functions/src/index.ts"],
       "@aws-nx/utils": ["libs/utils/src/index.ts"]
     }
