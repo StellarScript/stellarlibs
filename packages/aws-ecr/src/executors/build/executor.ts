@@ -12,7 +12,7 @@ export default async function runExecutor(
   const args = await classInstance(BuildArguments, schema);
   const options = normalizeOptions(args, context);
 
-  const command = creaetBuildCommand(options);
+  const command = creaetBuildCommand(options, context.cwd);
   return await runCommand(command, options.root);
 }
 

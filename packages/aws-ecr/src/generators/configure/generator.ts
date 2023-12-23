@@ -30,22 +30,22 @@ export async function configureGenerator(
 function configureProject(tree: Tree, options: NormalizedOptions) {
   const configuration = {
     'ecr-auth': {
-      executor: '@aws-nx/ecr:auth',
+      executor: '@aws-nx/aws-ecr:auth',
       options: {},
     },
     'ecr-tag': {
       dependsOn: ['ecr-auth', 'build'],
-      executor: '@aws-nx/ecr:tag',
+      executor: '@aws-nx/aws-ecr:tag',
       options: {},
     },
     'ecr-push': {
       dependsOn: ['ecer-tag'],
-      executor: '@aws-nx/ecr:push',
+      executor: '@aws-nx/aws-ecr:push',
       options: {},
     },
     'ecr-build': {
       dependsOn: ['build'],
-      executor: '@aws-nx/ecr:build',
+      executor: '@aws-nx/aws-ecr:build',
       options: {
         injectEnvs: ['NODE_ENV'],
       },

@@ -27,13 +27,15 @@ export function createCommand(command: string, options: CreateCommand) {
   return commands.command;
 }
 
-export function creaetBuildCommand(options: CreateBuildCommand) {
+export function creaetBuildCommand(options: CreateBuildCommand, cwd: string) {
   const commands = new Commands();
   commands.add('docker');
   commands.add('build');
   commands.add('-t');
   commands.add(`${options.args.tag}`);
-  commands.add(`${options.root}`);
+  commands.add('-f');
+  commands.add(`${options.root}/Dockerfile`);
+  commands.add(`${cwd}`);
 
   options.args.env?.forEach((e) => commands.add(`-e ${e}`));
   options.args.injectEnvs?.forEach((envVar) =>
