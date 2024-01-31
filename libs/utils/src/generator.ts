@@ -8,6 +8,9 @@ import {
   offsetFromRoot,
   GeneratorCallback,
   runTasksInSerial,
+  joinPathFragments,
+  updateJson,
+  readJson,
 } from '@nx/devkit';
 import type { Linter } from '@nx/linter';
 
@@ -81,5 +84,46 @@ export function addIgnoreFileName(tree: Tree, comment: string, fileNames: string
       ignores.push(comment, fileName, '');
     }
     tree.write('./.gitignore', ignores.join('\n'));
+  }
+}
+
+/**
+ *
+ * @param tree
+ * @param dirPath
+ * @description Removes files and directories recursively
+ */
+export function removeDirectoryRecursively(tree: Tree, dirPath: string): void {
+  const list = tree.exists(dirPath) ? tree.children(dirPath) : [];
+
+  for (const fileName of list) {
+    const filePath = joinPathFragments(dirPath, fileName);
+    const isFile = tree.isFile(filePath);
+
+    if (isFile) {
+      tree.delete(filePath);
+    } else {
+      removeDirectoryRecursively(tree, filePath);
+    }
+  }
+}
+
+/**
+ *
+ * @param tree
+ * @param projectName
+ * @description Remove library path from tsconfig.base.json
+ */
+export function removeTsConfigPath(tree: Tree, projectName: string): void {
+  try {
+    const workspaceName = readJson(tree, 'package.json').name.split('/')[0];
+    const key = `${workspaceName}/${projectName}/*`;
+
+    updateJson(tree, 'tsconfig.base.json', (json) => {
+      delete json.compilerOptions.paths[key];
+      return json;
+    });
+  } catch (e) {
+    return;
   }
 }
