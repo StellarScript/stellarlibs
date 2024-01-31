@@ -1,5 +1,5 @@
 import type { Tree } from '@nx/devkit';
-import { ProjectType } from '@aws-nx/utils';
+import { ProjectType } from '@stellar-libs/utils';
 import { AppGeneratorSchema } from './schema';
 import { generatePackage } from '../../shared/generator/generator';
 

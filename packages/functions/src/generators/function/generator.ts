@@ -12,7 +12,7 @@ import {
   readConfiguration,
   updateConfiguration,
   classInstance,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 
 import { FunctionGeneratorSchema } from './schema';
 import { GeneratorArguments } from './arguments';

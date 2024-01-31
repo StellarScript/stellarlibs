@@ -1,5 +1,9 @@
 import { ExecutorContext } from '@nx/devkit';
-import { runCommand, normalizeOptions, classInstance } from '@aws-nx/utils';
+import {
+  runCommand,
+  normalizeOptions,
+  classInstance,
+} from '@stellar-libs/utils';
 
 import { SynthArguments } from './arguments';
 import { SynthExecutorSchema } from './schema';

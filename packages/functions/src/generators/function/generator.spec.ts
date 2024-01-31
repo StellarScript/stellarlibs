@@ -1,6 +1,6 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
-import { ProjectType } from '@aws-nx/utils';
+import { ProjectType } from '@stellar-libs/utils';
 
 import functionGenerator from './generator';
 import { FunctionGeneratorSchema } from './schema';

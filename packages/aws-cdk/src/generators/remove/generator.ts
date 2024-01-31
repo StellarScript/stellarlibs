@@ -4,7 +4,7 @@ import {
   ProjectType,
   removeTsConfigPath,
   removeDirectoryRecursively,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 import { RemoveGeneratorSchema } from './schema';
 
 export default async function removeGenerator(

@@ -1,19 +1,19 @@
 {
-  "name": "@aws-nx/aws-cdk",
+  "name": "@stellar-libs/aws-cdk",
   "version": "0.0.1",
   "license": "MIT",
-  "homepage": "https://github.com/StellarScript/aws-nx/blob/main/packages/aws-cdk/README.md",
+  "homepage": "https://github.com/StellarScript/stellar-libs/blob/main/packages/aws-cdk/README.md",
   "author": {
-    "name": "aws-nx"
+    "name": "stellar-libs"
   },
   "publishConfig": {
     "access": "public",
-    "@aws-nx:aws-cdk": "https://npm.pkg.github.com"
+    "@stellar-libs:aws-cdk": "https://npm.pkg.github.com"
   },
   "repository": {
     "type": "git",
     "directory": "packages/aws-cdk",
-    "url": "https://github.com/StellarScript/aws-nx"
+    "url": "https://github.com/StellarScript/stellar-libs"
   },
   "dependencies": {
     "@nx/devkit": "17.1.2",

@@ -21,10 +21,10 @@ AWS Cloud Development Kit (CDK) applications within Nx workspaces.
 
 ## Installation
 
-The [`@aws-nx/aws-cdk`](https://www.npmjs.com/package/@aws-nx/aws-cdk) package can be installed via npm or yarn. It provides tools for managing AWS CDK applications. To install, use the following command:
+The [`@stellar-libs/aws-cdk`](https://www.npmjs.com/package/@stellar-libs/aws-cdk) package can be installed via npm or yarn. It provides tools for managing AWS CDK applications. To install, use the following command:
 
 ```bash
-npm i @aws-nx/aws-cdk
+npm i @stellar-libs/aws-cdk
 ```
 
 <br>
@@ -35,7 +35,7 @@ npm i @aws-nx/aws-cdk
 To generate a new application, use the following command. This command sets up a new AWS CDK application with optional configurations for testing and linting.
 
 ```bash
-nx g @aws-nx/aws-cdk:application <APP_NAME>
+nx g @stellar-libs/aws-cdk:application <APP_NAME>
     [--jest <Boolean>]
     [--linting <Boolean>]
     [--tag <String>]
@@ -52,7 +52,7 @@ nx g @aws-nx/aws-cdk:application <APP_NAME>
 #### Example:
 
 ```bash
-nx g @aws-nx/aws-cdk:application myapp --tag experimental --tag infrastructure --directory apps
+nx g @stellar-libs/aws-cdk:application myapp --tag experimental --tag infrastructure --directory apps
 ```
 
 <br>
@@ -63,7 +63,7 @@ nx g @aws-nx/aws-cdk:application myapp --tag experimental --tag infrastructure -
 To remove an existing application, use the following command:
 
 ```bash
-nx g @aws-nx/aws-cdk:remove <APP_NAME>
+nx g @stellar-libs/aws-cdk:remove <APP_NAME>
 ```
 
 <br>

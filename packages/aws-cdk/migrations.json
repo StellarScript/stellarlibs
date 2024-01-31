@@ -3,7 +3,7 @@
     "1.0.0": {
       "version": "1.0.0",
       "packages": {
-        "@aws-nx/aws-cdk": {
+        "@stellar-libs/aws-cdk": {
           "version": "1.0.0",
           "alwaysAddToPackageJson": true
         }

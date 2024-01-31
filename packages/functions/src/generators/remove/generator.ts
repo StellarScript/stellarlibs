@@ -3,7 +3,7 @@ import {
   readConfiguration,
   updateConfiguration,
   removeDirectoryRecursively,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 import { type Tree, joinPathFragments } from '@nx/devkit';
 
 import { RemoveGeneratorSchema } from './schema';

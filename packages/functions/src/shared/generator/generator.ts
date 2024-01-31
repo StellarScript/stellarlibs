@@ -16,7 +16,7 @@ import {
   workspaceDirectory,
   updateConfiguration,
   classInstance,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 import { jestInitGenerator } from '@nx/jest';
 import { GeneratorAppSchema } from './schema';
 import { createConfiguration } from './config';

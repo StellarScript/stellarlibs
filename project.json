@@ -1,5 +1,5 @@
 {
-  "name": "@aws-nx/source",
+  "name": "@stellar-libs/source",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "targets": {
     "local-registry": {

@@ -1,6 +1,10 @@
 import * as path from 'path';
 import { type Tree, type GeneratorCallback, formatFiles } from '@nx/devkit';
-import { ProjectType, GeneratorTasks, addIgnoreFileName } from '@aws-nx/utils';
+import {
+  ProjectType,
+  GeneratorTasks,
+  addIgnoreFileName,
+} from '@stellar-libs/utils';
 
 import {
   addDependencies,

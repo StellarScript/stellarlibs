@@ -2,7 +2,7 @@
 
 # Functions Documentation
 
-The @aws-nx/functions is a tool within Nx workspaces to build, bundle, and package serverless functions.
+The @stellar-libs/functions is a tool within Nx workspaces to build, bundle, and package serverless functions.
 
 <br>
 
@@ -20,10 +20,10 @@ The @aws-nx/functions is a tool within Nx workspaces to build, bundle, and packa
 
 ## Installation
 
-The [`@aws-nx/functions`](https://www.npmjs.com/package/@aws-nx/functions) library can be installed via npm. It provides tools for generating, managing, and removing AWS CDK applications and functions within Nx workspaces. To install, use the following command:
+The [`@stellar-libs/functions`](https://www.npmjs.com/package/@stellar-libs/functions) library can be installed via npm. It provides tools for generating, managing, and removing AWS CDK applications and functions within Nx workspaces. To install, use the following command:
 
 ```bash
-npm i @aws-nx/functions
+npm i @stellar-libs/functions
 ```
 
 <br>
@@ -34,7 +34,7 @@ npm i @aws-nx/functions
 To generate a new application, execute the following command:
 
 ```bash
-nx g @aws-nx/functions:app <Function_Name> --project <Project_Name>
+nx g @stellar-libs/functions:app <Function_Name> --project <Project_Name>
 ```
 
 #### Options:
@@ -57,7 +57,7 @@ nx g lib
 To generate a new library, execute the following command:
 
 ```bash
-nx g @aws-nx/functions:lib <Function_Name> --project <Project_Name>
+nx g @stellar-libs/functions:lib <Function_Name> --project <Project_Name>
 ```
 
 #### Options:
@@ -74,13 +74,13 @@ nx g @aws-nx/functions:lib <Function_Name> --project <Project_Name>
 To remove an application, use one of the following commands:
 
 ```bash
-nx g @aws-nx/functions:remove <APP_NAME>
+nx g @stellar-libs/functions:remove <APP_NAME>
 ```
 
 or
 
 ```bash
-nx g @aws-nx/functions:remove --project <APP_NAME>
+nx g @stellar-libs/functions:remove --project <APP_NAME>
 ```
 
 <br>
@@ -91,13 +91,13 @@ nx g @aws-nx/functions:remove --project <APP_NAME>
 To remove a single function from an existing application, use one of the following commands:
 
 ```bash
-nx g @aws-nx/functions:remove <Project_Name> --function <Function_Name>
+nx g @stellar-libs/functions:remove <Project_Name> --function <Function_Name>
 ```
 
 or
 
 ```bash
-nx g @aws-nx/functions:remove --function <Function_Name> --project <Project_Name>
+nx g @stellar-libs/functions:remove --function <Function_Name> --project <Project_Name>
 ```
 
 <br>

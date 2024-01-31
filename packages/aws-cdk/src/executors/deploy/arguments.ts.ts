@@ -1,6 +1,6 @@
 import { Transform, Expose } from 'class-transformer';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
-import { toArray } from '@aws-nx/utils';
+import { toArray } from '@stellar-libs/utils';
 
 export class DeployArguments {
   @IsOptional()

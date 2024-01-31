@@ -4,7 +4,7 @@ import {
   classInstance,
   normalizeOptions,
   ExecutionContextMock,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 
 import synthExecutor from './executor';
 import { BootstrapArguments } from './arguments.ts';
@@ -22,7 +22,7 @@ describe('Bootstrap Executor', () => {
     context = ExecutionContextMock({
       executor: 'bootstrap',
       projectName: projectName,
-      plugin: '@aws-nx/aws-cdk',
+      plugin: '@stellar-libs/aws-cdk',
     });
   });
 

@@ -15,7 +15,7 @@ import {
   lintingGenerator,
   updateConfiguration,
   workspaceDirectory,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 
 import {
   CDK_VERSION,

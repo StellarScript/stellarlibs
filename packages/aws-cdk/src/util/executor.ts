@@ -1,4 +1,4 @@
-import { createCommand as _createCommand } from '@aws-nx/utils';
+import { createCommand as _createCommand } from '@stellar-libs/utils';
 
 interface CreateCommand {
   args: object;

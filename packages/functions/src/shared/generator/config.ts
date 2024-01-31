@@ -1,4 +1,4 @@
-import { ProjectType } from '@aws-nx/utils';
+import { ProjectType } from '@stellar-libs/utils';
 import type { ProjectConfiguration } from './schema';
 
 interface ConfigOptions {
@@ -15,7 +15,7 @@ export const createConfiguration = (
   sourceRoot: `${options.projectRoot}/src`,
   targets: {
     build: {
-      executor: '@aws-nx/function:build',
+      executor: '@stellar-libs/function:build',
       options: {
         additionalEntryPoints: [],
       },

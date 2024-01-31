@@ -1,6 +1,6 @@
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { Transform, Expose } from 'class-transformer';
-import { toArray } from '@aws-nx/utils';
+import { toArray } from '@stellar-libs/utils';
 
 export class SynthArguments {
   @IsOptional()

@@ -5,7 +5,7 @@ import {
   classInstance,
   normalizeOptions,
   ExecutionContextMock,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 
 import synthExecutor from './executor';
 import { SynthArguments } from './arguments';
@@ -26,7 +26,7 @@ describe('Synth Executor', () => {
       context = ExecutionContextMock({
         executor: 'synth',
         projectName: projectName,
-        plugin: '@aws-nx/aws-cdk',
+        plugin: '@stellar-libs/aws-cdk',
       });
 
       jest.spyOn(logger, 'debug');

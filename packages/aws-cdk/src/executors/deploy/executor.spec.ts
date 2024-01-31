@@ -5,7 +5,7 @@ import {
   classInstance,
   normalizeOptions,
   ExecutionContextMock,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 
 import deployExecutor from './executor';
 import { DeployArguments } from './arguments.ts';
@@ -26,7 +26,7 @@ describe('deploy Executor', () => {
       context = ExecutionContextMock({
         executor: 'deploy',
         projectName: projectName,
-        plugin: '@aws-nx/aws-cdk',
+        plugin: '@stellar-libs/aws-cdk',
       });
 
       jest.spyOn(logger, 'debug');

@@ -14,19 +14,19 @@ export const createConfiguration = (
   sourceRoot: `${options.projectRoot}/src`,
   targets: {
     deploy: {
-      executor: '@aws-nx/aws-cdk:deploy',
+      executor: '@stellar-libs/aws-cdk:deploy',
       options: {},
     },
     destroy: {
-      executor: '@aws-nx/aws-cdk:destroy',
+      executor: '@stellar-libs/aws-cdk:destroy',
       options: {},
     },
     bootstrap: {
-      executor: '@aws-nx/aws-cdk:bootstrap',
+      executor: '@stellar-libs/aws-cdk:bootstrap',
       options: {},
     },
     synth: {
-      executor: '@aws-nx/aws-cdk:synth',
+      executor: '@stellar-libs/aws-cdk:synth',
       options: {},
     },
     test: {

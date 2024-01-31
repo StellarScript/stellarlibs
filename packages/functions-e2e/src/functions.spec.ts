@@ -5,12 +5,12 @@ import {
   ensureNxProject,
   runNxCommandAsync,
 } from '@nx/plugin/testing';
-import { ensureNxLocalLibs, cleanLocalLibs } from '@aws-nx/utils';
+import { ensureNxLocalLibs, cleanLocalLibs } from '@stellar-libs/utils';
 
 describe('functions', () => {
   beforeAll(() => {
     ensureNxLocalLibs();
-    ensureNxProject('@aws-nx/functions', 'dist/packages/functions');
+    ensureNxProject('@stellar-libs/functions', 'dist/packages/functions');
   });
 
   afterAll(() => {
@@ -21,17 +21,21 @@ describe('functions', () => {
     it('(error) generate existing app', async () => {
       const projectName = uniq('functions-app');
 
-      await runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`);
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:app ${projectName}`
+      );
       expect(() => checkFilesExist(path.join(projectName))).toBeTruthy();
 
       expect(() =>
-        runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`)
+        runNxCommandAsync(`generate @stellar-libs/functions:app ${projectName}`)
       ).rejects.toThrow();
     });
 
     it('generate functions app', async () => {
       const projectName = uniq('functions-app');
-      await runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`);
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:app ${projectName}`
+      );
       expect(() => checkFilesExist(path.join(projectName))).toBeTruthy();
     }, 100000);
 
@@ -39,9 +43,11 @@ describe('functions', () => {
       const projectName = uniq('functions-app');
       const functionName = uniq('function');
 
-      await runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`);
       await runNxCommandAsync(
-        `generate @aws-nx/functions:function ${functionName} --project ${projectName}`
+        `generate @stellar-libs/functions:app ${projectName}`
+      );
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:function ${functionName} --project ${projectName}`
       );
       expect(() =>
         checkFilesExist(`${projectName}/${functionName}`)
@@ -52,17 +58,21 @@ describe('functions', () => {
   describe('Library Generator', () => {
     it('(error) generate existing lib', async () => {
       const projectName = uniq('functions-lib');
-      await runNxCommandAsync(`generate @aws-nx/functions:lib ${projectName}`);
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:lib ${projectName}`
+      );
       expect(() => checkFilesExist(path.join(projectName))).toBeTruthy();
 
       expect(() =>
-        runNxCommandAsync(`generate @aws-nx/functions:lib ${projectName}`)
+        runNxCommandAsync(`generate @stellar-libs/functions:lib ${projectName}`)
       ).rejects.toThrow();
     });
 
     it('generate functions lib', async () => {
       const projectName = uniq('functions-lib');
-      await runNxCommandAsync(`generate @aws-nx/functions:lib ${projectName}`);
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:lib ${projectName}`
+      );
       expect(() => checkFilesExist(path.join(projectName))).toBeTruthy();
     }, 100000);
 
@@ -70,9 +80,11 @@ describe('functions', () => {
       const projectName = uniq('functions-lib');
       const functionName = uniq('function');
 
-      await runNxCommandAsync(`generate @aws-nx/functions:lib ${projectName}`);
       await runNxCommandAsync(
-        `generate @aws-nx/functions:function ${functionName} --project ${projectName}`
+        `generate @stellar-libs/functions:lib ${projectName}`
+      );
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:function ${functionName} --project ${projectName}`
       );
       expect(() =>
         checkFilesExist(`${projectName}/${functionName}`)
@@ -87,15 +99,17 @@ describe('functions', () => {
     it('(error) generate function with none existing app', async () => {
       expect(() =>
         runNxCommandAsync(
-          `generate @aws-nx/functions:function ${functionName} --project ${projectName}`
+          `generate @stellar-libs/functions:function ${functionName} --project ${projectName}`
         )
       ).rejects.toThrow();
     }, 100000);
 
     it('generate function', async () => {
-      await runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`);
       await runNxCommandAsync(
-        `generate @aws-nx/functions:function ${functionName} --project ${projectName}`
+        `generate @stellar-libs/functions:app ${projectName}`
+      );
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:function ${functionName} --project ${projectName}`
       );
       expect(() => checkFilesExist(projectName)).toBeTruthy();
       expect(() =>
@@ -108,7 +122,7 @@ describe('functions', () => {
     it('(error) remove none existing app', async () => {
       expect(() =>
         runNxCommandAsync(
-          `generate @aws-nx/functions:remove --project none-existing-app`
+          `generate @stellar-libs/functions:remove --project none-existing-app`
         )
       ).rejects.toThrow();
     });
@@ -116,18 +130,20 @@ describe('functions', () => {
     it('(error) remove none existing lib', async () => {
       expect(() =>
         runNxCommandAsync(
-          `generate @aws-nx/functions:remove --project none-existing-lib`
+          `generate @stellar-libs/functions:remove --project none-existing-lib`
         )
       ).rejects.toThrow();
     });
 
     it('(error) remove none existing function', async () => {
       const projectName = uniq('functions-app');
-      await runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`);
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:app ${projectName}`
+      );
 
       expect(() =>
         runNxCommandAsync(
-          `generate @aws-nx/functions:remove --project ${projectName} --function none-existing-function`
+          `generate @stellar-libs/functions:remove --project ${projectName} --function none-existing-function`
         )
       ).rejects.toThrow();
     });
@@ -135,11 +151,13 @@ describe('functions', () => {
     it('remove app', async () => {
       const projectName = uniq('functions-app');
 
-      await runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`);
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:app ${projectName}`
+      );
       expect(() => checkFilesExist(projectName)).toBeTruthy();
 
       await runNxCommandAsync(
-        `generate @aws-nx/functions:remove --project ${projectName}`
+        `generate @stellar-libs/functions:remove --project ${projectName}`
       );
       expect(() => checkFilesExist(projectName)).toThrow();
     }, 100000);
@@ -148,9 +166,11 @@ describe('functions', () => {
       const projectName = uniq('functions-app');
       const functionName = uniq('function');
 
-      await runNxCommandAsync(`generate @aws-nx/functions:app ${projectName}`);
       await runNxCommandAsync(
-        `generate @aws-nx/functions:function ${functionName} --project ${projectName}`
+        `generate @stellar-libs/functions:app ${projectName}`
+      );
+      await runNxCommandAsync(
+        `generate @stellar-libs/functions:function ${functionName} --project ${projectName}`
       );
 
       expect(() => checkFilesExist(projectName)).toBeTruthy();
@@ -159,7 +179,7 @@ describe('functions', () => {
       ).toBeTruthy();
 
       await runNxCommandAsync(
-        `generate @aws-nx/functions:remove --project ${projectName} --function ${functionName}`
+        `generate @stellar-libs/functions:remove --project ${projectName} --function ${functionName}`
       );
 
       expect(() => checkFilesExist(projectName)).not.toThrow();

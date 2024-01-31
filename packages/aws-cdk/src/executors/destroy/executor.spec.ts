@@ -5,7 +5,7 @@ import {
   classInstance,
   normalizeOptions,
   ExecutionContextMock,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 
 import destroyExecutor from './executor';
 import { DestroyArguments } from './arguments.ts';
@@ -26,7 +26,7 @@ describe('destroy Executor', () => {
       context = ExecutionContextMock({
         executor: 'destroy',
         projectName: projectName,
-        plugin: '@aws-nx/aws-cdk',
+        plugin: '@stellar-libs/aws-cdk',
       });
 
       jest.spyOn(logger, 'debug');

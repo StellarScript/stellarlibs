@@ -10,7 +10,7 @@ import {
   GeneratorTasks,
   addTsConfigPath,
   addIgnoreFileName,
-} from '@aws-nx/utils';
+} from '@stellar-libs/utils';
 
 import {
   addDependencies,

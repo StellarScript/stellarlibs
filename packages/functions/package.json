@@ -1,19 +1,19 @@
 {
-  "name": "@aws-nx/functions",
+  "name": "@stellar-libs/functions",
   "version": "0.0.1",
   "license": "MIT",
-  "homepage": "https://github.com/StellarScript/aws-nx/blob/main/packages/functions/README.md",
+  "homepage": "https://github.com/StellarScript/stellar-libs/blob/main/packages/functions/README.md",
   "author": {
-    "name": "aws-nx"
+    "name": "stellar-libs"
   },
   "publishConfig": {
     "access": "public",
-    "@aws-nx:functions": "https://npm.pkg.github.com"
+    "@stellar-libs:functions": "https://npm.pkg.github.com"
   },
   "repository": {
     "type": "git",
     "directory": "packages/functions",
-    "url": "https://github.com/StellarScript/aws-nx"
+    "url": "https://github.com/StellarScript/stellar-libs"
   },
   "dependencies": {
     "tslib": "^2.3.0",
