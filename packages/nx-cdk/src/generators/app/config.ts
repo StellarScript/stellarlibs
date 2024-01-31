@@ -12,19 +12,19 @@ export const createConfiguration = (options: ConfigOptions): ProjectConfiguratio
   sourceRoot: joinPathFragments(options.projectRoot, 'src'),
   targets: {
     deploy: {
-      executor: '@aws-nx/aws-cdk:deploy',
+      executor: '@stellarlibs/nx-cdk:deploy',
       options: {},
     },
     destroy: {
-      executor: '@aws-nx/aws-cdk:destroy',
+      executor: '@stellarlibs/nx-cdk:destroy',
       options: {},
     },
     bootstrap: {
-      executor: '@aws-nx/aws-cdk:bootstrap',
+      executor: '@stellarlibs/nx-cdk:bootstrap',
       options: {},
     },
     synth: {
-      executor: '@aws-nx/aws-cdk:synth',
+      executor: '@stellarlibs/nx-cdk:synth',
       options: {},
     },
     test: {
@@ -35,7 +35,7 @@ export const createConfiguration = (options: ConfigOptions): ProjectConfiguratio
       },
     },
     'list-stacks': {
-      executor: '@aws-nx/aws-cdk:list-stacks',
+      executor: '@stellarlibs/nx-cdk:list-stacks',
       options: {},
     },
     lint: {

@@ -1,65 +1,20 @@
-import { execSync } from 'child_process';
-import { join, dirname } from 'path';
-import { mkdirSync, rmSync } from 'fs';
+import * as path from 'path';
+import { uniq, checkFilesExist, ensureNxProject, runNxCommandAsync } from '@nx/plugin/testing';
 
-describe('nx-cdk', () => {
-  let projectDirectory: string;
-
-  beforeAll(() => {
-    projectDirectory = createTestProject();
-
-    // The plugin has been built and published to a local registry in the jest globalSetup
-    // Install the plugin built with the latest source code into the test repo
-    execSync(`npm install @stellarlibs/nx-cdk@e2e`, {
-      cwd: projectDirectory,
-      stdio: 'inherit',
-      env: process.env,
-    });
+describe('"@stellarlibs/nx-cdk" Generators', () => {
+  beforeAll(async () => {
+    await ensureNxProject('@stellarlibs/utils', 'dist/libs/nx-cdk');
+    await ensureNxProject('@stellarlibs/nx-cdk', 'dist/packages/nx-cdk');
   });
 
-  afterAll(() => {
-    // Cleanup the test project
-    rmSync(projectDirectory, {
-      recursive: true,
-      force: true,
-    });
-  });
-
-  it('should be installed', () => {
-    // npm ls will fail if the package is not installed properly
-    execSync('npm ls @stellarlibs/nx-cdk', {
-      cwd: projectDirectory,
-      stdio: 'inherit',
-    });
+  describe('Application Generator', () => {
+    it('generate application with duplicate name (error)', async () => {
+      const pluginName = uniq('aws-cdk');
+      await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName}`);
+      expect(() => checkFilesExist(path.join(pluginName)));
+      expect(async () => {
+        return await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName}`);
+      }).rejects.toThrow();
+    }, 100000);
   });
 });
-
-/**
- * Creates a test project with create-nx-workspace and installs the plugin
- * @returns The directory where the test project was created
- */
-function createTestProject() {
-  const projectName = 'test-project';
-  const projectDirectory = join(process.cwd(), 'tmp', projectName);
-
-  // Ensure projectDirectory is empty
-  rmSync(projectDirectory, {
-    recursive: true,
-    force: true,
-  });
-  mkdirSync(dirname(projectDirectory), {
-    recursive: true,
-  });
-
-  execSync(
-    `npx --yes create-nx-workspace@latest ${projectName} --preset apps --nxCloud=skip --no-interactive`,
-    {
-      cwd: dirname(projectDirectory),
-      stdio: 'inherit',
-      env: process.env,
-    }
-  );
-  console.log(`Created test project in "${projectDirectory}"`);
-
-  return projectDirectory;
-}
