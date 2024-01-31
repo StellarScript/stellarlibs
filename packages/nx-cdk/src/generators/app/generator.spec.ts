@@ -1,11 +1,8 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-import { Tree } from '@nx/devkit';
 
 describe('app generator', () => {
-  let tree: Tree;
-
   beforeEach(() => {
-    tree = createTreeWithEmptyWorkspace();
+    createTreeWithEmptyWorkspace();
   });
 
   it('should run successfully', async () => {
