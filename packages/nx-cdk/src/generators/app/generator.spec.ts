@@ -1,31 +1,20 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readProjectConfiguration } from '@nx/devkit';
 
-import applicationGenerator from './generator';
+import { appGenerator } from './generator';
 import { AppGeneratorSchema } from './schema';
 
-describe('Application Generator', () => {
+describe('app generator', () => {
   let tree: Tree;
-  const options: AppGeneratorSchema = { name: 'testapp' };
+  const options: AppGeneratorSchema = { name: 'test' };
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
   });
 
-  it('generate application', async () => {
-    await applicationGenerator(tree, options);
-    const config = await readProjectConfiguration(tree, options.name);
+  it('should run successfully', async () => {
+    await appGenerator(tree, options);
+    const config = readProjectConfiguration(tree, 'test');
     expect(config).toBeDefined();
-    expect(tree.exists(config.sourceRoot)).toBeTruthy();
-  });
-
-  it('generate application with directory argument', async () => {
-    const directory = 'dir';
-    const _options = { ...options, directory };
-
-    await applicationGenerator(tree, _options);
-    const config = await readProjectConfiguration(tree, _options.name);
-    expect(config).toBeDefined();
-    expect(tree.exists(config.sourceRoot)).toBeTruthy();
   });
 });

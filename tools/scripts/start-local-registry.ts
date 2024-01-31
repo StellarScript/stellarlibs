@@ -16,15 +16,9 @@ export default async () => {
     storage,
     verbose: false,
   });
-
   const nx = require.resolve('nx');
-  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', version()], {
+  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', '0.0.0-e2e', '--tag', 'e2e'], {
     env: process.env,
     stdio: 'inherit',
   });
 };
-
-function version() {
-  const randomNum = () => Math.floor(Math.random() * 10);
-  return `${randomNum()}.${randomNum()}.${randomNum()}`;
-}

@@ -1,7 +1,6 @@
 import {
   Tree,
   updateJson,
-  formatFiles,
   GeneratorCallback,
   joinPathFragments,
   getWorkspaceLayout,
@@ -42,16 +41,13 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
   const lintTask = await generateLintConfig(tree, options);
   tasks.register(lintTask);
 
-  const unitTest = await generateJestTest(tree, testFilesDir, options);
+  const unitTest = await generateTest(tree, testFilesDir, options);
   if (unitTest) {
     tasks.register(unitTest);
   }
 
   addIgnoreFileName(tree, '# AWS CDK', ['cdk.out']);
   tasks.register(addDependenciesToPackageJson(tree, dependencies, {}));
-
-  await formatFiles(tree);
-  return tasks.runInSerial();
 }
 
 /**
@@ -89,7 +85,7 @@ async function generateLintConfig(tree: Tree, options: NormalizedSchema) {
  * @param options
  * @returns
  */
-async function generateJestTest(
+async function generateTest(
   tree: Tree,
   filePath: string,
   options: NormalizedSchema

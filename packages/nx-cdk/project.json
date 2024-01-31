@@ -8,6 +8,7 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "external": ["libs/utils"],
         "outputPath": "dist/packages/nx-cdk",
         "main": "packages/nx-cdk/src/index.ts",
         "tsConfig": "packages/nx-cdk/tsconfig.lib.json",
@@ -41,8 +42,7 @@
       "dependsOn": ["build"]
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
