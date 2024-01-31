@@ -1,5 +1,5 @@
 {
-  "name": "@stellar-libs/nx-aws-cdk",
+  "name": "@stellar-libs/nx-cdk",
   "version": "0.0.1",
   "dependencies": {
     "@nx/devkit": "17.1.3",
