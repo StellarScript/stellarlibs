@@ -10,7 +10,7 @@ This repository contains a collection of Nx plugins designed to work with AWS.
 
 ## Available Plugins
 
-1. [**aws-cdk**](https://github.com/StellarScript/stellarlibs/tree/main/packages/aws-cdk#nx-aws-cdk-documentation) - This plugin provides support for AWS Cloud Development Kit (CDK).
+1. [**nx-cdk**](https://github.com/StellarScript/stellarlibs/tree/main/packages/nx-cdk#nx-nx-cdk-documentation) - This plugin provides support for AWS Cloud Development Kit (CDK).
 
 2. [**functions**](https://github.com/StellarScript/stellarlibs/tree/main/packages/functions#functions-documentation) - This plugin provides support for aws lambda to build, bundle and package funcitons.
 
