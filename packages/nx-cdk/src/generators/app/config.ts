@@ -1,5 +1,5 @@
 import { ProjectConfiguration, joinPathFragments } from '@nx/devkit';
-import { ProjectType } from '@stellar-libs/utils';
+import { ProjectType } from '@stellarlibs/utils';
 
 interface ConfigOptions {
   tags: string[];

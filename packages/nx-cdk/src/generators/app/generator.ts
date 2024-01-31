@@ -16,7 +16,7 @@ import {
   addProjectFiles,
   addIgnoreFileName,
   updateConfiguration,
-} from '@stellar-libs/utils';
+} from '@stellarlibs/utils';
 import { jestInitGenerator } from '@nx/jest';
 import { lintProjectGenerator } from '@nx/eslint';
 

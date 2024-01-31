@@ -1,4 +1,4 @@
-import { TestRunner } from '@stellar-libs/utils';
+import { TestRunner } from '@stellarlibs/utils';
 
 export interface AppGeneratorSchema {
   name: string;

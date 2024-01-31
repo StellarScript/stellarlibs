@@ -1,4 +1,4 @@
-![CI](https://github.com/StellarScript/stellar-libs/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/StellarScript/stellarlibs/actions/workflows/ci.yml/badge.svg)
 
 ---
 
@@ -10,9 +10,9 @@ This repository contains a collection of Nx plugins designed to work with AWS.
 
 ## Available Plugins
 
-1. [**aws-cdk**](https://github.com/StellarScript/stellar-libs/tree/main/packages/aws-cdk#nx-aws-cdk-documentation) - This plugin provides support for AWS Cloud Development Kit (CDK).
+1. [**aws-cdk**](https://github.com/StellarScript/stellarlibs/tree/main/packages/aws-cdk#nx-aws-cdk-documentation) - This plugin provides support for AWS Cloud Development Kit (CDK).
 
-2. [**functions**](https://github.com/StellarScript/stellar-libs/tree/main/packages/functions#functions-documentation) - This plugin provides support for aws lambda to build, bundle and package funcitons.
+2. [**functions**](https://github.com/StellarScript/stellarlibs/tree/main/packages/functions#functions-documentation) - This plugin provides support for aws lambda to build, bundle and package funcitons.
 
 <br>
 
@@ -21,7 +21,7 @@ This repository contains a collection of Nx plugins designed to work with AWS.
 The workspace is generated using the following command:
 
 ```bash
-npx create-nx-workspace stellar-libs --package-manager=yarn
+npx create-nx-workspace stellarlibs --package-manager=yarn
 ```
 
 <br>

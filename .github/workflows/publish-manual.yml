@@ -55,7 +55,7 @@ jobs:
 
       - name: Update Migration
         run: |
-          npx nx run ${{ github.event.inputs.plugin }}:update-migration --scope=@stellar-libs --ver=${{ github.event.inputs.version }}
+          npx nx run ${{ github.event.inputs.plugin }}:update-migration --scope=@stellarlibs --ver=${{ github.event.inputs.version }}
 
       - name: Build Plugin
         run: npx nx run ${{ github.event.inputs.plugin }}:build --outputPath ./build/${{ github.event.inputs.plugin }}
@@ -65,7 +65,7 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-          scope: '@stellar-libs'
+          scope: '@stellarlibs'
 
       - name: Publish Plugin
         run: npx nx run ${{ github.event.inputs.plugin }}:publish  --ver=${{ github.event.inputs.version }} --tag=${{ github.event.inputs.tag }}
