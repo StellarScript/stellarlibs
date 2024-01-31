@@ -37,5 +37,10 @@
       }
     }
   },
-  "nxCloudAccessToken": "ZTA3NzE3ZTQtMzdmOC00ZDI0LWFiZGQtYzdjYWM0NjFlNDI4fHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "ZTA3NzE3ZTQtMzdmOC00ZDI0LWFiZGQtYzdjYWM0NjFlNDI4fHJlYWQtd3JpdGU=",
+  "generators": {
+    "@nx/workspace:move": {
+      "projectNameAndRootFormat": "as-provided"
+    }
+  }
 }
