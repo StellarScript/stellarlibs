@@ -1,5 +1,0 @@
-describe('GET /', () => {
-  it('should run successfully', async () => {
-    expect(1).toBe(1);
-  });
-});
