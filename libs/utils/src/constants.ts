@@ -1,4 +1,9 @@
 export enum ProjectType {
-  Application = 'application',
   Library = 'library',
+  Application = 'application',
+}
+
+export enum TestRunner {
+  Jest = 'jest',
+  None = 'none',
 }

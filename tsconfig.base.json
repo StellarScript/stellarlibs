@@ -15,9 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@aws-nx/aws-cdk": ["packages/aws-cdk/src/index.ts"],
-      "@aws-nx/functions": ["packages/functions/src/index.ts"],
-      "@aws-nx/utils": ["libs/utils/src/index.ts"]
+      "@stellarlibs/nx-cdk": ["packages/nx-cdk/src/index.ts"],
+      "@stellarlibs/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

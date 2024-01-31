@@ -7,11 +7,9 @@ on:
         description: 'Name'
         required: true
         type: choice
-        default: 'aws-cdk'
+        default: 'nx-cdk'
         options:
-          - 'aws-cdk'
-          - 'aws-ecr'
-          - 'functions'
+          - 'nx-cdk'
 
       tag:
         description: 'Tag'
@@ -53,10 +51,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
 
-      - name: Update Migration
-        run: |
-          npx nx run ${{ github.event.inputs.plugin }}:update-migration --scope=@aws-nx --ver=${{ github.event.inputs.version }}
-
       - name: Build Plugin
         run: npx nx run ${{ github.event.inputs.plugin }}:build --outputPath ./build/${{ github.event.inputs.plugin }}
 
@@ -65,7 +59,7 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-          scope: '@aws-nx'
+          scope: '@stellarlibs'
 
       - name: Publish Plugin
         run: npx nx run ${{ github.event.inputs.plugin }}:publish  --ver=${{ github.event.inputs.version }} --tag=${{ github.event.inputs.tag }}

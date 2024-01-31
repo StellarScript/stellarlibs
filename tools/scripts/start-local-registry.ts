@@ -7,7 +7,7 @@ import { execFileSync } from 'child_process';
 
 export default async () => {
   // local registry target to run
-  const localRegistryTarget = '@aws-nx/source:local-registry';
+  const localRegistryTarget = '@stellarlibs/source:local-registry';
   // storage folder for the local registry
   const storage = './tmp/local-registry/storage';
 
@@ -16,15 +16,9 @@ export default async () => {
     storage,
     verbose: false,
   });
-
   const nx = require.resolve('nx');
-  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', version()], {
+  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', '0.0.0-e2e', '--tag', 'e2e'], {
     env: process.env,
     stdio: 'inherit',
   });
 };
-
-function version() {
-  const randomNum = () => Math.floor(Math.random() * 10);
-  return `${randomNum()}.${randomNum()}.${randomNum()}`;
-}
