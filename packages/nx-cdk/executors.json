@@ -1,0 +1,9 @@
+{
+  "executors": {
+    "bootstrap": {
+      "implementation": "./src/executors/bootstrap/executor",
+      "schema": "./src/executors/bootstrap/schema.json",
+      "description": "bootstrap executor"
+    }
+  }
+}
