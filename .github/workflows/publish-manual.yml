@@ -10,8 +10,6 @@ on:
         default: 'nx-cdk'
         options:
           - 'nx-cdk'
-          - 'aws-ecr'
-          - 'functions'
 
       tag:
         description: 'Tag'
@@ -52,10 +50,6 @@ jobs:
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm install
-
-      - name: Update Migration
-        run: |
-          npx nx run ${{ github.event.inputs.plugin }}:update-migration --scope=@stellarlibs --ver=${{ github.event.inputs.version }}
 
       - name: Build Plugin
         run: npx nx run ${{ github.event.inputs.plugin }}:build --outputPath ./build/${{ github.event.inputs.plugin }}

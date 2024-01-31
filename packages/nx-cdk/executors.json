@@ -4,6 +4,11 @@
       "implementation": "./src/executors/bootstrap/executor",
       "schema": "./src/executors/bootstrap/schema.json",
       "description": "bootstrap executor"
+    },
+    "synth": {
+      "implementation": "./src/executors/synth/executor",
+      "schema": "./src/executors/synth/schema.json",
+      "description": "synth executor"
     }
   }
 }
