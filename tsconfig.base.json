@@ -17,7 +17,7 @@
     "paths": {
       "@stellar-libs/aws-cdk": ["packages/aws-cdk/src/index.ts"],
       "@stellar-libs/functions": ["packages/functions/src/index.ts"],
-      "@stellar-libs/utils": ["libs/utils/src/index.ts"]
+      "@stellar-libs/nx-aws-cdk": ["packages/nx-aws-cdk/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
