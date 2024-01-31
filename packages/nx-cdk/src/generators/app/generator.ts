@@ -98,11 +98,10 @@ async function generateJestTest(
     return null;
   }
   const jestTask = await jestInitGenerator(tree, {
-    js: false,
-    compiler: 'tsc',
-    babelJest: false,
+    skipFormat: false,
     skipPackageJson: false,
-    testEnvironment: 'node',
+    keepExistingVersions: false,
+    updatePackageScripts: true,
   });
   addProjectFiles(tree, filePath, {
     projectName: options.name,
