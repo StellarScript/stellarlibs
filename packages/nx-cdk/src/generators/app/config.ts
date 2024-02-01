@@ -31,16 +31,11 @@ export const createConfiguration = (options: ConfigOptions): ProjectConfiguratio
       executor: '@stellarlibs/nx-cdk:synth',
       options: {},
     },
-    test: {
-      executor: '@nx/jest:jest',
-      outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
-      options: {
-        jestConfig: `${options.projectRoot}/jest.config.ts`,
-      },
-    },
     'list-stacks': {
-      executor: '@stellarlibs/nx-cdk:list-stacks',
-      options: {},
+      executor: 'nx:run-commands',
+      options: {
+        command: 'npx cdk list',
+      },
     },
     lint: {
       executor: '@nx/eslint:lint',

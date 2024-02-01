@@ -103,6 +103,17 @@ async function generateTest(
     projectName: options.name,
     projectRoot: options.projectRoot,
   });
+
+  updateConfiguration(tree, options.name, (workspace) => {
+    workspace.targets.test = {
+      executor: '@nx/jest:jest',
+      outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
+      options: {
+        jestConfig: `${options.projectRoot}/jest.config.ts`,
+      },
+    };
+    return workspace;
+  });
   return jestTask;
 }
 
