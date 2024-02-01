@@ -2,23 +2,23 @@ import * as childProcess from 'child_process';
 import { type ExecutorContext, logger } from '@nx/devkit';
 import { ExecutionContextMock } from '@stellarlibs/utils';
 
-import synthExecutor from './executor';
+import destroyExecutor from './executor';
 import { createCommand } from '../../common/executor';
-import { normalizeArguments, normalizeOptions } from '../synth/executor';
+import { normalizeArguments, normalizeOptions } from './executor';
 
-describe('Synthesize Executor', () => {
+describe('Destroy Executor', () => {
   let context: ExecutorContext;
   const projectName = 'test-app';
 
   beforeAll(() => {
     context = ExecutionContextMock({
-      executor: 'synth',
+      executor: 'destroy',
       projectName: projectName,
       plugin: '@stellarlibs/nx-cdk',
     });
   });
 
-  describe('Execute Synth', () => {
+  describe('Execute Destroy', () => {
     afterEach(() => jest.clearAllMocks());
 
     beforeAll(() => {
@@ -26,7 +26,7 @@ describe('Synthesize Executor', () => {
       jest.spyOn(childProcess, 'execSync');
     });
 
-    it('run synth', () => {
+    it('run destroy', () => {
       const argOpt = {
         all: true,
         quiet: true,
@@ -37,21 +37,19 @@ describe('Synthesize Executor', () => {
         tag: ['mockTag-1', 'mockTag-2'],
         parameter: ['param1=value1', 'param2=value2'],
       };
+
       const args = normalizeArguments(argOpt);
-      const command = createCommand('synth', {
+      const command = createCommand('destroy', {
         args,
         projectRoot: 'myproject',
         projectName: 'mock-project-name',
       });
 
-      expect(command.includes(`synth ${argOpt.stack}`)).toBeTruthy();
+      expect(command.includes(`destroy ${argOpt.stack}`)).toBeTruthy();
       expect(command.includes(`--all`)).toBeTruthy();
       expect(command.includes(`--app ${argOpt.app}`)).toBeTruthy();
       expect(command.includes(`--exclusively`)).toBeTruthy();
       expect(command.includes(`--quiet`)).toBeTruthy();
-      expect(
-        command.includes(`--no-previous-parameters ${argOpt.noPreviousParameters}`)
-      ).toBeTruthy();
 
       argOpt.tag.forEach((tg) => {
         expect(command.includes(`--tags ${tg}`)).toBeTruthy();
@@ -61,11 +59,11 @@ describe('Synthesize Executor', () => {
       });
     });
 
-    it('run synth executor command', async () => {
-      const execution = await synthExecutor({}, context);
+    it('run destroy executor command', async () => {
+      const execution = await destroyExecutor({}, context);
 
       const options = normalizeOptions({}, context);
-      const command = createCommand('synth', options);
+      const command = createCommand('destroy', options);
 
       expect(childProcess.execSync).toHaveBeenCalledTimes(1);
       expect(command).toBe(execution.command[1]);

@@ -2,7 +2,7 @@ import * as childProcess from 'child_process';
 import { type ExecutorContext, logger } from '@nx/devkit';
 import { ExecutionContextMock } from '@stellarlibs/utils';
 
-import { createCommand } from '../../common';
+import { createCommand } from '../../common/executor';
 import synthExecutor, { normalizeArguments, normalizeOptions } from './executor';
 
 describe('Bootstrap Executor', () => {
@@ -26,25 +26,44 @@ describe('Bootstrap Executor', () => {
     });
 
     it('bootstrap arguments', async () => {
-      const args = normalizeArguments({
+      const argOpt = {
+        trust: true,
+        showTemplate: true,
+        noPreviousParameters: true,
+        terminationProtection: true,
+        tag: ['mock-tag'],
         profile: 'mock-profile',
+        kmsKeyId: 'mock-kms-key-id',
         qualifier: 'mock-qualifier',
         bucketName: 'mock-bucket-name',
         executionPolicy: 'mock-execution-policy',
-        tag: ['mock-tag'],
-        trust: true,
-        terminationProtection: true,
-        kmsKeyId: 'mock-kms-key-id',
-      });
+      };
 
+      const args = normalizeArguments(argOpt);
       const command = createCommand('bootstrap', {
         args,
-        projectName: 'mock-project-name',
         projectRoot: 'myproject',
+        projectName: 'mock-project-name',
       });
-      for (const arg in args) {
-        expect(command.includes(`--${arg}`)).toBeTruthy();
-      }
+
+      expect(command.includes(`--trust ${argOpt.trust}`)).toBeTruthy();
+      expect(command.includes(`--profile ${argOpt.profile}`)).toBeTruthy();
+      expect(command.includes(`--qualifier ${argOpt.qualifier}`)).toBeTruthy();
+      expect(command.includes(`--show-template ${argOpt.showTemplate}`)).toBeTruthy();
+      expect(command.includes(`--bootstrap-bucket-name ${argOpt.bucketName}`)).toBeTruthy();
+      expect(command.includes(`--bootstrap-kms-key-id ${argOpt.kmsKeyId}`)).toBeTruthy();
+      argOpt.tag.forEach((t) => expect(command.includes(`--tags ${t}`)).toBeTruthy());
+      expect(
+        command.includes(`--no-previous-parameters ${argOpt.noPreviousParameters}`)
+      ).toBeTruthy();
+
+      expect(
+        command.includes(`--termination-protection ${argOpt.terminationProtection}`)
+      ).toBeTruthy();
+
+      expect(
+        command.includes(`--cloudformation-execution-policies ${argOpt.executionPolicy}`)
+      ).toBeTruthy();
     });
 
     it('run bootstrap executor command', async () => {
