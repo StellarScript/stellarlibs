@@ -30,19 +30,18 @@ export function normalizeOptions(options: SynthExecutorSchema, context: Executor
   const projectName = context.projectName;
   const projectRoot = context.workspace.projects[projectName].root;
   const args = normalizeArguments(options);
-
   return {
+    args,
     projectName,
     projectRoot,
-    args: sanitizeObject(args),
   };
 }
 
 export function normalizeArguments(options: SynthExecutorSchema): NormalizedArguments {
-  return {
+  return sanitizeObject({
     _: toArray(options.stack),
     tags: toArray(options.tag),
     parameters: toArray(options.parameter),
     ...exclude(options, ['stack', 'parameter', 'tag']),
-  };
+  });
 }

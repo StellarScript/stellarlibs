@@ -1,18 +1,18 @@
 import { ExecutorContext } from '@nx/devkit';
-import { runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
+import { pick, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
 
 import { BootstrapExecutorSchema } from './schema';
 import { createCommand } from '../../common/executor';
 
 export interface Arguments {
-  tags: string[];
-  profile: string;
-  qualifier: string;
-  trust: boolean;
-  'bootstrap-kms-key-id': string;
-  'bootstrap-bucket-name': string;
-  'termination-protection': boolean;
-  'cloudformation-execution-policies': string;
+  tags?: string[];
+  profile?: string;
+  qualifier?: string;
+  trust?: boolean;
+  'bootstrap-kms-key-id'?: string;
+  'bootstrap-bucket-name'?: string;
+  'termination-protection'?: boolean;
+  'cloudformation-execution-policies'?: string;
 }
 
 interface NormalizeOptions {
@@ -37,23 +37,20 @@ export function normalizeOptions(
   const projectName = context.projectName;
   const projectRoot = context.workspace.projects[projectName].root;
   const args = normalizeArguments(options);
-
   return {
+    args,
     projectName,
     projectRoot,
-    args: sanitizeObject(args),
   };
 }
 
 export function normalizeArguments(options: BootstrapExecutorSchema) {
-  return {
+  return sanitizeObject({
     tags: toArray(options.tag),
-    profile: options.profile,
-    qualifier: options.qualifier,
-    trust: options.trust,
     'bootstrap-bucket-name': options.bucketName,
     'bootstrap-kms-key-id': options.kmsKeyId,
     'cloudformation-execution-policies': options.executionPolicy,
     'termination-protection': options.terminationProtection,
-  };
+    ...pick(options, ['profile', 'qualifier', 'trust']),
+  });
 }
