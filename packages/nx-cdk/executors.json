@@ -9,6 +9,11 @@
       "implementation": "./src/executors/synth/executor",
       "schema": "./src/executors/synth/schema.json",
       "description": "synth executor"
+    },
+    "deploy": {
+      "implementation": "./src/executors/deploy/executor",
+      "schema": "./src/executors/deploy/schema.json",
+      "description": "deploy executor"
     }
   }
 }

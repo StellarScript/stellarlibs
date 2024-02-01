@@ -27,6 +27,10 @@ export const createConfiguration = (options: ConfigOptions): ProjectConfiguratio
       executor: '@stellarlibs/nx-cdk:synth',
       options: {},
     },
+    synthesize: {
+      executor: '@stellarlibs/nx-cdk:synth',
+      options: {},
+    },
     test: {
       executor: '@nx/jest:jest',
       outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
