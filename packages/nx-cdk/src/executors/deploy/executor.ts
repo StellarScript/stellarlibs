@@ -1,8 +1,12 @@
 import { ExecutorContext } from '@nx/devkit';
-import { exclude, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
+import { excludeCopy, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
 
 import { DeployExecutorSchema } from './schema';
-import { createCommand } from '../../common/executor';
+import {
+  commonExecutorSchema,
+  commonStackExecutorSchema,
+  createCommand,
+} from '../../common/executor';
 
 export interface NormalizedArguments {
   _: string[];
@@ -44,26 +48,28 @@ export function normalizeOptions(options: DeployExecutorSchema, context: Executo
   };
 }
 
-export function normalizeArguments(options: DeployExecutorSchema) {
-  return sanitizeObject({
-    _: toArray(options.stack),
-    tags: toArray(options.tag),
-    parameters: toArray(options.parameter),
-    'no-rollback': options.noRollback,
-    'outputs-file': options.outputFile,
-    'change-set-name': options.changeSetName,
-    'ignore-no-stacks': options.ignoreNoStacks,
-    'hotswap-fallback': options.hotswapFallback,
+export function normalizeArguments(schema: DeployExecutorSchema) {
+  const commonArgs = commonExecutorSchema<DeployExecutorSchema>(schema);
+  const commonStackArgs = commonStackExecutorSchema<DeployExecutorSchema>(schema);
 
-    ...exclude(options, [
-      'tag',
-      'stack',
-      'parameter',
-      'noRollback',
-      'outputFile',
-      'changeSetName',
-      'ignoreNoStacks',
-      'hotswapFallback',
-    ]),
+  const restArgs = excludeCopy(schema, [
+    'noRollback',
+    'outputFile',
+    'changeSetName',
+    'ignoreNoStacks',
+    'hotswapFallback',
+    ...commonArgs.exclude,
+    ...commonStackArgs.exclude,
+  ]);
+
+  return sanitizeObject({
+    ...restArgs,
+    ...commonArgs.args,
+    ...commonStackArgs.args,
+    'no-rollback': schema.noRollback,
+    'outputs-file': schema.outputFile,
+    'change-set-name': schema.changeSetName,
+    'ignore-no-stacks': schema.ignoreNoStacks,
+    'hotswap-fallback': schema.hotswapFallback,
   });
 }

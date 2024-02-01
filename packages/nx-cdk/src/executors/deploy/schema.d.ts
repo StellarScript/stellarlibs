@@ -1,13 +1,11 @@
-export interface DeployExecutorSchema {
-  all?: boolean;
+import { CommonExecutorSchema, CommonStackExecutorSchema } from '../../common/executor';
+
+export interface DeployExecutorSchema extends CommonExecutorSchema, CommonStackExecutorSchema {
   app?: string;
   force?: boolean;
   progress?: string;
   outputFile?: string;
   noRollback?: boolean;
-  tag?: string | string[];
-  stack?: string | string[];
-  parameter?: string | string[];
   method?: string;
   changeSetName?: string;
   ignoreNoStacks?: boolean;

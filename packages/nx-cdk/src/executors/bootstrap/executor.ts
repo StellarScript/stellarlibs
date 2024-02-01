@@ -1,8 +1,7 @@
 import { ExecutorContext } from '@nx/devkit';
-import { exclude, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
-
+import { excludeCopy, runCommand, sanitizeObjectCopy } from '@stellarlibs/utils';
+import { commonExecutorSchema, createCommand } from '../../common/executor';
 import { BootstrapExecutorSchema } from './schema';
-import { createCommand } from '../../common/executor';
 
 export interface Arguments {
   tags?: string[];
@@ -37,6 +36,7 @@ export function normalizeOptions(
   const projectName = context.projectName;
   const projectRoot = context.workspace.projects[projectName].root;
   const args = normalizeArguments(options);
+
   return {
     args,
     projectName,
@@ -44,19 +44,23 @@ export function normalizeOptions(
   };
 }
 
-export function normalizeArguments(options: BootstrapExecutorSchema) {
-  return sanitizeObject({
-    tags: toArray(options.tag),
-    'bootstrap-bucket-name': options.bucketName,
-    'bootstrap-kms-key-id': options.kmsKeyId,
-    'cloudformation-execution-policies': options.executionPolicy,
-    'termination-protection': options.terminationProtection,
-    ...exclude(options, [
-      'tag',
-      'bucketName',
-      'kmsKeyId',
-      'executionPolicy',
-      'terminationProtection',
-    ]),
+export function normalizeArguments(schema: BootstrapExecutorSchema) {
+  const commonArgs = commonExecutorSchema<BootstrapExecutorSchema>(schema);
+
+  const restArgs = excludeCopy(schema, [
+    'bucketName',
+    'kmsKeyId',
+    'executionPolicy',
+    'terminationProtection',
+    ...commonArgs.exclude,
+  ]);
+
+  return sanitizeObjectCopy({
+    ...restArgs,
+    ...commonArgs.args,
+    'bootstrap-bucket-name': schema.bucketName,
+    'bootstrap-kms-key-id': schema.kmsKeyId,
+    'termination-protection': schema.terminationProtection,
+    'cloudformation-execution-policies': schema.executionPolicy,
   });
 }

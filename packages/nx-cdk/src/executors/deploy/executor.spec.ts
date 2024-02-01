@@ -70,6 +70,7 @@ describe('Deploy Executor', () => {
 
       expect(command.includes(`--deploy ${stack[0]} ${stack[1]}`));
       expect(command.includes(`--app ${app}`));
+      expect(command.includes(`--all`));
       expect(command.includes(`--force`));
       expect(command.includes(`--method ${method}`));
       expect(command.includes(`--progress ${progress}`));

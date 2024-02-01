@@ -1,2 +1,2 @@
 export * from './command';
-export * from './args.options';
+export * from './argsSchema';

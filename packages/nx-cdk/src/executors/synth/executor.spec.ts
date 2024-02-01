@@ -27,34 +27,32 @@ describe('Synthesize Executor', () => {
     });
 
     it('run synth', () => {
-      const stackName = 'MockStack';
-      const tags = ['mockTag-1', 'mockTag-2'];
-      const parameters = ['param1=value1', 'param2=value2'];
-      const app = 'bin/index.ts';
-
-      const args = normalizeArguments({
+      const argOpt = {
         all: true,
         quiet: true,
-        exclusively: false,
-        app: app,
-        tag: tags,
-        stack: stackName,
-        parameter: parameters,
-      });
-
+        exclusively: true,
+        stack: 'MockStack',
+        app: 'bin/index.ts',
+        tag: ['mockTag-1', 'mockTag-2'],
+        parameter: ['param1=value1', 'param2=value2'],
+      };
+      const args = normalizeArguments(argOpt);
       const command = createCommand('synth', {
         args,
         projectRoot: 'myproject',
         projectName: 'mock-project-name',
       });
 
-      expect(command.includes(`synth ${stackName}`)).toBeTruthy();
-      expect(command.includes(`--app ${app}`)).toBeTruthy();
+      expect(command.includes(`synth ${argOpt.stack}`)).toBeTruthy();
+      expect(command.includes(`--all`)).toBeTruthy();
+      expect(command.includes(`--app ${argOpt.app}`)).toBeTruthy();
+      expect(command.includes(`--exclusively`)).toBeTruthy();
+      expect(command.includes(`--quiet`)).toBeTruthy();
 
-      tags.forEach((tag) => {
-        expect(command.includes(`--tags ${tag}`)).toBeTruthy();
+      argOpt.tag.forEach((tg) => {
+        expect(command.includes(`--tags ${tg}`)).toBeTruthy();
       });
-      parameters.forEach((param) => {
+      argOpt.parameter.forEach((param) => {
         expect(command.includes(`--parameters ${param}`)).toBeTruthy();
       });
     });

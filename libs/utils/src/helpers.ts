@@ -3,11 +3,18 @@ export function toArray(value: string | string[] | undefined): string[] {
   return Array.isArray(value) ? value : [value];
 }
 
-export function exclude<User, Key extends keyof User>(user: User, keys: Key[]): Omit<User, Key> {
+export function exclude<Data, Key extends keyof Data>(data: Data, keys: Key[]): Omit<Data, Key> {
   for (const key of keys) {
-    delete user[key];
+    delete data[key];
   }
-  return user;
+  return data;
+}
+
+export function excludeCopy<Data, Key extends keyof Data>(
+  data: Data,
+  keys: Key[]
+): Omit<Data, Key> {
+  return exclude({ ...data }, keys);
 }
 
 export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
@@ -27,4 +34,8 @@ export function sanitizeObject<T>(obj: T) {
     }
   }
   return obj;
+}
+
+export function sanitizeObjectCopy<T>(obj: T) {
+  return sanitizeObject({ ...obj });
 }

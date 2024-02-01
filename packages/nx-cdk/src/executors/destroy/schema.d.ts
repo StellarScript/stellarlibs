@@ -1,1 +1,3 @@
-export interface DestroyExecutorSchema {} // eslint-disable-line
+import { CommonExecutorSchema, CommonStackExecutorSchema } from '../../common/executor';
+
+export interface DestroyExecutorSchema extends CommonExecutorSchema, CommonStackExecutorSchema {}

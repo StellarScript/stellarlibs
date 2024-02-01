@@ -1,8 +1,11 @@
 import { ExecutorContext } from '@nx/devkit';
-import { exclude, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
-
+import { excludeCopy, runCommand, sanitizeObjectCopy } from '@stellarlibs/utils';
+import {
+  createCommand,
+  commonExecutorSchema,
+  commonStackExecutorSchema,
+} from '../../common/executor';
 import { SynthExecutorSchema } from './schema';
-import { createCommand } from '../../common/executor';
 
 export interface NormalizedArguments {
   _: string[];
@@ -37,11 +40,14 @@ export function normalizeOptions(options: SynthExecutorSchema, context: Executor
   };
 }
 
-export function normalizeArguments(options: SynthExecutorSchema): NormalizedArguments {
-  return sanitizeObject({
-    _: toArray(options.stack),
-    tags: toArray(options.tag),
-    parameters: toArray(options.parameter),
-    ...exclude(options, ['stack', 'parameter', 'tag']),
+export function normalizeArguments(schema: SynthExecutorSchema): NormalizedArguments {
+  const commonArgs = commonExecutorSchema(schema);
+  const commonStackArgs = commonStackExecutorSchema(schema);
+  const restArgs = excludeCopy(schema, [...commonArgs.exclude, ...commonStackArgs.exclude]);
+
+  return sanitizeObjectCopy({
+    ...restArgs,
+    ...commonArgs.args,
+    ...commonStackArgs.args,
   });
 }
