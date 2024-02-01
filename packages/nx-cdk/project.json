@@ -14,6 +14,7 @@
         "tsConfig": "packages/nx-cdk/tsconfig.lib.json",
         "assets": [
           "packages/nx-cdk/*.md",
+          "packages/nx-cdk/LICENSE",
           {
             "input": "./packages/nx-cdk/src",
             "glob": "**/!(*.ts)",
