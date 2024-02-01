@@ -10,11 +10,13 @@ import { SynthExecutorSchema } from './schema';
 export interface NormalizedArguments {
   _: string[];
   app?: string;
-  tags: string[];
+  tags?: string[];
   all?: boolean;
   quiet?: boolean;
   parameters?: string[];
   exclusively?: boolean;
+  'show-template': boolean;
+  'no-previous-parameters': boolean;
 }
 
 export interface NormalizedOptions {

@@ -6,6 +6,7 @@ import { toArray } from '@stellarlibs/utils';
  */
 export interface CommonStackExecutorSchema {
   all?: boolean;
+  tag?: string | string[];
   stack?: string | string[];
   parameter?: string | string[];
 }
@@ -15,7 +16,8 @@ export interface NormalizedCommonStackExecutorSchema {
   args: {
     _: string[];
     all?: boolean;
-    parameters: string[];
+    parameters?: string[];
+    tags?: string[];
   };
 }
 
@@ -23,10 +25,11 @@ export function commonStackExecutorSchema<T extends CommonStackExecutorSchema>(
   schema: T
 ): NormalizedCommonStackExecutorSchema {
   return {
-    exclude: ['stack', 'parameter', 'all'],
+    exclude: ['stack', 'parameter', 'all', 'tag'],
     args: {
-      _: toArray(schema.stack),
       all: schema.all,
+      _: toArray(schema.stack),
+      tags: toArray(schema.tag),
       parameters: toArray(schema.parameter),
     },
   };
@@ -55,7 +58,7 @@ export function commonExecutorSchema<T extends CommonExecutorSchema>(
   schema: T
 ): NormalizedCommonExecutorSchema {
   return {
-    exclude: ['showTemplate', 'tag'],
+    exclude: ['showTemplate', 'tag', 'noPreviousParameters'],
     args: {
       tags: toArray(schema.tag),
       'show-template': schema.showTemplate,
