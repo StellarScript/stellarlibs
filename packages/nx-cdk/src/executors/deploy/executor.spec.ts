@@ -27,40 +27,25 @@ describe('Deploy Executor', () => {
     });
 
     it('run deploy', () => {
-      const all = true;
-      const force = true;
-      const noRollback = true;
-      const ignoreNoStacks = true;
+      const argOpt = {
+        all: true,
+        force: true,
+        noRollback: true,
+        ignoreNoStacks: true,
+        noPreviousParameters: true,
+        progress: 'events',
+        method: 'change-set',
+        app: 'bin/index.ts',
+        outputFile: 'output.json',
+        tag: ['mockTag-1', 'mockTag-2'],
+        stack: ['MockStack', 'MockStack2'],
+        changeSetName: 'mystack-changeset',
+        parameter: ['param1:value1', 'param2:value2'],
+        hotswap: 'MockStack',
+        hotswapFallback: 'MockStack',
+      };
 
-      const progress = 'events';
-      const method = 'change-set';
-      const app = 'bin/index.ts';
-      const outputFile = 'output.json';
-      const tags = ['mockTag-1', 'mockTag-2'];
-      const stack = ['MockStack', 'MockStack2'];
-
-      const changeSetName = 'mystack-changeset';
-      const parameters = ['param1=value1', 'param2=value2'];
-
-      const hotswap = stack[0];
-      const hotswapFallback = stack[0];
-
-      const args = normalizeArguments({
-        all,
-        app,
-        stack,
-        force,
-        method,
-        hotswap,
-        tag: tags,
-        progress,
-        outputFile,
-        noRollback,
-        changeSetName,
-        ignoreNoStacks,
-        hotswapFallback,
-        parameter: parameters,
-      });
+      const args = normalizeArguments(argOpt);
 
       const command = createCommand('deploy', {
         args,
@@ -68,20 +53,24 @@ describe('Deploy Executor', () => {
         projectName: 'mock-project-name',
       });
 
-      expect(command.includes(`--deploy ${stack[0]} ${stack[1]}`));
-      expect(command.includes(`--app ${app}`));
+      expect(command.includes(`--deploy ${argOpt.stack[0]} ${argOpt.stack[1]}`));
+      expect(command.includes(`--app ${argOpt.app}`));
       expect(command.includes(`--all`));
       expect(command.includes(`--force`));
-      expect(command.includes(`--method ${method}`));
-      expect(command.includes(`--progress ${progress}`));
-      expect(command.includes(`--output-file ${outputFile}`));
+      expect(command.includes(`--method ${argOpt.method}`));
+      expect(command.includes(`--progress ${argOpt.progress}`));
+      expect(command.includes(`--output-file ${argOpt.outputFile}`));
       expect(command.includes(`--no-rollback`));
-      expect(command.includes(`--change-set-name ${changeSetName}`));
+      expect(command.includes(`--change-set-name ${argOpt.changeSetName}`));
       expect(command.includes(`--ignore-no-stacks`));
-      expect(command.includes(`--hotswap ${hotswap}`));
-      expect(command.includes(`--hotswap-fallback ${hotswapFallback}`));
-      tags.forEach((tag) => expect(command.includes(`--tag ${tag}`)));
-      parameters.forEach((parameter) => expect(command.includes(`--parameter ${parameter}`)));
+      expect(command.includes(`--hotswap ${argOpt.hotswap}`));
+      expect(command.includes(`--hotswap-fallback ${argOpt.hotswapFallback}`));
+      argOpt.tag.forEach((tag) => expect(command.includes(`--tag ${tag}`)));
+      argOpt.parameter.forEach((parameter) => expect(command.includes(`--parameter ${parameter}`)));
+
+      expect(
+        command.includes(`--no-previous-parameters ${argOpt.noPreviousParameters}`)
+      ).toBeTruthy();
     });
   });
 

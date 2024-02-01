@@ -31,6 +31,7 @@ describe('Synthesize Executor', () => {
         all: true,
         quiet: true,
         exclusively: true,
+        noPreviousParameters: true,
         stack: 'MockStack',
         app: 'bin/index.ts',
         tag: ['mockTag-1', 'mockTag-2'],
@@ -48,6 +49,9 @@ describe('Synthesize Executor', () => {
       expect(command.includes(`--app ${argOpt.app}`)).toBeTruthy();
       expect(command.includes(`--exclusively`)).toBeTruthy();
       expect(command.includes(`--quiet`)).toBeTruthy();
+      expect(
+        command.includes(`--no-previous-parameters ${argOpt.noPreviousParameters}`)
+      ).toBeTruthy();
 
       argOpt.tag.forEach((tg) => {
         expect(command.includes(`--tags ${tg}`)).toBeTruthy();

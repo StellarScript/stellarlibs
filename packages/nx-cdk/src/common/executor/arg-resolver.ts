@@ -39,6 +39,7 @@ export function commonStackExecutorSchema<T extends CommonStackExecutorSchema>(
 export interface CommonExecutorSchema {
   tag?: string | string[];
   showTemplate?: boolean;
+  noPreviousParameters?: boolean;
 }
 
 export interface NormalizedCommonExecutorSchema {
@@ -46,6 +47,7 @@ export interface NormalizedCommonExecutorSchema {
   args: {
     tags: string[];
     'show-template': boolean;
+    'no-previous-parameters': boolean;
   };
 }
 
@@ -57,6 +59,7 @@ export function commonExecutorSchema<T extends CommonExecutorSchema>(
     args: {
       tags: toArray(schema.tag),
       'show-template': schema.showTemplate,
+      'no-previous-parameters': schema.noPreviousParameters,
     },
   };
 }

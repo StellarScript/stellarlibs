@@ -1,2 +1,2 @@
 export * from './command';
-export * from './argsSchema';
+export * from './arg-resolver';

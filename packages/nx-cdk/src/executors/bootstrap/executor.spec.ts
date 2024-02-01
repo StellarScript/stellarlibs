@@ -29,6 +29,7 @@ describe('Bootstrap Executor', () => {
       const argOpt = {
         trust: true,
         showTemplate: true,
+        noPreviousParameters: true,
         terminationProtection: true,
         tag: ['mock-tag'],
         profile: 'mock-profile',
@@ -53,8 +54,13 @@ describe('Bootstrap Executor', () => {
       expect(command.includes(`--bootstrap-kms-key-id ${argOpt.kmsKeyId}`)).toBeTruthy();
       argOpt.tag.forEach((t) => expect(command.includes(`--tags ${t}`)).toBeTruthy());
       expect(
+        command.includes(`--no-previous-parameters ${argOpt.noPreviousParameters}`)
+      ).toBeTruthy();
+
+      expect(
         command.includes(`--termination-protection ${argOpt.terminationProtection}`)
       ).toBeTruthy();
+
       expect(
         command.includes(`--cloudformation-execution-policies ${argOpt.executionPolicy}`)
       ).toBeTruthy();
