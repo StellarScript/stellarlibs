@@ -14,6 +14,11 @@
       "implementation": "./src/executors/deploy/executor",
       "schema": "./src/executors/deploy/schema.json",
       "description": "deploy executor"
+    },
+    "destroy": {
+      "implementation": "./src/executors/destroy/executor",
+      "schema": "./src/executors/destroy/schema.json",
+      "description": "destroy executor"
     }
   }
 }
