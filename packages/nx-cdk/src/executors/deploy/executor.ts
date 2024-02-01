@@ -1,5 +1,5 @@
 import { ExecutorContext } from '@nx/devkit';
-import { excludeCopy, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
+import { excludeCopy, runCommand, sanitizeObject } from '@stellarlibs/utils';
 
 import { DeployExecutorSchema } from './schema';
 import {
