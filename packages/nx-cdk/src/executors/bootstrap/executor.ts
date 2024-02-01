@@ -1,5 +1,5 @@
 import { ExecutorContext } from '@nx/devkit';
-import { pick, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
+import { exclude, runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
 
 import { BootstrapExecutorSchema } from './schema';
 import { createCommand } from '../../common/executor';
@@ -51,6 +51,12 @@ export function normalizeArguments(options: BootstrapExecutorSchema) {
     'bootstrap-kms-key-id': options.kmsKeyId,
     'cloudformation-execution-policies': options.executionPolicy,
     'termination-protection': options.terminationProtection,
-    ...pick(options, ['profile', 'qualifier', 'trust']),
+    ...exclude(options, [
+      'tag',
+      'bucketName',
+      'kmsKeyId',
+      'executionPolicy',
+      'terminationProtection',
+    ]),
   });
 }
