@@ -2,7 +2,7 @@ import * as childProcess from 'child_process';
 import { type ExecutorContext, logger } from '@nx/devkit';
 import { ExecutionContextMock } from '@stellarlibs/utils';
 
-import { createCommand } from '../../common';
+import { createCommand } from '../../common/executor';
 import synthExecutor, { normalizeArguments, normalizeOptions } from './executor';
 
 describe('Bootstrap Executor', () => {
@@ -39,8 +39,8 @@ describe('Bootstrap Executor', () => {
 
       const command = createCommand('bootstrap', {
         args,
-        projectName: 'mock-project-name',
         projectRoot: 'myproject',
+        projectName: 'mock-project-name',
       });
       for (const arg in args) {
         expect(command.includes(`--${arg}`)).toBeTruthy();

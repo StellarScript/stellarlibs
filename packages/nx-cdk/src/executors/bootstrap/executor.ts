@@ -1,8 +1,8 @@
 import { ExecutorContext } from '@nx/devkit';
 import { runCommand, sanitizeObject, toArray } from '@stellarlibs/utils';
 
-import { createCommand } from '../../common';
 import { BootstrapExecutorSchema } from './schema';
+import { createCommand } from '../../common/executor';
 
 export interface Arguments {
   tags: string[];
@@ -26,13 +26,7 @@ export default async function runExecutor(
   context: ExecutorContext
 ) {
   const options = normalizeOptions(schema, context);
-
-  const command = createCommand('bootstrap', {
-    args: options.args,
-    projectRoot: options.projectRoot,
-    projectName: options.projectName,
-  });
-
+  const command = createCommand('bootstrap', options);
   return await runCommand(command, context.root);
 }
 
