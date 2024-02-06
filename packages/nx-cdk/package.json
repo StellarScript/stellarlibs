@@ -23,6 +23,9 @@
     "@nx/jest": "17.3.0",
     "@nx/eslint": "17.3.0"
   },
+  "peerDependencies": {
+    "aws-cdk": "^2.105.0"
+  },
   "type": "commonjs",
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
