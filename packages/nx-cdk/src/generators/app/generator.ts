@@ -21,7 +21,7 @@ import { lintProjectGenerator } from '@nx/eslint';
 
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
-import { dependencies } from './dependencies';
+import { dependencies, devDependencies } from './dependencies';
 
 interface NormalizedSchema extends AppGeneratorSchema {
   tags: string[];
@@ -47,7 +47,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
   }
 
   addIgnoreFileName(tree, '# AWS CDK', ['cdk.out']);
-  tasks.register(addDependenciesToPackageJson(tree, dependencies, {}));
+  tasks.register(addDependenciesToPackageJson(tree, dependencies, devDependencies));
 }
 
 /**
