@@ -48,6 +48,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
 
   addIgnoreFileName(tree, '# AWS CDK', ['cdk.out']);
   tasks.register(addDependenciesToPackageJson(tree, dependencies, devDependencies));
+  await tasks.runInSerial();
 }
 
 /**
