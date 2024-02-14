@@ -8,6 +8,7 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "generatePackageJson": true,
         "external": ["libs/utils"],
         "outputPath": "dist/packages/nx-cdk",
         "main": "packages/nx-cdk/src/index.ts",
