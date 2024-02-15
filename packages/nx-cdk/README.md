@@ -96,7 +96,7 @@ nx g @stellarlibs/nx-cdk:remove <APP_NAME>
 <br>
 <br>
 
-## 3. Bootstrap<a name="bootstrap"></a>
+## 4. Bootstrap<a name="bootstrap"></a>
 
 Before deploying the application, it's necessary to bootstrap the environment. This step prepares the AWS resources required for deployment.
 
@@ -127,7 +127,7 @@ nx bootstrap <APP_NAME>
 <br>
 <br>
 
-## 4. Synth<a name="synth"></a>
+## 5. Synth<a name="synth"></a>
 
 The `nx synth <APP_NAME>` command is used to synthesize the application, which means it compiles your source code into a format that can be deployed to AWS.
 
@@ -143,7 +143,7 @@ nx synth <APP_NAME>
 <br>
 <br>
 
-## 5. Deploy<a name="deploy"></a>
+## 6. Deploy<a name="deploy"></a>
 
 To deploy the application/stack, execute:
 
@@ -165,7 +165,7 @@ nx deploy --stack StackOne --stack StackTwo
 <br>
 <br>
 
-## 6. Destroy<a name="destroy"></a>
+## 7. Destroy<a name="destroy"></a>
 
 To destroy the application/stack, execute:
 
