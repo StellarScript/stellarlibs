@@ -3,7 +3,6 @@ import {
   updateJson,
   GeneratorCallback,
   joinPathFragments,
-  getWorkspaceLayout,
   addProjectConfiguration,
   addDependenciesToPackageJson,
 } from '@nx/devkit';
@@ -11,6 +10,8 @@ import {
   toArray,
   Nullable,
   TestRunner,
+  ProjectType,
+  getProjectDir,
   GeneratorTasks,
   addProjectFiles,
   addIgnoreFileName,
@@ -29,10 +30,14 @@ interface NormalizedSchema extends AppGeneratorSchema {
   projectSource: string;
 }
 
-export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
+export default async function appGenerator(
+  tree: Tree,
+  schema: AppGeneratorSchema,
+  projectType = ProjectType.Application
+) {
   const tasks = new GeneratorTasks();
 
-  const options = normailzeOptions(tree, schema);
+  const options = normailzeOptions(tree, projectType, schema);
   const appFilesDir = joinPathFragments(__dirname, 'files', 'app');
   const testFilesDir = joinPathFragments(__dirname, 'files', 'unitTest');
 
@@ -145,9 +150,13 @@ function generateProject(tree: Tree, filePath: string, options: NormalizedSchema
  * @param options
  * @returns
  */
-export function normailzeOptions(tree: Tree, options: AppGeneratorSchema): NormalizedSchema {
-  const { appsDir } = getWorkspaceLayout(tree);
-  const workspaceDir = options.directory || appsDir;
+export function normailzeOptions(
+  tree: Tree,
+  projectType: ProjectType,
+  options: AppGeneratorSchema
+): NormalizedSchema {
+  const dir = getProjectDir(tree, projectType);
+  const workspaceDir = options.directory || dir;
 
   const projectRoot = joinPathFragments(workspaceDir, options.name);
   const projectSource = joinPathFragments(projectRoot, 'src');
