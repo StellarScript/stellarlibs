@@ -9,11 +9,12 @@ AWS Cloud Development Kit (CDK) applications within Nx workspaces.
 ## Table of Contents
 
 1. [Generate Application](#generate-application)
-2. [Remove Application](#remove-application)
-3. [Environment Bootstrap](#bootstrap)
-4. [Synthesize Application](#synth)
-5. [Deploy Application/Stack](#deploy)
-6. [Destroy Application/Stack](#destroy)
+2. [Generate Library](#generate-library)
+3. [Remove Application](#remove-application)
+4. [Environment Bootstrap](#bootstrap)
+5. [Synthesize Application](#synth)
+6. [Deploy Application/Stack](#deploy)
+7. [Destroy Application/Stack](#destroy)
 
 ---
 
@@ -57,7 +58,34 @@ nx g @stellarlibs/nx-cdk:app myapp --tag experimental --tag infrastructure --dir
 <br>
 <br>
 
-## 2. Remove Application<a name="remove-application"></a>
+## 2. Generate Library<a name="generate-library"></a>
+
+To generate a new library, use the following command. This command sets up a new AWS CDK library with optional configurations for testing and linting.
+
+```sh
+nx g @stellarlibs/nx-cdk:lib <APP_NAME>
+
+    [--tag <String>]
+    [--directory <String>]
+    [--testRunner <jest | none>]
+```
+
+#### Options:
+
+- `--tag` (optional): Tags to categorize your applications. You can pass multiple --tag arguments.
+- `--testRunner` (optional): Specifies the testing library to use. Jest | None.
+- `--directory` (optional): Specifies the directory where the application will be created.
+
+#### Example:
+
+```bash
+nx g @stellarlibs/nx-cdk:lib myapp --tag experimental --tag infrastructure --directory apps
+```
+
+</br>
+</br>
+
+## 3. Remove Application<a name="remove-application"></a>
 
 To remove an existing application, use the following command:
 

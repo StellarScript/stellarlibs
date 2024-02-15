@@ -3,7 +3,6 @@ import {
   updateJson,
   GeneratorCallback,
   joinPathFragments,
-  getWorkspaceLayout,
   addProjectConfiguration,
   addDependenciesToPackageJson,
 } from '@nx/devkit';
@@ -11,6 +10,8 @@ import {
   toArray,
   Nullable,
   TestRunner,
+  ProjectType,
+  getProjectDir,
   GeneratorTasks,
   addProjectFiles,
   addIgnoreFileName,
@@ -29,14 +30,18 @@ interface NormalizedSchema extends AppGeneratorSchema {
   projectSource: string;
 }
 
-export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
+export default async function appGenerator(
+  tree: Tree,
+  schema: AppGeneratorSchema,
+  projectType = ProjectType.Application
+) {
   const tasks = new GeneratorTasks();
 
-  const options = normailzeOptions(tree, schema);
-  const appFilesDir = joinPathFragments(__dirname, 'files', 'app');
+  const options = normailzeOptions(tree, projectType, schema);
+  const appFilesDir = joinPathFragments(__dirname, 'files', projectType);
   const testFilesDir = joinPathFragments(__dirname, 'files', 'unitTest');
 
-  generateProject(tree, appFilesDir, options);
+  generateProject(tree, appFilesDir, projectType, options);
 
   const lintTask = await generateLintConfig(tree, options);
   tasks.register(lintTask);
@@ -124,8 +129,13 @@ async function generateTest(
  * @param filePath
  * @param options
  */
-function generateProject(tree: Tree, filePath: string, options: NormalizedSchema): void {
-  const config = createConfiguration(options);
+function generateProject(
+  tree: Tree,
+  filePath: string,
+  projectType: ProjectType,
+  options: NormalizedSchema
+): void {
+  const config = createConfiguration(projectType, options);
   addProjectConfiguration(tree, options.name, config);
 
   updateConfiguration(tree, options.name, (workspace) => {
@@ -145,9 +155,13 @@ function generateProject(tree: Tree, filePath: string, options: NormalizedSchema
  * @param options
  * @returns
  */
-export function normailzeOptions(tree: Tree, options: AppGeneratorSchema): NormalizedSchema {
-  const { appsDir } = getWorkspaceLayout(tree);
-  const workspaceDir = options.directory || appsDir;
+export function normailzeOptions(
+  tree: Tree,
+  projectType: ProjectType,
+  options: AppGeneratorSchema
+): NormalizedSchema {
+  const dir = getProjectDir(tree, projectType);
+  const workspaceDir = options.directory || dir;
 
   const projectRoot = joinPathFragments(workspaceDir, options.name);
   const projectSource = joinPathFragments(projectRoot, 'src');

@@ -1,3 +1,6 @@
+import { Tree, getWorkspaceLayout } from '@nx/devkit';
+import { ProjectType } from './constants';
+
 export function toArray(value: string | string[] | undefined): string[] {
   if (value === undefined) return [];
   return Array.isArray(value) ? value : [value];
@@ -38,4 +41,10 @@ export function sanitizeObject<T>(obj: T) {
 
 export function sanitizeObjectCopy<T>(obj: T) {
   return sanitizeObject({ ...obj });
+}
+
+export function getProjectDir(tree: Tree, type: ProjectType): string {
+  const workspace = getWorkspaceLayout(tree);
+  const _type = type === ProjectType.Application ? 'appsDir' : 'libsDir';
+  return workspace[_type];
 }
