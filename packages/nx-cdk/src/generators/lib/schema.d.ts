@@ -1,3 +1,3 @@
 import { AppGeneratorSchema } from '../app/schema';
 
-export type LibGeneratorSchema = AppGeneratorSchema
+export type LibGeneratorSchema = AppGeneratorSchema;
