@@ -38,10 +38,10 @@ export default async function appGenerator(
   const tasks = new GeneratorTasks();
 
   const options = normailzeOptions(tree, projectType, schema);
-  const appFilesDir = joinPathFragments(__dirname, 'files', 'app');
+  const appFilesDir = joinPathFragments(__dirname, 'files', projectType);
   const testFilesDir = joinPathFragments(__dirname, 'files', 'unitTest');
 
-  generateProject(tree, appFilesDir, options);
+  generateProject(tree, appFilesDir, projectType, options);
 
   const lintTask = await generateLintConfig(tree, options);
   tasks.register(lintTask);
@@ -129,8 +129,13 @@ async function generateTest(
  * @param filePath
  * @param options
  */
-function generateProject(tree: Tree, filePath: string, options: NormalizedSchema): void {
-  const config = createConfiguration(options);
+function generateProject(
+  tree: Tree,
+  filePath: string,
+  projectType: ProjectType,
+  options: NormalizedSchema
+): void {
+  const config = createConfiguration(projectType, options);
   addProjectConfiguration(tree, options.name, config);
 
   updateConfiguration(tree, options.name, (workspace) => {
