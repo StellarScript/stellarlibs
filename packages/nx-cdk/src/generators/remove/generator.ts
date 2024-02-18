@@ -1,17 +1,12 @@
-import { addProjectConfiguration, formatFiles, generateFiles, Tree } from '@nx/devkit';
-import * as path from 'path';
+import { type Tree, readProjectConfiguration } from '@nx/devkit';
+import { ProjectType, removeTsConfigPath, removeDirectoryRecursively } from '@stellarlibs/utils';
 import { RemoveGeneratorSchema } from './schema';
 
-export async function removeGenerator(tree: Tree, options: RemoveGeneratorSchema) {
-   const projectRoot = `libs/${options.name}`;
-   addProjectConfiguration(tree, options.name, {
-      root: projectRoot,
-      projectType: 'library',
-      sourceRoot: `${projectRoot}/src`,
-      targets: {},
-   });
-   generateFiles(tree, path.join(__dirname, 'files'), projectRoot, options);
-   await formatFiles(tree);
-}
+export default async function removeGenerator(tree: Tree, options: RemoveGeneratorSchema) {
+   const config = readProjectConfiguration(tree, options.name);
 
-export default removeGenerator;
+   if (config.projectType === ProjectType.Library) {
+      removeTsConfigPath(tree, options.name);
+   }
+   removeDirectoryRecursively(tree, config.root);
+}

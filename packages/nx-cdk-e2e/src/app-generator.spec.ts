@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { checkFilesExist, ensureNxProject, runNxCommandAsync, uniq } from '@nx/plugin/testing';
 
-describe('@stellarlibs/nx-cdk" Generators', () => {
+describe('"@stellarlibs/nx-cdk" Generators', () => {
    beforeEach(async () => {
       await ensureNxProject('@stellarlibs/utils', 'dist/libs/nx-cdk');
       await ensureNxProject('@stellarlibs/nx-cdk', 'dist/packages/nx-cdk');
