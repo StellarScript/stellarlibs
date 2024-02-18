@@ -8,14 +8,11 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "generatePackageJson": true,
-        "external": ["libs/utils"],
         "outputPath": "dist/packages/nx-cdk",
         "main": "packages/nx-cdk/src/index.ts",
         "tsConfig": "packages/nx-cdk/tsconfig.lib.json",
         "assets": [
           "packages/nx-cdk/*.md",
-          "packages/nx-cdk/LICENSE",
           {
             "input": "./packages/nx-cdk/src",
             "glob": "**/!(*.ts)",
