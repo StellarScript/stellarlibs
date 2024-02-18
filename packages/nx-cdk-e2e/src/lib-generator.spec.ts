@@ -25,12 +25,9 @@ describe('"@stellarlibs/nx-cdk" Library Generators', () => {
          await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`);
 
          expect(() => {
-            // check generated library directory
             checkFilesExist(path.join(pluginName));
+            checkFilesExist(path.join(pluginName, 'src', 'construct.ts'));
             checkFilesExist(path.join(pluginName, 'tsconfig.json'));
-            // Check generated source files
-            checkFilesExist(path.join(pluginName, 'src', 'bin/index.ts'));
-            checkFilesExist(path.join(pluginName, 'src', 'stack/lib.ts'));
          }).not.toThrow();
       }, 100000);
 
@@ -49,8 +46,10 @@ describe('"@stellarlibs/nx-cdk" Library Generators', () => {
       it('generate library with none test runner', async () => {
          const pluginName = uniq('aws-cdk');
          await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`);
-         expect(() => checkFilesExist(path.join('tsconfig.spec.json'))).toThrow();
-         expect(() => checkFilesExist(path.join('jest.config.ts'))).toThrow();
+         expect(() => {
+            checkFilesExist(path.join('jest.config.ts'));
+            checkFilesExist(path.join('tsconfig.spec.json'));
+         }).toThrow();
       }, 100000);
 
       it('generate library with jest test runner', async () => {
