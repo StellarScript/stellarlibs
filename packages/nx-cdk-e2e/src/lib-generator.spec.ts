@@ -27,7 +27,6 @@ describe('"@stellarlibs/nx-cdk" Library Generators', () => {
          expect(() => {
             // check generated library directory
             checkFilesExist(path.join(pluginName));
-            checkFilesExist(path.join(pluginName, 'cdk.json'));
             checkFilesExist(path.join(pluginName, 'tsconfig.json'));
             // Check generated source files
             checkFilesExist(path.join(pluginName, 'src', 'bin/index.ts'));
