@@ -12,6 +12,13 @@
             "index": 0
          },
          "x-prompt": "What name would you like to use?"
+      },
+
+      "testRunner": {
+         "type": "string",
+         "enum": ["jest", "none"],
+         "description": "Test runner to use for unit tests.",
+         "x-prompt": "Which unit test runner would you like to use?"
       }
    },
    "required": ["name"]

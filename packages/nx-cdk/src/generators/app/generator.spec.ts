@@ -1,6 +1,6 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 
-describe('app generator', () => {
+describe('Application Generator', () => {
    beforeEach(() => {
       createTreeWithEmptyWorkspace();
    });

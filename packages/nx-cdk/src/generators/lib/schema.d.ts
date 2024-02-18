@@ -1,3 +1,3 @@
-export interface LibGeneratorSchema {
-   name: string;
-}
+import { AppGeneratorSchema } from '../app/schema';
+
+export type LibGeneratorSchema = AppGeneratorSchema;
