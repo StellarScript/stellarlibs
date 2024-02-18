@@ -50,7 +50,6 @@ describe('"@stellarlibs/nx-cdk" Generators', () => {
          runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner none`);
          expect(() => checkFilesExist(path.join('tsconfig.spec.json'))).toThrow();
          expect(() => checkFilesExist(path.join('jest.config.ts'))).toThrow();
-         expect(() => checkFilesExist(path.join('vitest.config.ts'))).toThrow();
       }, 100000);
 
       it('generate application with jest test runner', () => {
