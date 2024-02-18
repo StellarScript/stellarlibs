@@ -60,7 +60,4 @@ try {
 }
 
 // Execute "npm publish" to publish
-execSync(`npm publish --access public --tag ${tag}`, {
-   stdio: 'inherit',
-   shell: true,
-});
+execSync(`npm publish --access public --tag ${tag}`);
