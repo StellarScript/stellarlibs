@@ -43,12 +43,8 @@ export function updateConfiguration<T>(
  * @param projectName
  * @returns
  */
-export function readConfiguration<T>(
-  tree: Tree,
-  projectName: string
-): T & ProjectConfiguration {
-  return readProjectConfiguration(tree, projectName) as T &
-    ProjectConfiguration;
+export function readConfiguration<T>(tree: Tree, projectName: string): T & ProjectConfiguration {
+  return readProjectConfiguration(tree, projectName) as T & ProjectConfiguration;
 }
 
 /**
@@ -57,15 +53,12 @@ export function readConfiguration<T>(
  * @param filePath
  * @param options
  */
-export function addProjectFiles(
-  tree: Tree,
-  filePath: string,
-  options: GeneratorOptions
-): void {
+export function addProjectFiles(tree: Tree, filePath: string, options: GeneratorOptions): void {
   generateFiles(tree, filePath, options.projectRoot, {
     ...options,
     ...names(options.projectName),
     offsetFromRoot: offsetFromRoot(options.projectRoot),
+    testRunner: options.testRunner ?? '',
     template: '',
   });
 }
@@ -81,11 +74,7 @@ export class GeneratorTasks extends Set<GeneratorCallback> {
   }
 }
 
-export function addIgnoreFileName(
-  tree: Tree,
-  comment: string,
-  fileNames: string[]
-): void {
+export function addIgnoreFileName(tree: Tree, comment: string, fileNames: string[]): void {
   const exists = tree.exists('.gitignore');
   if (!exists) {
     return;

@@ -1564,7 +1564,7 @@
   dependencies:
     "@nx/workspace" "18.0.4"
 
-"@nx/devkit@18.0.4":
+"@nx/devkit@18.0.4", "@nx/devkit@^18.0.4":
   version "18.0.4"
   resolved "https://registry.yarnpkg.com/@nx/devkit/-/devkit-18.0.4.tgz#fec28139ef5d078933c5f1b5a7e0a585672dbdd6"
   integrity sha512-Vs1AXgOjMJyaWpKopD04dy0FwQ22n5ZR1bFf98Ab4Ht0WJwJE90IpUVAkwI03n5BYxAKOlQnFltsB4gu6Y8mZQ==
@@ -1733,7 +1733,7 @@
     fs-extra "^11.1.0"
     tslib "^2.3.0"
 
-"@nx/vite@18.0.4":
+"@nx/vite@18.0.4", "@nx/vite@^18.0.4":
   version "18.0.4"
   resolved "https://registry.yarnpkg.com/@nx/vite/-/vite-18.0.4.tgz#aaa5b06d17e8073ed04a33ae61980b8d95be282c"
   integrity sha512-IUd3vvxsiVefRDNDC3uJ+YYtrQtAPJQ02uvipmuI5CZtOuDc99hCrXVTeDDU6FobJ3K/vdnG3frDZP3uhTd1mQ==
