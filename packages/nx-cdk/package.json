@@ -5,6 +5,10 @@
       "@nx/devkit": "18.0.4",
       "tslib": "^2.3.0"
    },
+   "devDependencies": {
+      "@nx/vite": "18.0.4",
+      "@nx/jest": "18.0.4"
+   },
    "type": "commonjs",
    "main": "./src/index.js",
    "typings": "./src/index.d.ts",
