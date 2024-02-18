@@ -1,10 +1,10 @@
 export enum ProjectType {
-  Library = 'library',
-  Application = 'application',
+   Library = 'library',
+   Application = 'application',
 }
 
 export enum TestRunner {
-  Jest = 'jest',
-  Vitest = 'vitest',
-  None = 'none',
+   Jest = 'jest',
+   Vitest = 'vitest',
+   None = 'none',
 }

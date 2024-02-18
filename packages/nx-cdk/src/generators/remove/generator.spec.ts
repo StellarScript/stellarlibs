@@ -5,16 +5,16 @@ import { removeGenerator } from './generator';
 import { RemoveGeneratorSchema } from './schema';
 
 describe('remove generator', () => {
-  let tree: Tree;
-  const options: RemoveGeneratorSchema = { name: 'test' };
+   let tree: Tree;
+   const options: RemoveGeneratorSchema = { name: 'test' };
 
-  beforeEach(() => {
-    tree = createTreeWithEmptyWorkspace();
-  });
+   beforeEach(() => {
+      tree = createTreeWithEmptyWorkspace();
+   });
 
-  it('should run successfully', async () => {
-    await removeGenerator(tree, options);
-    const config = readProjectConfiguration(tree, 'test');
-    expect(config).toBeDefined();
-  });
+   it('should run successfully', async () => {
+      await removeGenerator(tree, options);
+      const config = readProjectConfiguration(tree, 'test');
+      expect(config).toBeDefined();
+   });
 });

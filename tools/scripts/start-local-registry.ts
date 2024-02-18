@@ -6,19 +6,19 @@ import { startLocalRegistry } from '@nx/js/plugins/jest/local-registry';
 import { execFileSync } from 'child_process';
 
 export default async () => {
-  // local registry target to run
-  const localRegistryTarget = '@stellarlibs/source:local-registry';
-  // storage folder for the local registry
-  const storage = './tmp/local-registry/storage';
+   // local registry target to run
+   const localRegistryTarget = '@stellarlibs/source:local-registry';
+   // storage folder for the local registry
+   const storage = './tmp/local-registry/storage';
 
-  global.stopLocalRegistry = await startLocalRegistry({
-    localRegistryTarget,
-    storage,
-    verbose: false,
-  });
-  const nx = require.resolve('nx');
-  execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', '0.0.0-e2e', '--tag', 'e2e'], {
-    env: process.env,
-    stdio: 'pipe',
-  });
+   global.stopLocalRegistry = await startLocalRegistry({
+      localRegistryTarget,
+      storage,
+      verbose: false,
+   });
+   const nx = require.resolve('nx');
+   execFileSync(nx, ['run-many', '--targets', 'publish', '--ver', '0.0.0-e2e', '--tag', 'e2e'], {
+      env: process.env,
+      stdio: 'pipe',
+   });
 };
