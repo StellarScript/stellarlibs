@@ -1,67 +1,67 @@
 name: Publish
 
 on:
-  workflow_dispatch:
-    inputs:
-      plugin:
-        description: 'Name'
-        required: true
-        type: choice
-        default: 'nx-cdk'
-        options:
-          - 'nx-cdk'
+   workflow_dispatch:
+      inputs:
+         plugin:
+            description: 'Name'
+            required: true
+            type: choice
+            default: 'nx-cdk'
+            options:
+               - 'nx-cdk'
 
-      tag:
-        description: 'Tag'
-        required: true
-        type: choice
-        default: 'latest'
-        options:
-          - 'latest'
-          - 'beta'
+         tag:
+            description: 'Tag'
+            required: true
+            type: choice
+            default: 'latest'
+            options:
+               - 'latest'
+               - 'beta'
 
-      version:
-        description: 'Version'
-        required: true
-        type: string
+         version:
+            description: 'Version'
+            required: true
+            type: string
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['18.x']
-    steps:
-      - name: Info
-        run: |
-          echo Runing Publish
+   release:
+      runs-on: ubuntu-latest
+      strategy:
+         matrix:
+            node-version: ['18.x']
+      steps:
+         - name: Info
+           run: |
+              echo Runing Publish
 
-      - uses: actions/checkout@v3
+         - uses: actions/checkout@v3
 
-      - name: Cached Modules
-        id: cache
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
-          restore-keys: |
-            nodeModules-
+         - name: Cached Modules
+           id: cache
+           uses: actions/cache@v2
+           with:
+              path: node_modules
+              key: nodeModules-${{ hashFiles('**/package-lock.json') }}-${{ matrix.node-version }}
+              restore-keys: |
+                 nodeModules-
 
-      - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: npm install
+         - name: Install Dependencies
+           if: steps.cache.outputs.cache-hit != 'true'
+           run: npm install
 
-      - name: Build Plugin
-        run: npx nx run ${{ github.event.inputs.plugin }}:build --outputPath ./build/${{ github.event.inputs.plugin }}
+         - name: Build Plugin
+           run: npx nx run ${{ github.event.inputs.plugin }}:build --outputPath ./build/${{ github.event.inputs.plugin }}
 
-      - name: Npm Auth
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@stellarlibs'
+         - name: Npm Auth
+           uses: actions/setup-node@v3
+           with:
+              node-version: '18.x'
+              registry-url: 'https://registry.npmjs.org'
+              scope: '@stellarlibs'
 
-      - name: Publish Plugin
-        run: npx nx run ${{ github.event.inputs.plugin }}:publish  --ver=${{ github.event.inputs.version }} --tag=${{ github.event.inputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+         - name: Publish Plugin
+           run: npx nx run ${{ github.event.inputs.plugin }}:publish  --ver=${{ github.event.inputs.version }} --tag=${{ github.event.inputs.tag }}
+           env:
+              NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}

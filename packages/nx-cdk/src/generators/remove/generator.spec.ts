@@ -1,11 +1,11 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 
 describe('remove generator', () => {
-  beforeEach(() => {
-    createTreeWithEmptyWorkspace();
-  });
+   beforeEach(() => {
+      createTreeWithEmptyWorkspace();
+   });
 
-  it('should run successfully', async () => {
-    expect(1).toBeDefined();
-  });
+   it('should run successfully', async () => {
+      expect(1).toBeDefined();
+   });
 });

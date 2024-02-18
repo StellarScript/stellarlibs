@@ -1,11 +1,11 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 
-describe('app generator', () => {
-  beforeEach(() => {
-    createTreeWithEmptyWorkspace();
-  });
+describe('Application Generator', () => {
+   beforeEach(() => {
+      createTreeWithEmptyWorkspace();
+   });
 
-  it('should run successfully', async () => {
-    expect(1).toBe(1);
-  });
+   it('should run successfully', async () => {
+      expect(1).toBe(1);
+   });
 });

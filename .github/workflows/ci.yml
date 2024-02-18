@@ -1,47 +1,47 @@
 name: CI
 
 on:
-  pull_request:
-    paths-ignore:
-      - '**/README.md'
-      - '.yarnrc'
-      - '.prettierrc'
-      - '.gitignore'
-      - '.eslintignore'
-      - '.prettierignore'
+   pull_request:
+      paths-ignore:
+         - '**/README.md'
+         - '.yarnrc'
+         - '.prettierrc'
+         - '.gitignore'
+         - '.eslintignore'
+         - '.prettierignore'
 
 permissions:
-  actions: read
-  contents: read
+   actions: read
+   contents: read
 
 concurrency:
-  group: >-
-    ${{ github.workflow }}-${{
-      github.event_name == 'push'
-        && github.ref
-        || github.head_ref
-    }}
-  cancel-in-progress: ${{ github.event_name != 'push' }}
+   group: >-
+      ${{ github.workflow }}-${{
+        github.event_name == 'push'
+          && github.ref
+          || github.head_ref
+      }}
+   cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
-  main:
-    name: Nx Cloud - Main Job
-    uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.13.1
-    with:
-      main-branch-name: main
-      number-of-agents: 5
-      init-commands: |
-        npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=4
-      parallel-commands: |
-        npx nx-cloud record -- npx nx format:check
-      parallel-commands-on-agents: |
-        npx nx affected --target=lint --parallel=4
-        npx nx affected --target=test --parallel=4 --ci --code-coverage
-        npx nx affected --target=build --parallel=4
-        npx nx run nx-cdk-e2e:e2e
+   main:
+      name: Nx Cloud - Main Job
+      uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.13.1
+      with:
+         main-branch-name: main
+         number-of-agents: 5
+         init-commands: |
+            npx nx-cloud start-ci-run --stop-agents-after="build" --agent-count=4
+         parallel-commands: |
+            npx nx-cloud record -- npx nx format:check
+         parallel-commands-on-agents: |
+            npx nx affected --target=lint --parallel=4
+            npx nx affected --target=test --parallel=4 --ci --code-coverage
+            npx nx affected --target=build --parallel=4
+            npx nx run nx-cdk-e2e:e2e
 
-  agents:
-    name: Nx Cloud - Agents
-    uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.13.1
-    with:
-      number-of-agents: 4
+   agents:
+      name: Nx Cloud - Agents
+      uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.13.1
+      with:
+         number-of-agents: 4

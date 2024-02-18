@@ -45,9 +45,9 @@ nx g @stellarlibs/nx-cdk:app <APP_NAME>
 
 #### Options:
 
-- `--tag` (optional): Tags to categorize your applications. You can pass multiple --tag arguments.
-- `--testRunner` (optional): Specifies the testing library to use. Jest | None.
-- `--directory` (optional): Specifies the directory where the application will be created.
+-  `--tag` (optional): Tags to categorize your applications. You can pass multiple --tag arguments.
+-  `--testRunner` (optional): Specifies the testing library to use. Jest | None.
+-  `--directory` (optional): Specifies the directory where the application will be created.
 
 #### Example:
 
@@ -72,9 +72,9 @@ nx g @stellarlibs/nx-cdk:lib <APP_NAME>
 
 #### Options:
 
-- `--tag` (optional): Tags to categorize your applications. You can pass multiple --tag arguments.
-- `--testRunner` (optional): Specifies the testing library to use. Jest | None.
-- `--directory` (optional): Specifies the directory where the application will be created.
+-  `--tag` (optional): Tags to categorize your applications. You can pass multiple --tag arguments.
+-  `--testRunner` (optional): Specifies the testing library to use. Jest | None.
+-  `--directory` (optional): Specifies the directory where the application will be created.
 
 #### Example:
 
@@ -116,13 +116,13 @@ nx bootstrap <APP_NAME>
 
 #### Options:
 
-- `--profile` (optional): Specifies the AWS profile for bootstrapping.
-- `--qualifier` (optional): Specifies the bootstrap qualifier.
-- `--bucketName` (optional): Specifies the bootstrap bucket name.
-- `--executionPolicy` (optional): Specifies the execution policy ARN.
-- `--terminationProtection` (optional): Protects against termination.
-- `--kmsKeyId` (optional): Specifies the KMS key ID.
-- `--trust` (optional): Specifies trust options.
+-  `--profile` (optional): Specifies the AWS profile for bootstrapping.
+-  `--qualifier` (optional): Specifies the bootstrap qualifier.
+-  `--bucketName` (optional): Specifies the bootstrap bucket name.
+-  `--executionPolicy` (optional): Specifies the execution policy ARN.
+-  `--terminationProtection` (optional): Protects against termination.
+-  `--kmsKeyId` (optional): Specifies the KMS key ID.
+-  `--trust` (optional): Specifies trust options.
 
 <br>
 <br>
@@ -138,7 +138,7 @@ nx synth <APP_NAME>
 
 #### Options:
 
-- `--output` (optional): Specifies the directory for the synthesized output.
+-  `--output` (optional): Specifies the directory for the synthesized output.
 
 <br>
 <br>
@@ -154,7 +154,7 @@ nx deploy <Stack_Name>
 
 #### Options:
 
-- `--stack` (optional) <Stack_Name>: Specifies the stack name to deploy. You can pass multiple --stack arguments.
+-  `--stack` (optional) <Stack_Name>: Specifies the stack name to deploy. You can pass multiple --stack arguments.
 
 #### Example:
 
@@ -176,7 +176,7 @@ nx destroy <Stack_Name>
 
 #### Options:
 
-- `--stack` (optional): Specifies the stack name to destroy. You can pass multiple --stack arguments.
+-  `--stack` (optional): Specifies the stack name to destroy. You can pass multiple --stack arguments.
 
 #### Example:
 

@@ -1,32 +1,13 @@
 {
-  "name": "@stellarlibs/nx-cdk",
-  "version": "0.0.1",
-  "license": "MIT",
-  "homepage": "https://github.com/StellarScript/stellarlibs/blob/main/packages/nx-cdk/README.md",
-  "author": {
-    "name": "StellarScript"
-  },
-  "publishConfig": {
-    "access": "public",
-    "@stellarlibs:nx-cdk": "https://npm.pkg.github.com"
-  },
-  "repository": {
-    "type": "git",
-    "directory": "packages/packages/nx-cdk",
-    "url": "https://github.com/StellarScript/stellarlibs"
-  },
-  "dependencies": {
-    "@nx/devkit": "17.3.0",
-    "tslib": "^2.3.0",
-    "@nx/jest": "17.3.0",
-    "@nx/eslint": "17.3.0"
-  },
-  "peerDependencies": {
-    "aws-cdk": "^2.105.0"
-  },
-  "type": "commonjs",
-  "main": "./src/index.js",
-  "typings": "./src/index.d.ts",
-  "generators": "./generators.json",
-  "executors": "./executors.json"
+   "name": "@stellarlibs/nx-cdk",
+   "version": "0.0.1",
+   "dependencies": {
+      "@nx/devkit": "18.0.4",
+      "tslib": "^2.3.0"
+   },
+   "type": "commonjs",
+   "main": "./src/index.js",
+   "typings": "./src/index.d.ts",
+   "generators": "./generators.json",
+   "executors": "./executors.json"
 }

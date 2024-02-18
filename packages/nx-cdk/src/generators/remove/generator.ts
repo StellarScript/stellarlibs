@@ -3,10 +3,10 @@ import { ProjectType, removeTsConfigPath, removeDirectoryRecursively } from '@st
 import { RemoveGeneratorSchema } from './schema';
 
 export default async function removeGenerator(tree: Tree, options: RemoveGeneratorSchema) {
-  const config = readProjectConfiguration(tree, options.name);
+   const config = readProjectConfiguration(tree, options.name);
 
-  if (config.projectType === ProjectType.Library) {
-    removeTsConfigPath(tree, options.name);
-  }
-  removeDirectoryRecursively(tree, config.root);
+   if (config.projectType === ProjectType.Library) {
+      removeTsConfigPath(tree, options.name);
+   }
+   removeDirectoryRecursively(tree, config.root);
 }
