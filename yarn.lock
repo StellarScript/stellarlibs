@@ -1662,7 +1662,7 @@
     tsconfig-paths "^4.1.2"
     tslib "^2.3.0"
 
-"@nx/linter@18.0.4":
+"@nx/linter@18.0.4", "@nx/linter@^18.0.4":
   version "18.0.4"
   resolved "https://registry.yarnpkg.com/@nx/linter/-/linter-18.0.4.tgz#1526321b553ee175357025ccda836788c6411488"
   integrity sha512-yCg7H63eWkjReQUagAFAoICD53ByYZDyRqlkarZe9AGRWJM4GYKhJntihsk1mUOO7Sz0a907BMaWk8Wn5HbHEA==
@@ -3315,20 +3315,6 @@ create-jest@^29.7.0:
     jest-config "^29.7.0"
     jest-util "^29.7.0"
     prompts "^2.0.1"
-
-create-nx-workspace@18.0.4:
-  version "18.0.4"
-  resolved "https://registry.yarnpkg.com/create-nx-workspace/-/create-nx-workspace-18.0.4.tgz#c7e82ce8e3b7c6dbfda6bf9585254795db3ee015"
-  integrity sha512-p9z8IAHuARGINW7a2wyXW9guhA8bvQ0jBO9dIAyYbYJS5v+Wv9z2UBxlLklCQ0rakHZuvRD8qb8GV1MAUWoZ1Q==
-  dependencies:
-    axios "^1.6.0"
-    chalk "^4.1.0"
-    enquirer "~2.3.6"
-    flat "^5.0.2"
-    ora "5.3.0"
-    tmp "~0.2.1"
-    tslib "^2.3.0"
-    yargs "^17.6.2"
 
 create-require@^1.1.0:
   version "1.1.1"
