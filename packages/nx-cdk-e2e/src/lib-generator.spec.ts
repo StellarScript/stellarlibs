@@ -10,16 +10,19 @@ describe('@stellarlibs/nx-cdk" Generators', () => {
    describe('Library Generator', () => {
       it('generate library with duplicate name (error)', async () => {
          const pluginName = uniq('aws-cdk');
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName}`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`);
+
          expect(() => checkFilesExist(path.join(pluginName)));
          expect(async () => {
-            return await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName}`);
+            return await runNxCommandAsync(
+               `generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner none`
+            );
          }).rejects.toThrow();
       }, 100000);
 
       it('generate library', async () => {
          const pluginName = uniq('aws-cdk');
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName}`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`);
          expect(() => {
             // check generated library directory
             checkFilesExist(path.join(pluginName));
@@ -38,7 +41,7 @@ describe('@stellarlibs/nx-cdk" Generators', () => {
          const pluginDirectory = uniq('subdir');
 
          await runNxCommandAsync(
-            `generate @stellarlibs/nx-cdk:lib ${pluginName} --directory ${pluginDirectory}`
+            `generate @stellarlibs/nx-cdk:lib ${pluginName} --directory ${pluginDirectory} --testRunner none`
          );
          expect(() => checkFilesExist(path.join(pluginDirectory, pluginName))).not.toThrow();
       }, 100000);
