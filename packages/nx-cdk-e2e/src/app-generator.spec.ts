@@ -61,8 +61,8 @@ describe('"@stellarlibs/nx-cdk" Generators', () => {
 
          expect(() => {
             checkFilesExist(path.join(pluginName));
-            checkFilesExist(path.join('jest.config.ts'));
-            checkFilesExist(path.join('tsconfig.spec.json'));
+            checkFilesExist(path.join(pluginName, 'jest.config.ts'));
+            checkFilesExist(path.join(pluginName, 'tsconfig.spec.json'));
          }).not.toThrow();
       }, 100000);
 
@@ -71,8 +71,8 @@ describe('"@stellarlibs/nx-cdk" Generators', () => {
          await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner vitest`);
          expect(() => {
             checkFilesExist(path.join(pluginName));
-            checkFilesExist(path.join('vitest.config.ts'));
-            checkFilesExist(path.join('tsconfig.spec.json'));
+            checkFilesExist(path.join(pluginName, 'vitest.config.ts'));
+            checkFilesExist(path.join(pluginName, 'tsconfig.spec.json'));
          }).not.toThrow();
       }, 100000);
    });
