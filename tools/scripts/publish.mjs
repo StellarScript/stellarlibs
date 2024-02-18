@@ -22,7 +22,10 @@ function invariant(condition, message) {
 
 // Executing publish script: node path/to/publish.mjs {name} --version {version} --tag {tag}
 // Default "tag" to "next" so we won't publish the "latest" tag by accident.
-const [, , name, version, tag = 'next'] = process.argv;
+const [, , name, , tag = 'next'] = process.argv;
+
+const rand = () => Math.floor(Math.random() * 10);
+const version = `${rand()}.${rand()}.${rand()}`;
 
 // A simple SemVer validation to validate the version
 const validVersion = /^\d+\.\d+\.\d+(-\w+\.\d+)?/;
