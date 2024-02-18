@@ -1,1 +1,4 @@
-export interface DestroyExecutorSchema {} // eslint-disable-line
+import { CommonStackExecutorSchema } from '../../common/executor';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface DestroyExecutorSchema extends CommonStackExecutorSchema {}
