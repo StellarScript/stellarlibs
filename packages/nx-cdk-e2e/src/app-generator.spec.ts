@@ -13,8 +13,10 @@ describe('"@stellarlibs/nx-cdk" Generators', () => {
          await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner none`);
 
          expect(() => checkFilesExist(path.join(pluginName))).not.toThrow();
-         expect(() => {
-            return runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner none`);
+         expect(async () => {
+            return await runNxCommandAsync(
+               `generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner none`
+            );
          }).rejects.toThrow();
       }, 100000);
 
