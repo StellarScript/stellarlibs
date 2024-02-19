@@ -14,6 +14,7 @@
             "main": "packages/nx-cdk/src/index.ts",
             "tsConfig": "packages/nx-cdk/tsconfig.lib.json",
             "assets": [
+               "packages/nx-cdk/LICENSE",
                "packages/nx-cdk/*.md",
                {
                   "input": "./packages/nx-cdk/src",
