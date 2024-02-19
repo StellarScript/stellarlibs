@@ -57,7 +57,7 @@ export async function generateApplication(
       lintDependencies,
    });
 
-   const filePath = joinPathFragments(__dirname, 'files/testing', options.testRunner);
+   const filePath = joinPathFragments(__dirname, 'files', projectType, 'testing', options.testRunner);
    const runnerDependencies = TestRunner.Vitest ? viteDependencies : jestDependencies;
 
    await testConfigGenerator(tree, filePath, {
