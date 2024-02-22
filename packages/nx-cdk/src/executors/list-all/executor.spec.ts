@@ -1,11 +1,41 @@
-import { ListAllExecutorSchema } from './schema';
-import executor from './executor';
+import * as childProcess from 'child_process';
+import { ExecutorContext, logger } from '@nx/devkit';
+import { ExecutionContextMock } from '@stellarlibs/utils';
 
-const options: ListAllExecutorSchema = {};
+import listExecutor from './executor';
+import { createCommand } from '../../common/executor';
 
 describe('ListAll Executor', () => {
-   it('can run', async () => {
-      const output = await executor(options);
-      expect(output.success).toBe(true);
+   let context: ExecutorContext;
+   const projectName = 'test-app';
+
+   beforeAll(() => {
+      context = ExecutionContextMock({
+         executor: 'list',
+         projectName: projectName,
+         plugin: '@stellarlibs/nx-cdk',
+      });
+   });
+
+   describe('Execute List', () => {
+      afterEach(() => jest.clearAllMocks());
+
+      beforeAll(() => {
+         jest.spyOn(logger, 'debug');
+         jest.spyOn(childProcess, 'execSync');
+      });
+
+      it('run list', async () => {
+         const execution = await listExecutor({}, context);
+
+         const command = createCommand('list', {
+            projectRoot: `apps/${projectName}`,
+            projectName: 'mock-project-name',
+            args: [],
+         });
+
+         expect(command).toBe(execution?.command[1]);
+         expect(childProcess.execSync).toHaveBeenCalledTimes(1);
+      });
    });
 });

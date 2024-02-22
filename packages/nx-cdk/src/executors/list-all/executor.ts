@@ -7,7 +7,7 @@ import { createCommand } from '../../common/executor';
 export default async function runExecutor(_options: ListAllExecutorSchema, context: ExecutorContext) {
    const _context = normalizeContext(context);
    const command = createCommand('list', _context);
-   return await runCommand(command, context.root);
+   return runCommand(command, context.root);
 }
 
 function normalizeContext(context: ExecutorContext) {

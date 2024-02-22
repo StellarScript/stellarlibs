@@ -23,7 +23,7 @@ interface NormalizeOptions {
 export default async function runExecutor(schema: BootstrapExecutorSchema, context: ExecutorContext) {
    const options = normalizeOptions(schema, context);
    const command = createCommand('bootstrap', options);
-   return await runCommand(command, context.root);
+   return runCommand(command, context.root);
 }
 
 export function normalizeOptions(
