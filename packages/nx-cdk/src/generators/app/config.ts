@@ -27,11 +27,9 @@ const applicationTargets = {
       executor: '@stellarlibs/nx-cdk:synth',
       options: {},
    },
-   'list-stacks': {
-      executor: 'nx:run-commands',
-      options: {
-         command: 'npx cdk list',
-      },
+   'list-all': {
+      executor: '@stellarlibs/nx-cdk:list-all',
+      options: {},
    },
 };
 
