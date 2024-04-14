@@ -22,7 +22,7 @@ export function createConfiguration(options: Options) {
 function targets(options: Options) {
    return {
       build: {
-         executor: '@nrwl/workspace:run-commands',
+         executor: 'nx:run-commands',
          options: {
             cwd: options.projectRoot,
             color: true,
@@ -30,7 +30,7 @@ function targets(options: Options) {
          },
       },
       serve: {
-         executor: '@nrwl/workspace:run-commands',
+         executor: 'nx:run-commands',
          options: {
             cwd: options.projectRoot,
             color: true,
@@ -38,7 +38,7 @@ function targets(options: Options) {
          },
       },
       deploy: {
-         executor: '@nrwl/workspace:run-commands',
+         executor: 'nx:run-commands',
          options: {
             cwd: options.projectRoot,
             color: true,
@@ -52,7 +52,7 @@ function targets(options: Options) {
          ],
       },
       remove: {
-         executor: '@nrwl/workspace:run-commands',
+         executor: 'nx:run-commands',
          options: {
             cwd: options.projectRoot,
             color: true,
