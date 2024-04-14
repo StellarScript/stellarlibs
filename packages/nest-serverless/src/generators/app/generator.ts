@@ -25,21 +25,33 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    const tasks = new GeneratorTasks();
 
    const options = normalizeOptions(tree, schema);
+   generateConfiguration(tree, options);
    generateProject(tree, options);
 
    await installDependencies(tree, tasks);
    await tasks.runInSerial();
 }
 
-function generateProject(tree: Tree, options: NormalizedSchema) {
+/**
+ *
+ * @param tree
+ * @param options
+ */
+function generateConfiguration(tree: Tree, options: NormalizedSchema) {
    const config = createConfiguration(options);
    addProjectConfiguration(tree, options.projectName, config);
-
    updateJson(tree, 'tsconfig.base.json', (json) => {
-      json.compilerOptions.paths['@serverless'] = 'serverless.base.ts';
+      json.compilerOptions.paths['@serverless'] = ['serverless.base.ts'];
       return json;
    });
+}
 
+/**
+ *
+ * @param tree
+ * @param options
+ */
+function generateProject(tree: Tree, options: NormalizedSchema) {
    generateFiles(tree, joinPathFragments(__dirname, 'files', 'root'), options.workspaceRoot, {
       offsetFromRoot: offsetFromRoot(options.workspaceRoot),
       template: '',
