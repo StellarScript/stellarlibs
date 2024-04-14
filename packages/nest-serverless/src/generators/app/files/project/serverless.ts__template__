@@ -1,14 +1,15 @@
 import type { Serverless } from 'serverless/aws';
+// eslint-disable-next-line @nx/enforce-module-boundaries
 import {
    baseServerlessConfig,
-   baseServerlessConfigProvider,
+   baseServerlessProvider,
    customServerlessConfig,
 } from '../../../serverless.base';
 
 const serverless: Partial<Serverless> = {
    ...baseServerlessConfig,
    provider: { ...baseServerlessProvider },
-   custom: { ...baseServerlessCustom },
+   custom: { ...customServerlessConfig },
 
    functions: {
       api: {
