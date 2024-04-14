@@ -41,7 +41,7 @@ function generateConfiguration(tree: Tree, options: NormalizedSchema) {
    const config = createConfiguration(options);
    addProjectConfiguration(tree, options.projectName, config);
    updateJson(tree, 'tsconfig.base.json', (json) => {
-      json.compilerOptions.paths['@serverless'] = ['serverless.base.ts'];
+      json.compilerOptions.paths['@serverless'] = ['./serverless.base.ts'];
       return json;
    });
 }
