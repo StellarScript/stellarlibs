@@ -1,5 +1,5 @@
 import type { Serverless } from "serverless/aws";
-import { baseServerlessConfig } from "<%= offsetFromRoot %>serverless.base";
+import { baseServerlessConfig } from "@serverless";
 
 const serverlessConfig: Partial<Serverless> = {
   ...baseServerlessConfig,

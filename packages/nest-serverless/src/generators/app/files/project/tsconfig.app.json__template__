@@ -2,7 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "<%= offsetFromRoot %>dist/out-tsc",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "@serverless":["./serverless.ts"]
+    }
   },
   "exclude": ["**/*.spec.ts"],
   "include": ["**/*.ts"]
