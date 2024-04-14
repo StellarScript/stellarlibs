@@ -60,7 +60,7 @@ function normalizeOptions(tree: Tree, schema: AppGeneratorSchema): NormalizedSch
 
    const workspaceRoot = '.';
    const projectRoot = joinPathFragments(workspaceDir, schema.name);
-   const projectSource = joinPathFragments(projectRoot, 'src');
+   const projectSource = joinPathFragments(projectRoot);
 
    return {
       projectRoot,
