@@ -10,8 +10,8 @@ import {
 } from '@nx/devkit';
 import { GeneratorTasks, getProjectDir, ProjectType } from '@stellarlibs/utils';
 import { AppGeneratorSchema } from './schema';
-import { dependencies, devDependencies } from './dependencies';
 import { createConfiguration } from './config';
+import { dependencies, devDependencies } from './dependencies';
 
 interface NormalizedSchema {
    projectRoot: string;

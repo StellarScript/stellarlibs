@@ -1,15 +1,22 @@
 import type { Serverless } from "serverless/aws";
 import { baseServerlessConfig } from "@serverless";
 
-const serverlessConfig: Partial<Serverless> = {
+const serverless: Partial<Serverless> = {
   ...baseServerlessConfig,
-  service: "<%= projectName %>",
-  custom: {
-    ...baseServerlessConfig.custom,
-    "serverless-offline": {
-      lambdaPort: 3002,
-      httpPort: 3003,
-    },
+ provider: {
+      ...baseServerlessConfigProvider,
+   },
+   custom: {
+      ...baseServerlessConfig.custom,
+      webpack: {
+         webpackConfig: './webpack.config.js',
+         includeModules: true,
+         packager: 'yarn',
+      },
+      'serverless-offline': {
+         lambdaPort: 3002,
+         httpPort: 3003,
+      },
   },
   functions: {
     "get-<%= projectName %>": {
@@ -26,4 +33,5 @@ const serverlessConfig: Partial<Serverless> = {
   },
 };
 
-export default serverlessConfig;
+module.exports = serverless;
+
