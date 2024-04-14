@@ -35,22 +35,15 @@ function targets(options: Options) {
             command: command('package', { packageName: options.projectName }),
          },
       },
-      serve: {
-         executor: 'nx:run-commands',
-         options: {
-            cwd: options.projectRoot,
-            color: true,
-            command: command('offline start'),
-         },
-      },
       deploy: {
          executor: 'nx:run-commands',
          options: {
             cwd: options.projectRoot,
             color: true,
-            command: command('deploy', { verboase: true }),
+            command: command('deploy', { packageName: options.projectName }),
          },
          dependsOn: [
+            'build',
             {
                target: 'deploy',
                projects: 'dependencies',
@@ -63,6 +56,14 @@ function targets(options: Options) {
             cwd: options.projectRoot,
             color: true,
             command: command('remove', { verboase: true }),
+         },
+      },
+      serve: {
+         executor: 'nx:run-commands',
+         options: {
+            cwd: options.projectRoot,
+            color: true,
+            command: command('offline start'),
          },
       },
       lint: {
@@ -84,6 +85,7 @@ function targets(options: Options) {
 
 function command(cmd: string, options: CommandOptions = {}) {
    const baseOutDir = path.resolve(path.join('dist', 'serverless'));
+   const outDir = path.join(baseOutDir, options.packageName || '');
 
    const commands = new Commands();
    commands.add('sls').add(cmd);
@@ -93,7 +95,7 @@ function command(cmd: string, options: CommandOptions = {}) {
    }
 
    if (options.packageName && options.packageName.length) {
-      commands.add('--package').add(path.join(baseOutDir, options.packageName || ''));
+      commands.add('--package').add(outDir);
    }
    return commands.command;
 }
