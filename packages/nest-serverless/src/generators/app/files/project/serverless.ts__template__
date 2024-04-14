@@ -1,28 +1,26 @@
 import type { Serverless } from 'serverless/aws';
-import { baseServerlessConfig, baseServerlessConfigProvider, customServerlessConfig } from '../../../serverless.base';
+import {
+   baseServerlessConfig,
+   baseServerlessConfigProvider,
+   customServerlessConfig,
+} from '../../../serverless.base';
 
 const serverless: Partial<Serverless> = {
    ...baseServerlessConfig,
-   provider: {
-      ...baseServerlessConfigProvider,
-   },
-
-   custom: {
-      ...customServerlessConfig,
-      'serverless-offline': {
-         lambdaPort: 3002,
-         httpPort: 3003,
-      },
-   },
+   provider: { ...baseServerlessProvider },
+   custom: { ...baseServerlessCustom },
 
    functions: {
-      'get-myapp': {
-         handler: 'dist/packages/testapp/myapp',
+      api: {
+         package: {
+            patterns: ['!node_modules/**', './src/**'],
+         },
+         handler: './src/lambda.handler',
          events: [
             {
-               http: {
-                  method: 'get',
-                  path: 'myapp',
+               httpApi: {
+                  method: 'GET',
+                  path: '/',
                },
             },
          ],

@@ -11,6 +11,7 @@ export const devDependencies = {
    webpack: '^5.91.0',
    'webpack-cli': '^5.1.4',
    'webpack-node-externals': '^3.0.0',
+   'swc-loader': '^0.2.6',
 };
 
 export const dependencies = {
