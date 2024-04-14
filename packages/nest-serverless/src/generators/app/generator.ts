@@ -6,6 +6,7 @@ import {
    joinPathFragments,
    offsetFromRoot,
    Tree,
+   updateJson,
 } from '@nx/devkit';
 import { GeneratorTasks, getProjectDir, ProjectType } from '@stellarlibs/utils';
 import { AppGeneratorSchema } from './schema';
@@ -33,6 +34,11 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
 function generateProject(tree: Tree, options: NormalizedSchema) {
    const config = createConfiguration(options);
    addProjectConfiguration(tree, options.projectName, config);
+
+   updateJson(tree, 'tsconfig.base.json', (json) => {
+      json.compilerOptions.paths['@serverless'] = 'serverless.base.ts';
+      return json;
+   });
 
    generateFiles(tree, joinPathFragments(__dirname, 'files', 'root'), options.workspaceRoot, {
       offsetFromRoot: offsetFromRoot(options.workspaceRoot),

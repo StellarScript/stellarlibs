@@ -3,7 +3,7 @@ import { baseServerlessConfig } from "@serverless";
 
 const serverlessConfig: Partial<Serverless> = {
   ...baseServerlessConfig,
-  service: "<%= serviceName %>",
+  service: "<%= projectName %>",
   custom: {
     ...baseServerlessConfig.custom,
     "serverless-offline": {
@@ -12,13 +12,13 @@ const serverlessConfig: Partial<Serverless> = {
     },
   },
   functions: {
-    "get-<%= serviceName %>": {
+    "get-<%= projectName %>": {
       handler: "dist/<%= projectRoot %>",
       events: [
         {
           http: {
             method: "get",
-            path: "<%= serviceName %>",
+            path: "<%= projectName %>",
           },
         },
       ],
