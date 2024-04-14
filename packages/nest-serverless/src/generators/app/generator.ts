@@ -26,6 +26,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    const options = normalizeOptions(tree, schema);
    generateConfiguration(tree, options);
    generateProject(tree, options);
+   await lintConfigGenerator(tree, options);
    await installDependencies(tree);
 }
 
@@ -45,8 +46,10 @@ function generateConfiguration(tree: Tree, options: NormalizedSchema) {
 
 /**
  *
+ * @param tree
+ * @param options
  */
-export async function lintConfigGenerator(tree: Tree, options: NormalizedSchema) {
+async function lintConfigGenerator(tree: Tree, options: NormalizedSchema) {
    const lintTask = await lintProjectGenerator(tree, {
       project: options.projectName,
       tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.*?.json')],
