@@ -4,7 +4,7 @@
     "outDir": "<%= offsetFromRoot %>dist/out-tsc",
     "types": ["node"],
     "paths": {
-      "@serverless":["./serverless.ts"]
+      "@serverless":["serverless.base.ts"]
     }
   },
   "exclude": ["**/*.spec.ts"],
