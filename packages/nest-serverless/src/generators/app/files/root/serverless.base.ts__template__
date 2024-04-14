@@ -1,20 +1,19 @@
 import type { Serverless } from 'serverless/aws';
 
 export const envName = process.env.NODE_ENV;
-const envFile = process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : '';
-export const { env } = require(`./environment${envFile}.ts`);
+const envFile = process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : '.prod';
+export const { env } = require(`./environments/environment${envFile}.ts`);
 
 export const baseServerlessConfigProvider: Serverless['provider'] = {
    name: 'aws',
-   runtime: 'nodejs18.x',
+   runtime: 'nodejs20.x',
    memorySize: 128,
-   profile: env.profile,
-   stage: env.name,
+   stage: 'dev',
+   region: 'us-east-1',
    environment: {
       NODE_ENV: envName,
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
    },
-   region: env.region,
 };
 
 export const baseServerlessConfig: Partial<Serverless> = {
@@ -24,15 +23,13 @@ export const baseServerlessConfig: Partial<Serverless> = {
       individually: true,
       excludeDevDependencies: true,
    },
-   plugins: ['serverless-esbuild', 'serverless-offline'],
+   
+   plugins: ['serverless-webpack', 'serverless-offline'],
    custom: {
-      esbuild: {
-         bundle: true,
-         minify: env.name !== 'dev',
-         target: ["ES6"],
-         sourcemap: env.name !== 'dev',
-         sourcesContent: false,
-         define: { 'require.resolve': undefined },
+      webpack: {
+         webpackConfig: 'webpack.config.js',
+         includeModules: false,
+         packager: 'yarn',
       },
    },
 };

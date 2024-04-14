@@ -1,17 +1,17 @@
 import {
-   addDependenciesToPackageJson,
-   addProjectConfiguration,
-   generateFiles,
-   installPackagesTask,
-   joinPathFragments,
-   offsetFromRoot,
    Tree,
    updateJson,
+   generateFiles,
+   offsetFromRoot,
+   joinPathFragments,
+   installPackagesTask,
+   addProjectConfiguration,
+   addDependenciesToPackageJson,
 } from '@nx/devkit';
 import { GeneratorTasks, getProjectDir, ProjectType } from '@stellarlibs/utils';
+import { dependencies, devDependencies } from './dependencies';
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
-import { dependencies, devDependencies } from './dependencies';
 
 interface NormalizedSchema {
    projectRoot: string;
@@ -66,6 +66,11 @@ function generateProject(tree: Tree, options: NormalizedSchema) {
    });
 }
 
+/**
+ *
+ * @param tree
+ * @param tasks
+ */
 async function installDependencies(tree: Tree, tasks: GeneratorTasks) {
    tasks.register(addDependenciesToPackageJson(tree, dependencies, devDependencies));
    await installPackagesTask(tree);

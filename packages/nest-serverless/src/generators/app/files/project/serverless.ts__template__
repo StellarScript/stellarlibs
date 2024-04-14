@@ -8,11 +8,6 @@ const serverless: Partial<Serverless> = {
    },
    custom: {
       ...baseServerlessConfig.custom,
-      webpack: {
-         webpackConfig: './webpack.config.js',
-         includeModules: true,
-         packager: 'yarn',
-      },
       'serverless-offline': {
          lambdaPort: 3002,
          httpPort: 3003,
