@@ -1,4 +1,3 @@
-import * as path from 'path';
 import { joinPathFragments } from '@nx/devkit';
 import { Commands, ProjectType } from '@stellarlibs/utils';
 
@@ -32,7 +31,7 @@ function targets(options: Options) {
          options: {
             cwd: options.projectRoot,
             color: true,
-            command: command('package', { packageName: options.projectName }),
+            command: command('package', { verboase: true }),
          },
       },
       deploy: {
@@ -40,7 +39,7 @@ function targets(options: Options) {
          options: {
             cwd: options.projectRoot,
             color: true,
-            command: command('deploy', { packageName: options.projectName }),
+            command: command('deploy', { verboase: true }),
          },
          dependsOn: [
             'build',
@@ -84,18 +83,11 @@ function targets(options: Options) {
 }
 
 function command(cmd: string, options: CommandOptions = {}) {
-   const baseOutDir = path.resolve(path.join('dist', 'serverless'));
-   const outDir = path.join(baseOutDir, options.packageName || '');
-
    const commands = new Commands();
    commands.add('sls').add(cmd);
 
    if (options?.verboase) {
       commands.add('--verbose');
-   }
-
-   if (options.packageName && options.packageName.length) {
-      commands.add('--package').add(outDir);
    }
    return commands.command;
 }

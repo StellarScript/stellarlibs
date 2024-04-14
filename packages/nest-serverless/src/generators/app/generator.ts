@@ -68,7 +68,7 @@ function generateProject(tree: Tree, options: NormalizedSchema) {
  * @param tasks
  */
 async function installDependencies(tree: Tree): Promise<void> {
-   await addDependenciesToPackageJson(tree, dependencies, devDependencies);
+   await addDependenciesToPackageJson(tree, dependencies, devDependencies)();
    await installPackagesTask(tree, true);
 }
 
