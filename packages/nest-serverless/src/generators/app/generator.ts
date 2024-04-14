@@ -1,5 +1,6 @@
 import {
    addDependenciesToPackageJson,
+   addProjectConfiguration,
    generateFiles,
    installPackagesTask,
    joinPathFragments,
@@ -9,6 +10,7 @@ import {
 import { GeneratorTasks, getProjectDir, ProjectType } from '@stellarlibs/utils';
 import { AppGeneratorSchema } from './schema';
 import { dependencies, devDependencies } from './dependencies';
+import { createConfiguration } from './config';
 
 interface NormalizedSchema {
    projectRoot: string;
@@ -29,6 +31,9 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
 }
 
 function generateProject(tree: Tree, options: NormalizedSchema) {
+   const config = createConfiguration(options);
+   addProjectConfiguration(tree, options.projectName, config);
+
    generateFiles(tree, joinPathFragments(__dirname, 'files', 'root'), options.workspaceRoot, {
       offsetFromRoot: offsetFromRoot(options.workspaceRoot),
       template: '',
