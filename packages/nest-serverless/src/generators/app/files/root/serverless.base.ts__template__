@@ -23,13 +23,13 @@ export const baseServerlessConfig: Partial<Serverless> = {
       individually: true,
       excludeDevDependencies: true,
    },
-   
    plugins: ['serverless-webpack', 'serverless-offline'],
-   custom: {
-      webpack: {
-         webpackConfig: 'webpack.config.js',
-         includeModules: false,
-         packager: 'yarn',
-      },
+};
+
+export const customServerlessConfig: Serverless['custom'] = {
+   webpack: {
+      webpackConfig: 'webpack.config.js',
+      includeModules: false,
+      packager: 'yarn',
    },
 };

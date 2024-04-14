@@ -3,13 +3,13 @@ const { join } = require('path');
 
 module.exports = {
    output: {
-      path: join(__dirname, '<%= offsetFromRoot %>dist/<%= projectRoot %>'),
+      path: join(__dirname, '../../../dist/packages/testapp/myapp'),
    },
    plugins: [
       new NxWebpackPlugin({
          target: 'node',
-         compiler: 'tsc',
-         main: './src/main.ts',
+         compiler: 'swc',
+         main: './src/lambda.ts',
          tsConfig: './tsconfig.app.json',
          optimization: false,
          outputHashing: 'none',
