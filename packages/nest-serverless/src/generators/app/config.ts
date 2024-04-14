@@ -16,7 +16,6 @@ export function createConfiguration(options: Options) {
       sourceRoot: joinPathFragments(options.projectRoot, 'src'),
       targets: targets(options),
       tags: options.tags || [],
-      implicitDependencies: ['core'],
    };
 }
 
