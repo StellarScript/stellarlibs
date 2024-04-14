@@ -8,10 +8,11 @@ import {
    addProjectConfiguration,
    addDependenciesToPackageJson,
 } from '@nx/devkit';
-import { getProjectDir, ProjectType } from '@stellarlibs/utils';
+import { addIgnoreFileName, getProjectDir, ProjectType } from '@stellarlibs/utils';
 import { dependencies, devDependencies } from './dependencies';
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
+import { lintProjectGenerator } from '@nx/eslint';
 
 interface NormalizedSchema {
    projectRoot: string;
@@ -44,10 +45,25 @@ function generateConfiguration(tree: Tree, options: NormalizedSchema) {
 
 /**
  *
+ */
+export async function lintConfigGenerator(tree: Tree, options: NormalizedSchema) {
+   const lintTask = await lintProjectGenerator(tree, {
+      project: options.projectName,
+      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.*?.json')],
+      eslintFilePatterns: [`${options.projectRoot}/**/*.ts`],
+      skipFormat: false,
+      setParserOptionsProject: true,
+   });
+   await lintTask();
+}
+
+/**
+ *
  * @param tree
  * @param options
  */
 function generateProject(tree: Tree, options: NormalizedSchema) {
+   addIgnoreFileName(tree, '# Serverless', ['.serverless']);
    generateFiles(tree, joinPathFragments(__dirname, 'files', 'root'), options.workspaceRoot, {
       offsetFromRoot: offsetFromRoot(options.workspaceRoot),
       template: '',
