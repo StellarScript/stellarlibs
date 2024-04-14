@@ -1,5 +1,6 @@
+import * as path from 'path';
 import { joinPathFragments } from '@nx/devkit';
-import { ProjectType } from '@stellarlibs/utils';
+import { Commands, ProjectType } from '@stellarlibs/utils';
 
 type Options = {
    projectRoot: string;
@@ -7,6 +8,11 @@ type Options = {
    projectSource: string;
    serviceName: string;
    projectName: string;
+};
+
+type CommandOptions = {
+   verboase?: boolean;
+   packageName?: string;
 };
 
 export function createConfiguration(options: Options) {
@@ -26,7 +32,7 @@ function targets(options: Options) {
          options: {
             cwd: options.projectRoot,
             color: true,
-            command: 'sls package',
+            command: command('package', { packageName: options.projectName }),
          },
       },
       serve: {
@@ -34,7 +40,7 @@ function targets(options: Options) {
          options: {
             cwd: options.projectRoot,
             color: true,
-            command: 'sls offline start',
+            command: command('offline start'),
          },
       },
       deploy: {
@@ -42,7 +48,7 @@ function targets(options: Options) {
          options: {
             cwd: options.projectRoot,
             color: true,
-            command: 'sls deploy --verbose',
+            command: command('deploy', { verboase: true }),
          },
          dependsOn: [
             {
@@ -56,7 +62,7 @@ function targets(options: Options) {
          options: {
             cwd: options.projectRoot,
             color: true,
-            command: 'sls remove',
+            command: command('remove', { verboase: true }),
          },
       },
       lint: {
@@ -74,4 +80,20 @@ function targets(options: Options) {
          },
       },
    };
+}
+
+function command(cmd: string, options: CommandOptions = {}) {
+   const baseOutDir = path.resolve(path.join('dist', 'serverless'));
+
+   const commands = new Commands();
+   commands.add('sls').add(cmd);
+
+   if (options?.verboase) {
+      commands.add('--verbose');
+   }
+
+   if (options.packageName && options.packageName.length) {
+      commands.add('--package').add(path.join(baseOutDir, options.packageName || ''));
+   }
+   return commands.command;
 }
