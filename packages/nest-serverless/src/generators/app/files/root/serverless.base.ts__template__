@@ -1,7 +1,7 @@
 import type { Serverless } from 'serverless/aws';
 
 export const envName = process.env.NODE_ENV;
-const envFile = process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : '.prod';
+const envFile = process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : '.dev';
 export const { env } = require(`./environments/environment${envFile}.ts`);
 
 export const baseServerlessConfig: Partial<Serverless> = {

@@ -1,6 +1,6 @@
 import type { Environment } from './environment.types';
 
 export const env: Environment = {
-   name: 'prod',
-   region: 'us-east-1',
+   name: 'dev',
+   region: 'us-east-2',
 };
