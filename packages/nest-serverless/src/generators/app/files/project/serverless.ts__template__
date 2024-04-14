@@ -1,9 +1,9 @@
-import type { Serverless } from "serverless/aws";
-import { baseServerlessConfig } from "@serverless";
+import type { Serverless } from 'serverless/aws';
+import { baseServerlessConfig, baseServerlessConfigProvider } from '@serverless';
 
 const serverless: Partial<Serverless> = {
-  ...baseServerlessConfig,
- provider: {
+   ...baseServerlessConfig,
+   provider: {
       ...baseServerlessConfigProvider,
    },
    custom: {
@@ -17,21 +17,20 @@ const serverless: Partial<Serverless> = {
          lambdaPort: 3002,
          httpPort: 3003,
       },
-  },
-  functions: {
-    "get-<%= projectName %>": {
-      handler: "dist/<%= projectRoot %>",
-      events: [
-        {
-          http: {
-            method: "get",
-            path: "<%= projectName %>",
-          },
-        },
-      ],
-    },
-  },
+   },
+   functions: {
+      'get-myapp': {
+         handler: 'dist/packages/testapp/myapp',
+         events: [
+            {
+               http: {
+                  method: 'get',
+                  path: 'myapp',
+               },
+            },
+         ],
+      },
+   },
 };
 
 module.exports = serverless;
-
