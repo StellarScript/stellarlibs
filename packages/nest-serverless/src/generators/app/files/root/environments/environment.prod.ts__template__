@@ -1,0 +1,6 @@
+import type { Environment } from './environment.types';
+
+export const env: Environment = {
+   name: 'prod',
+   region: 'eu-west-1',
+};

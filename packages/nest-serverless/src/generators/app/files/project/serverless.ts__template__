@@ -1,0 +1,29 @@
+import type { Serverless } from "serverless/aws";
+import { baseServerlessConfig } from "<%= offsetFromRoot %>serverless.base";
+
+const serverlessConfig: Partial<Serverless> = {
+  ...baseServerlessConfig,
+  service: "<%= serviceName %>",
+  custom: {
+    ...baseServerlessConfig.custom,
+    "serverless-offline": {
+      lambdaPort: 3002,
+      httpPort: 3003,
+    },
+  },
+  functions: {
+    "get-<%= serviceName %>": {
+      handler: "dist/<%= projectRoot %>",
+      events: [
+        {
+          http: {
+            method: "get",
+            path: "<%= serviceName %>",
+          },
+        },
+      ],
+    },
+  },
+};
+
+export default serverlessConfig;

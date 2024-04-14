@@ -32,22 +32,7 @@ export const baseServerlessConfig: Partial<Serverless> = {
          target: ['es2020'],
          sourcemap: env.name !== 'dev',
          sourcesContent: false,
-         plugins: '../../plugins.js',
          define: { 'require.resolve': undefined },
-      },
-   },
-   provider: {
-      ...baseServerlessConfigProvider,
-      apiGateway: {
-         minimumCompressionSize: 1024,
-         // @ts-ignore
-         restApiId: {
-            'Fn::ImportValue': `${env.name}-AppApiGW-restApiId`,
-         },
-         // @ts-ignore
-         restApiRootResourceId: {
-            'Fn::ImportValue': `${env.name}-AppApiGW-rootResourceId`,
-         },
       },
    },
 };
