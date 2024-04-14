@@ -8,7 +8,7 @@ import {
    addProjectConfiguration,
    addDependenciesToPackageJson,
 } from '@nx/devkit';
-import { GeneratorTasks, getProjectDir, ProjectType } from '@stellarlibs/utils';
+import { getProjectDir, ProjectType } from '@stellarlibs/utils';
 import { dependencies, devDependencies } from './dependencies';
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
@@ -22,14 +22,10 @@ interface NormalizedSchema {
 }
 
 export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
-   const tasks = new GeneratorTasks();
-
    const options = normalizeOptions(tree, schema);
    generateConfiguration(tree, options);
    generateProject(tree, options);
-
-   await installDependencies(tree, tasks);
-   await tasks.runInSerial();
+   await installDependencies(tree);
 }
 
 /**
@@ -71,9 +67,9 @@ function generateProject(tree: Tree, options: NormalizedSchema) {
  * @param tree
  * @param tasks
  */
-async function installDependencies(tree: Tree, tasks: GeneratorTasks) {
-   tasks.register(addDependenciesToPackageJson(tree, dependencies, devDependencies));
-   await installPackagesTask(tree);
+async function installDependencies(tree: Tree): Promise<void> {
+   await addDependenciesToPackageJson(tree, dependencies, devDependencies);
+   await installPackagesTask(tree, true);
 }
 
 /**
