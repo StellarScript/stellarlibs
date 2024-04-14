@@ -4,7 +4,7 @@ import {
    baseServerlessConfig,
    baseServerlessProvider,
    customServerlessConfig,
-} from '../../../serverless.base';
+} from '<%= offsetFromRoot %>serverless.base';
 
 const serverless: Partial<Serverless> = {
    ...baseServerlessConfig,
