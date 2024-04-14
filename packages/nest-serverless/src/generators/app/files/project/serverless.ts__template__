@@ -1,5 +1,5 @@
 import type { Serverless } from 'serverless/aws';
-import { baseServerlessConfig, baseServerlessConfigProvider, customServerlessConfig } from '@serverless';
+import { baseServerlessConfig, baseServerlessConfigProvider, customServerlessConfig } from '../../../serverless.base';
 
 const serverless: Partial<Serverless> = {
    ...baseServerlessConfig,
