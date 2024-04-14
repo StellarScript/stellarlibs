@@ -29,7 +29,7 @@ export const baseServerlessConfig: Partial<Serverless> = {
       esbuild: {
          bundle: true,
          minify: env.name !== 'dev',
-         target: ['es2020'],
+         target: ["ES6"],
          sourcemap: env.name !== 'dev',
          sourcesContent: false,
          define: { 'require.resolve': undefined },
