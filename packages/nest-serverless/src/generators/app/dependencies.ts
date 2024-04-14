@@ -7,6 +7,10 @@ export const devDependencies = {
    '@vendia/serverless-express': '^4.12.6',
    '@nestjs/platform-express': '^10.0.2',
    'serverless-webpack': '^5.13.0',
+   '@nx/webpack': '^18.2.3',
+   webpack: '^5.91.0',
+   'webpack-cli': '^5.1.4',
+   'webpack-node-externals': '^3.0.0',
 };
 
 export const dependencies = {

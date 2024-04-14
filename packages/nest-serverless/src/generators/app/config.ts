@@ -22,20 +22,6 @@ export function createConfiguration(options: Options) {
 function targets(options: Options) {
    return {
       build: {
-         executor: '@nx/webpack:webpack',
-         outputs: ['{options.outputPath}'],
-         defaultConfiguration: 'development',
-         options: {
-            target: 'node',
-            compiler: 'tsc',
-            generatePackageJson: true,
-            outputPath: 'dist/packages/testapp/myapp',
-            main: 'packages/testapp/myapp/src/main.ts',
-            tsConfig: 'packages/testapp/myapp/tsconfig.app.json',
-            webpackConfig: 'packages/testapp/myapp/webpack.config.js',
-         },
-      },
-      package: {
          executor: 'nx:run-commands',
          options: {
             cwd: options.projectRoot,

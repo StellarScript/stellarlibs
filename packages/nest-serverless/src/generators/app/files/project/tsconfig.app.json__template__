@@ -1,9 +1,12 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "<%= offsetFromRoot %>dist/out-tsc",
-    "types": ["node"]
-  },
-  "exclude": ["**/*.spec.ts"],
-  "include": ["**/*.ts"]
+   "extends": "./tsconfig.json",
+   "compilerOptions": {
+      "outDir": "<%= offsetFromRoot %>dist/out-tsc",
+      "target": "ES2022",
+      "module": "CommonJS",
+      "esModuleInterop": true,
+      "skipLibCheck": true
+   },
+   "exclude": ["**/*.spec.ts", "./serverless.ts", "node_modules"],
+   "include": ["**/*.ts"]
 }
