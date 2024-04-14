@@ -1,17 +1,39 @@
-import { addProjectConfiguration, formatFiles, generateFiles, Tree } from '@nx/devkit';
-import * as path from 'path';
+// import * as path from 'path';
+import { generateFiles, joinPathFragments, offsetFromRoot, Tree } from '@nx/devkit';
+import { getProjectDir, ProjectType } from '@stellarlibs/utils';
 import { AppGeneratorSchema } from './schema';
 
-export async function appGenerator(tree: Tree, options: AppGeneratorSchema) {
-   const projectRoot = `libs/${options.name}`;
-   addProjectConfiguration(tree, options.name, {
-      root: projectRoot,
-      projectType: 'library',
-      sourceRoot: `${projectRoot}/src`,
-      targets: {},
-   });
-   generateFiles(tree, path.join(__dirname, 'files'), projectRoot, options);
-   await formatFiles(tree);
+interface NormalizedSchema {
+   projectRoot: string;
+   projectSource: string;
+   workspaceRoot: string;
+   projectName: string;
+   serviceName: string;
 }
 
-export default appGenerator;
+export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
+   const options = normalizeOptions(tree, schema);
+}
+
+/**
+ *
+ * @param tree
+ * @param schema
+ * @returns
+ */
+function normalizeOptions(tree: Tree, schema: AppGeneratorSchema): NormalizedSchema {
+   const projDir = getProjectDir(tree, ProjectType.Application);
+   const workspaceDir = joinPathFragments(projDir, schema.project);
+
+   const workspaceRoot = '.';
+   const projectRoot = joinPathFragments(workspaceDir, schema.name);
+   const projectSource = joinPathFragments(projectRoot, 'src');
+
+   return {
+      projectRoot,
+      projectSource,
+      workspaceRoot,
+      projectName: schema.name,
+      serviceName: schema.project,
+   };
+}
