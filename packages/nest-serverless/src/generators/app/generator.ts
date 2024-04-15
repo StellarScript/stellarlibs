@@ -7,9 +7,11 @@ import {
    installPackagesTask,
    addProjectConfiguration,
    addDependenciesToPackageJson,
+   formatFiles,
 } from '@nx/devkit';
 import {
    addIgnoreFileName,
+   GeneratorTasks,
    getProjectDir,
    ProjectType,
    testGenerator,
@@ -31,16 +33,20 @@ interface NormalizedSchema {
 }
 
 export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
+   const tasks = new GeneratorTasks();
+
    const options = normalizeOptions(tree, schema);
    configurationGenerator(tree, options);
    projectGenerator(tree, options);
 
-   await lintingGenerator(tree, options);
-   testGenerator(tree, options);
+   await lintingGenerator(tree, options, tasks);
+   testGenerator(tree, options, tasks);
    tsConfigGenerator(tree, options);
 
-   await addDependenciesToPackageJson(tree, dependencies, devDependencies)();
+   tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
    await installPackagesTask(tree, true);
+   await formatFiles(tree);
+   await tasks.runInSerial();
 }
 
 /**
@@ -62,15 +68,15 @@ function configurationGenerator(tree: Tree, options: NormalizedSchema) {
  * @param tree
  * @param options
  */
-async function lintingGenerator(tree: Tree, options: NormalizedSchema) {
-   const lintTask = await lintProjectGenerator(tree, {
+async function lintingGenerator(tree: Tree, options: NormalizedSchema, tasks: GeneratorTasks) {
+   const task = await lintProjectGenerator(tree, {
       project: options.projectName,
       tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.*?.json')],
       eslintFilePatterns: [`${options.projectRoot}/**/*.ts`],
       skipFormat: false,
       setParserOptionsProject: true,
    });
-   await lintTask();
+   tasks.register(task);
 }
 
 /**

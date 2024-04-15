@@ -1,6 +1,7 @@
 import { addDependenciesToPackageJson, joinPathFragments, offsetFromRoot, Tree } from '@nx/devkit';
 import { TestRunner } from './constants';
 import { TestRunnerType } from './types';
+import { GeneratorTasks } from './generator';
 
 type Options = {
    testRunner: TestRunnerType;
@@ -8,7 +9,7 @@ type Options = {
    projectName: string;
 };
 
-export function testGenerator(tree: Tree, options: Options) {
+export function testGenerator(tree: Tree, options: Options, tasks: GeneratorTasks) {
    const offset = offsetFromRoot(options.projectRoot);
 
    if (options.testRunner === TestRunner.None) {
@@ -20,12 +21,12 @@ export function testGenerator(tree: Tree, options: Options) {
          joinPathFragments(options.projectRoot, 'jest.config.ts'),
          JSON.stringify(jestConfig(offset, options.projectName))
       );
-      addDependenciesToPackageJson(tree, {}, jestDependencies);
+      tasks.register(addDependenciesToPackageJson(tree, {}, jestDependencies));
    }
 
    if (options.testRunner === TestRunner.Vitest) {
       tree.write(joinPathFragments(options.projectRoot, 'vitest.config.ts'), vitestConfig());
-      addDependenciesToPackageJson(tree, {}, viteDependencies);
+      tasks.register(addDependenciesToPackageJson(tree, {}, viteDependencies));
    }
 }
 
