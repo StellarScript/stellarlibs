@@ -71,14 +71,6 @@ function targets(options: Options) {
             lintFilePatterns: [joinPathFragments(options.projectRoot, '**/*.ts')],
          },
       },
-      test: {
-         executor: '@nrwl/jest:jest',
-         outputs: [joinPathFragments('coverage', options.projectName, options.serviceName)],
-         options: {
-            jestConfig: joinPathFragments(options.projectRoot, 'jest.config.js'),
-            passWithNoTests: true,
-         },
-      },
    };
 }
 

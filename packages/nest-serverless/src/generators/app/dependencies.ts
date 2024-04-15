@@ -19,3 +19,17 @@ export const dependencies = {
    '@nestjs/config': '^3.2.2',
    '@nestjs/core': '^10.0.2',
 };
+
+export const viteDependencies = {
+   vitest: '^1.5.0',
+   '@vitest/coverage-v8': '^1.5.0',
+   'vite-tsconfig-paths': '^4.3.2',
+   'vitest-mock-extended': '^1.3.1',
+};
+
+export const jestDependencies = {
+   jest: '^29.4.1',
+   '@nx/jest': '18.0.4',
+   '@types/jest': '^29.4.0',
+   'jest-environment-jsdom': '^29.4.1',
+};
