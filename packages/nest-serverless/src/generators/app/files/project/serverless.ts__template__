@@ -1,0 +1,32 @@
+import type { Serverless } from 'serverless/aws';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import {
+   baseServerlessConfig,
+   baseServerlessProvider,
+   customServerlessConfig,
+} from '<%= offsetFromRoot %>serverless.base';
+
+const serverless: Partial<Serverless> = {
+   ...baseServerlessConfig,
+   provider: { ...baseServerlessProvider },
+   custom: { ...customServerlessConfig },
+
+   functions: {
+      api: {
+         package: {
+            patterns: ['!node_modules/**', './src/**'],
+         },
+         handler: './src/lambda.handler',
+         events: [
+            {
+               httpApi: {
+                  method: 'GET',
+                  path: '/',
+               },
+            },
+         ],
+      },
+   },
+};
+
+module.exports = serverless;

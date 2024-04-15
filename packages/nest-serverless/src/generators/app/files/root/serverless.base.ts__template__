@@ -1,0 +1,35 @@
+import type { Serverless } from 'serverless/aws';
+
+export const envName = process.env.NODE_ENV;
+const envFile = process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : '.dev';
+export const { env } = require(`./environments/environment${envFile}.ts`);
+
+export const baseServerlessConfig: Partial<Serverless> = {
+   frameworkVersion: '3',
+   service: 'base',
+   package: {
+      individually: true,
+      excludeDevDependencies: true,
+   },
+   plugins: ['serverless-webpack', 'serverless-offline'],
+};
+
+export const baseServerlessProvider: Serverless['provider'] = {
+   name: 'aws',
+   runtime: 'nodejs18.x',
+   memorySize: 128,
+   stage: 'dev',
+   region: 'us-east-1',
+   environment: {
+      NODE_ENV: 'dev',
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+   },
+};
+
+export const customServerlessConfig: Serverless['custom'] = {
+   webpack: {
+      webpackConfig: 'webpack.config.js',
+      includeModules: false,
+      packager: 'yarn',
+   },
+};

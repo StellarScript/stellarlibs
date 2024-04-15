@@ -1,0 +1,18 @@
+const { NxWebpackPlugin } = require('@nx/webpack');
+const { join } = require('path');
+
+module.exports = {
+   output: {
+      path: join(__dirname, '<%= offsetFromRoot %>dist/<%= projectRoot %>'),
+   },
+   plugins: [
+      new NxWebpackPlugin({
+         target: 'node',
+         compiler: 'swc',
+         main: './src/lambda.ts',
+         tsConfig: './tsconfig.app.json',
+         optimization: false,
+         outputHashing: 'none',
+      }),
+   ],
+};
