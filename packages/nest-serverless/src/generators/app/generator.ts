@@ -8,7 +8,13 @@ import {
    addProjectConfiguration,
    addDependenciesToPackageJson,
 } from '@nx/devkit';
-import { addIgnoreFileName, getProjectDir, ProjectType, tsConfigGenerator } from '@stellarlibs/utils';
+import {
+   addIgnoreFileName,
+   getProjectDir,
+   ProjectType,
+   testGenerator,
+   tsConfigGenerator,
+} from '@stellarlibs/utils';
 import { dependencies, devDependencies } from './dependencies';
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
@@ -29,6 +35,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    projectGenerator(tree, options);
 
    await lintingGenerator(tree, options);
+   testGenerator(tree, options);
    tsConfigGenerator(tree, options);
 
    await addDependenciesToPackageJson(tree, dependencies, devDependencies)();
