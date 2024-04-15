@@ -1,11 +1,7 @@
 # nest-serverless
 
-This library was generated with [Nx](https://nx.dev).
+## Generate App
 
-## Building
-
-Run `nx build nest-serverless` to build the library.
-
-## Running unit tests
-
-Run `nx test nest-serverless` to execute the unit tests via [Jest](https://jestjs.io).
+```sh
+ ❯ nx g @stellarlibs/nest-serverless:app <App_Name> --project <Project_Name> --test <vitest | jest | none>
+```

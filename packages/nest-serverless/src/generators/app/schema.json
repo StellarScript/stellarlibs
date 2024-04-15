@@ -12,7 +12,12 @@
             "index": 0
          },
          "x-prompt": "What name would you like to use?"
+      },
+      "project": {
+         "type": "string",
+         "description": "name the root project",
+         "x-prompt": "What project would you like to use for project name?"
       }
    },
-   "required": ["name"]
+   "required": ["name", "project"]
 }
