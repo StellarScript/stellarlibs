@@ -18,10 +18,10 @@ import {
    TestRunnerType,
    tsConfigGenerator,
 } from '@stellarlibs/utils';
-import { dependencies, devDependencies } from './dependencies';
+import { lintProjectGenerator } from '@nx/eslint';
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
-import { lintProjectGenerator } from '@nx/eslint';
+import { dependencies, devDependencies } from './dependencies';
 
 interface NormalizedSchema {
    projectRoot: string;
