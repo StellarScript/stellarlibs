@@ -8,6 +8,8 @@
          "executor": "@nx/js:tsc",
          "outputs": ["{options.outputPath}"],
          "options": {
+            "generatePackageJson": true,
+            "external": ["libs/utils"],
             "outputPath": "dist/packages/nest-serverless",
             "main": "packages/nest-serverless/src/index.ts",
             "tsConfig": "packages/nest-serverless/tsconfig.lib.json",
