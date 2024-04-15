@@ -11,6 +11,7 @@ This repository contains a collection of Nx plugins.
 ## Available Plugins
 
 1. [**nx-cdk**](https://github.com/StellarScript/stellarlibs/tree/main/packages/nx-cdk#nx-nx-cdk-documentation) - This plugin provides support for AWS Cloud Development Kit (CDK).
+2. [**nest-serverless**](https://github.com/StellarScript/stellarlibs/tree/main/packages/nest-serverless)
 
 <br>
 
