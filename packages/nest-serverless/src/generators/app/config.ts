@@ -1,5 +1,5 @@
-import { joinPathFragments } from '@nx/devkit';
-import { Commands, ProjectType } from '@stellarlibs/utils';
+import { joinPathFragments, ProjectConfiguration } from '@nx/devkit';
+import { Commands, ProjectType, testCommands, TestRunnerType } from '@stellarlibs/utils';
 
 type Options = {
    projectRoot: string;
@@ -7,6 +7,7 @@ type Options = {
    projectSource: string;
    serviceName: string;
    projectName: string;
+   testRunner: TestRunnerType;
 };
 
 type CommandOptions = {
@@ -25,7 +26,7 @@ export function createConfiguration(options: Options) {
 }
 
 function targets(options: Options) {
-   return {
+   const config: ProjectConfiguration['targets'] = {
       build: {
          executor: 'nx:run-commands',
          options: {
@@ -72,6 +73,12 @@ function targets(options: Options) {
          },
       },
    };
+
+   if (options.testRunner !== 'none') {
+      (config.targets as ProjectConfiguration['targets']).test = testCommands(options);
+   }
+
+   return config;
 }
 
 function command(cmd: string, options: CommandOptions = {}) {

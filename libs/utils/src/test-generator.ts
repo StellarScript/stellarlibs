@@ -1,7 +1,9 @@
 import { addDependenciesToPackageJson, joinPathFragments, offsetFromRoot, Tree } from '@nx/devkit';
+import { TestRunner } from './constants';
+import { TestRunnerType } from './types';
 
 type Options = {
-   testRunner: 'jest' | 'none' | 'vitest';
+   testRunner: TestRunnerType;
    projectRoot: string;
    projectName: string;
 };
@@ -9,11 +11,11 @@ type Options = {
 export function testGenerator(tree: Tree, options: Options) {
    const offset = offsetFromRoot(options.projectRoot);
 
-   if (options.testRunner === 'none') {
+   if (options.testRunner === TestRunner.None) {
       return;
    }
 
-   if (options.testRunner === 'jest') {
+   if (options.testRunner === TestRunner.Jest) {
       tree.write(
          joinPathFragments(options.projectRoot, 'jest.config.ts'),
          JSON.stringify(jestConfig(offset, options.projectName))
@@ -21,10 +23,36 @@ export function testGenerator(tree: Tree, options: Options) {
       addDependenciesToPackageJson(tree, {}, jestDependencies);
    }
 
-   if (options.testRunner === 'vitest') {
+   if (options.testRunner === TestRunner.Vitest) {
       tree.write(joinPathFragments(options.projectRoot, 'vitest.config.ts'), vitestConfig());
       addDependenciesToPackageJson(tree, {}, viteDependencies);
    }
+}
+
+export function testCommands(options: Options) {
+   if (options.testRunner === TestRunner.None) {
+      return null;
+   }
+   if (options.testRunner === TestRunner.Jest) {
+      return {
+         executor: '@nx/jest:jest',
+         outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
+         options: {
+            jestConfig: joinPathFragments(options.projectRoot, 'jest.config.ts'),
+            passWithNoTests: true,
+         },
+      };
+   }
+   if (options.testRunner === TestRunner.Vitest) {
+      return {
+         executor: '@nx/vite:test',
+         outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
+         options: {
+            config: joinPathFragments(options.projectRoot, 'vitest.config.ts'),
+         },
+      };
+   }
+   return null;
 }
 
 /**

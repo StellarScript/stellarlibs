@@ -13,6 +13,7 @@ import {
    getProjectDir,
    ProjectType,
    testGenerator,
+   TestRunnerType,
    tsConfigGenerator,
 } from '@stellarlibs/utils';
 import { dependencies, devDependencies } from './dependencies';
@@ -26,7 +27,7 @@ interface NormalizedSchema {
    workspaceRoot: string;
    projectName: string;
    serviceName: string;
-   testRunner: 'jest' | 'none' | 'vitest';
+   testRunner: TestRunnerType;
 }
 
 export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
