@@ -44,8 +44,8 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    tsConfigGenerator(tree, options);
 
    tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
-   await installPackagesTask(tree, true);
-   await formatFiles(tree);
+   tasks.register(() => installPackagesTask(tree, true));
+   tasks.register(async () => await formatFiles(tree));
    await tasks.runInSerial();
 }
 
