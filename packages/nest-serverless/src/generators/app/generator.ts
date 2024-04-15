@@ -8,14 +8,13 @@ import {
    addProjectConfiguration,
    addDependenciesToPackageJson,
 } from '@nx/devkit';
-import { addIgnoreFileName, getProjectDir, ProjectType, updateConfiguration } from '@stellarlibs/utils';
+import { addIgnoreFileName, getProjectDir, ProjectType } from '@stellarlibs/utils';
 import { dependencies, devDependencies } from './dependencies';
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
 import { lintProjectGenerator } from '@nx/eslint';
-import { jestInitGenerator } from '@nx/jest';
-import { initGenerator } from '@nx/vite';
 import path = require('path');
+import { appTsConfig, baseTsConfig, specTsConfig } from './templates/tsconfig-template';
 
 interface NormalizedSchema {
    projectRoot: string;
@@ -32,7 +31,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    projectGenerator(tree, options);
 
    await lintingGenerator(tree, options);
-   await testGenerator(tree, options);
+   tsConfigGenerator(tree, options);
 
    await addDependenciesToPackageJson(tree, dependencies, devDependencies)();
    await installPackagesTask(tree, true);
@@ -42,6 +41,24 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
  *
  *
  */
+function tsConfigGenerator(tree: Tree, options: NormalizedSchema) {
+   const offset = offsetFromRoot(options.projectRoot);
+
+   const baseConfig = baseTsConfig(offset);
+   if (options.testRunner !== 'none')
+      baseConfig.references = [...baseConfig.references, { path: './tsconfig.spec.json' }];
+   tree.write(path.join(options.projectRoot, 'tsconfig.json'), JSON.stringify(baseConfig));
+
+   const appConfig = appTsConfig(offset);
+   if (options.testRunner !== 'none')
+      appConfig.exclude = [...appConfig.exclude, 'src/**/*.spec.ts', 'src/**/*.test.ts'];
+   tree.write(path.join(options.projectRoot, 'tsconfig.app.json'), JSON.stringify(appConfig));
+
+   if (options.testRunner !== 'none') {
+      const specConfig = specTsConfig(offset);
+      tree.write(path.join(options.projectRoot, 'tsconfig.app.json'), JSON.stringify(specConfig));
+   }
+}
 
 /**
  *
@@ -116,75 +133,4 @@ function normalizeOptions(tree: Tree, schema: AppGeneratorSchema): NormalizedSch
       serviceName: schema.project,
       testRunner: schema.test,
    };
-}
-
-/**
- *
- * @param tree
- * @param options
- * @returns
- */
-async function testGenerator(tree: Tree, options: NormalizedSchema) {
-   const tsconfigAppPath = path.resolve(joinPathFragments(options.projectRoot, 'tsconfig.app.json'));
-   const tsconfigBasePath = path.resolve(joinPathFragments(options.projectRoot, 'tsconfig.json'));
-   if (options.testRunner === 'none') {
-      return;
-   }
-   if (options.testRunner === 'jest') {
-      await jestGenerator(tree, options);
-   }
-   if (options.testRunner === 'vitest') {
-      await vitestGenerator(tree, options);
-   }
-
-   updateJson(tree, tsconfigAppPath, (json) => {
-      json.exclude = [...json.exclude, '**/*.spec.ts', '**/*.test.ts'];
-      return json;
-   });
-   updateJson(tree, tsconfigBasePath, (json) => {
-      json.references = [...json.references, { path: './tsconfig.spec.json' }];
-      return json;
-   });
-}
-
-async function vitestGenerator(tree: Tree, options: NormalizedSchema) {
-   const viteTask = await initGenerator(tree, {
-      skipFormat: false,
-      skipPackageJson: false,
-      keepExistingVersions: false,
-      updatePackageScripts: true,
-   });
-
-   updateConfiguration(tree, options.projectName, (workspace) => {
-      workspace.targets.test = {
-         executor: '@nx/vite:test',
-         outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
-         options: {
-            config: `${options.projectRoot}/vitest.config.ts`,
-         },
-      };
-      return workspace;
-   });
-   await viteTask();
-}
-
-async function jestGenerator(tree: Tree, options: NormalizedSchema) {
-   const jestTask = await jestInitGenerator(tree, {
-      skipFormat: false,
-      skipPackageJson: false,
-      keepExistingVersions: false,
-      updatePackageScripts: true,
-   });
-
-   updateConfiguration(tree, options.projectName, (workspace) => {
-      workspace.targets.test = {
-         executor: '@nx/jest:jest',
-         outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
-         options: {
-            jestConfig: `${options.projectRoot}/jest.config.ts`,
-         },
-      };
-      return workspace;
-   });
-   await jestTask();
 }
