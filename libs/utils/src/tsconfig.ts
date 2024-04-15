@@ -13,6 +13,12 @@ export function tsConfigGenerator(tree: Tree, options: Options) {
    specTsConfigGenerator(tree, offset, options);
 }
 
+/**
+ *
+ * @param tree
+ * @param offset
+ * @param options
+ */
 function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
    const baseConfig = baseTsConfigTemplate(offset);
 
@@ -22,6 +28,12 @@ function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
    tree.write(path.join(options.projectRoot, 'tsconfig.json'), JSON.stringify(baseConfig));
 }
 
+/**
+ *
+ * @param tree
+ * @param offset
+ * @param options
+ */
 function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
    const appConfig = appTsConfigTemplate(offset);
 
@@ -31,17 +43,26 @@ function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
    tree.write(path.join(options.projectRoot, 'tsconfig.app.json'), JSON.stringify(appConfig));
 }
 
+/**
+ *
+ * @param tree
+ * @param offset
+ * @param options
+ */
 function specTsConfigGenerator(tree: Tree, offset: string, options: Options) {
    if (options.testRunner !== 'none') {
       const specConfig = specTsConfigTemplate(offset);
+
+      specConfig.include = [...specConfig.include, `${options.testRunner}.config.ts`];
+      if (options.testRunner) specConfig.compilerOptions.types.push(options.testRunner);
+
       tree.write(path.join(options.projectRoot, 'tsconfig.spec.json'), JSON.stringify(specConfig));
    }
 }
 
 /**
  *
- *
- *
+ * Ts Config Templates
  */
 function baseTsConfigTemplate(offsetFromRoot: string) {
    return {
@@ -77,8 +98,8 @@ function specTsConfigTemplate(offsetFromRoot: string) {
       compilerOptions: {
          outDir: `${offsetFromRoot}dist/out-tsc`,
          module: 'commonjs',
-         types: ['jest', 'node'],
+         types: ['node'],
       },
-      include: ['jest.config.ts', 'src/**/*.test.ts', 'src/**/*.spec.ts', 'src/**/*.d.ts'],
+      include: ['src/**/*.test.ts', 'src/**/*.spec.ts', 'src/**/*.d.ts'],
    };
 }
