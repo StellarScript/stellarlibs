@@ -22,7 +22,7 @@ export function testGenerator(tree: Tree, options: Options) {
    }
 
    if (options.testRunner === 'vitest') {
-      tree.write(joinPathFragments(options.projectRoot, 'vite.config.ts'), vitestConfig());
+      tree.write(joinPathFragments(options.projectRoot, 'vitest.config.ts'), vitestConfig());
       addDependenciesToPackageJson(tree, {}, viteDependencies);
    }
 }
