@@ -27,7 +27,7 @@ export function createConfiguration(options: Options) {
 
 function targets(options: Options) {
    const config: ProjectConfiguration['targets'] = {
-      build: {
+      package: {
          executor: 'nx:run-commands',
          options: {
             cwd: options.projectRoot,
@@ -43,7 +43,7 @@ function targets(options: Options) {
             command: command('deploy', { verboase: true }),
          },
          dependsOn: [
-            'build',
+            'package',
             {
                target: 'deploy',
                projects: 'dependencies',

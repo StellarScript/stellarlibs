@@ -1,6 +1,7 @@
 export const devDependencies = {
    serverless: '^3.38.0',
    'aws-lambda': '^1.0.7',
+   '@types/aws-lambda': '^8.10.137',
    '@types/serverless': '^3.12.22',
    'serverless-localstack': '^1.2.0',
    'serverless-offline': '^13.3.3',
