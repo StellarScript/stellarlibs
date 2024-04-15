@@ -131,6 +131,6 @@ function normalizeOptions(tree: Tree, schema: AppGeneratorSchema): NormalizedSch
       workspaceRoot,
       projectName: schema.name,
       serviceName: schema.project,
-      testRunner: schema.test,
+      testRunner: schema.test || 'none',
    };
 }
