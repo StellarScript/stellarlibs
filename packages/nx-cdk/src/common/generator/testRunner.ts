@@ -48,12 +48,12 @@ export async function testConfigGenerator(
    }
 
    if (options.testRunner === TestRunner.Vitest) {
-      tasks.register(await addDependenciesToPackageJson(tree, {}, options.dependencies));
+      tasks.register(addDependenciesToPackageJson(tree, {}, options.dependencies));
       tasks.register(await vitestConfigGenerator(tree, options));
    }
 
+   await tasks.runInSerial();
    await installPackagesTask(tree);
-   return await tasks.runInSerial();
 }
 
 async function vitestConfigGenerator(tree: Tree, options: TestGeneratorOptions) {
