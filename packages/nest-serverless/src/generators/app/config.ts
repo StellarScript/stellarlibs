@@ -75,7 +75,7 @@ function targets(options: Options) {
    };
 
    if (options.testRunner !== 'none') {
-      (config.targets as ProjectConfiguration['targets']).test = testCommands(options);
+      config.test = testCommands(options);
    }
 
    return config;
