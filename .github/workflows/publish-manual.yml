@@ -10,6 +10,7 @@ on:
             default: 'nx-cdk'
             options:
                - 'nx-cdk'
+               - 'nest-serverless'
 
          tag:
             description: 'Tag'
