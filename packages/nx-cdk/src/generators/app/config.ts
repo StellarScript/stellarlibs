@@ -65,7 +65,7 @@ export const createConfiguration = (
    };
 
    if (options.test !== TestRunner.None) {
-      config.targets.test = testCommands[options.test];
+      config.targets.test = testCommands(options);
    }
 
    return config;
