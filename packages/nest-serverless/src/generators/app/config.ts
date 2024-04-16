@@ -1,9 +1,10 @@
-import { joinPathFragments } from '@nx/devkit';
-import { ProjectType } from '@stellarlibs/utils';
+import { joinPathFragments, ProjectConfiguration } from '@nx/devkit';
+import { ProjectType, testCommands, TestRunnerType } from '@stellarlibs/utils';
 
 type Options = {
    projectRoot: string;
    projectName: string;
+   test: TestRunnerType;
    tags: string[];
 };
 
@@ -18,7 +19,7 @@ export function createConfiguration(options: Options) {
 }
 
 function generateTargets(options: Options) {
-   return {
+   const config: ProjectConfiguration['targets'] = {
       build: {
          executor: '@nx/esbuild:esbuild',
          outputs: ['{options.outputPath}'],
@@ -52,4 +53,10 @@ function generateTargets(options: Options) {
          },
       },
    };
+
+   if (options.test !== 'none') {
+      config.test = testCommands(options);
+   }
+
+   return config;
 }
