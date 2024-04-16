@@ -18,6 +18,13 @@
          "type": "string",
          "description": "name the project root directory",
          "x-prompt": "What project would you like name root project?"
+      },
+
+      "test": {
+         "type": "string",
+         "enum": ["jest", "vitest", "none"],
+         "description": "Test runner to use for unit tests.",
+         "x-prompt": "Which unit test runner would you like to use?"
       }
    },
    "required": ["name", "project"]
