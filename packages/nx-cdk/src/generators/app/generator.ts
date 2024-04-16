@@ -46,7 +46,7 @@ export async function generateApplication(
    const options = normailzeOptions(tree, projectType, schema);
 
    generateConfiguration(tree, projectType, options);
-   generateProjectFiles(tree, options);
+   generateProjectFiles(tree, projectType, options);
    tsConfigGenerator(tree, options);
 
    tasks.register(await testGenerator(tree, options));
@@ -80,8 +80,8 @@ async function generateLinting(tree: Tree, options: NormalizedSchema) {
  * @param tree
  * @param options
  */
-function generateProjectFiles(tree: Tree, options: NormalizedSchema) {
-   const filesPath = joinPathFragments(__dirname, 'files', 'application');
+function generateProjectFiles(tree: Tree, projectType: ProjectType, options: NormalizedSchema) {
+   const filesPath = joinPathFragments(__dirname, 'files', projectType);
    addProjectFiles(tree, filesPath, {
       projectName: options.projectName,
       projectRoot: options.projectRoot,
