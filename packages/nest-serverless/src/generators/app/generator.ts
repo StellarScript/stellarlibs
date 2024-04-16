@@ -60,7 +60,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
 async function generateLinting(tree: Tree, options: NormalizedSchema) {
    return await lintProjectGenerator(tree, {
       project: options.projectName,
-      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.*?.json')],
+      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.app.json')],
       eslintFilePatterns: [`${options.projectRoot}/**/*.ts`],
       skipFormat: false,
       setParserOptionsProject: true,
