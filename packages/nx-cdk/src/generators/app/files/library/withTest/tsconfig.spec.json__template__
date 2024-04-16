@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "<%= offsetFromRoot %>dist/out-tsc",
-    "module": "commonjs",
-    "types": ["<%= testRunner %>", "node"]
-  },
-  "include": ["<%= testRunner %>.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
-}

@@ -1,5 +1,5 @@
 import { ProjectConfiguration, joinPathFragments } from '@nx/devkit';
-import { ProjectType, testCommands, TestRunnerType } from '@stellarlibs/utils';
+import { ProjectType, testCommands, TestRunner, TestRunnerType } from '@stellarlibs/utils';
 
 interface ConfigOptions {
    projectRoot: string;
@@ -46,14 +46,13 @@ export const createConfiguration = (
       return {};
    };
 
-   return {
+   const config: ProjectConfiguration = {
       name: options.projectName,
       root: options.projectRoot,
       projectType: projectType,
       sourceRoot: joinPathFragments(options.projectRoot, 'src'),
       targets: {
          ...targets(),
-         test: testCommands(options),
          lint: {
             executor: '@nx/eslint:lint',
             outputs: ['{options.outputFile}'],
@@ -64,4 +63,10 @@ export const createConfiguration = (
       },
       tags: options.tags,
    };
+
+   if (options.test !== TestRunner.None) {
+      config.targets.test = testCommands[options.test];
+   }
+
+   return config;
 };
