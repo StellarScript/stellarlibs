@@ -71,7 +71,7 @@ export class GeneratorTasks extends Set<GeneratorCallback> {
 
    public async runInSerial(): Promise<void> {
       const tasks = await runTasksInSerial(...Array.from(this));
-      tasks();
+      await tasks();
    }
 }
 

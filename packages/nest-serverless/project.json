@@ -14,8 +14,8 @@
             "main": "packages/nest-serverless/src/index.ts",
             "tsConfig": "packages/nest-serverless/tsconfig.lib.json",
             "assets": [
-               "packages/nx-cdk/LICENSE",
-               "packages/nx-cdk/*.md",
+               "packages/nest-serverless/LICENSE",
+               "packages/nest-serverless/*.md",
                {
                   "input": "./packages/nest-serverless/src",
                   "glob": "**/!(*.ts)",
@@ -40,7 +40,7 @@
          }
       },
       "publish": {
-         "command": "node tools/scripts/publish.mjs nx-cdk {args.ver} {args.tag}",
+         "command": "node tools/scripts/publish.mjs nest-serverless {args.ver} {args.tag}",
          "dependsOn": ["build"]
       },
       "lint": {
@@ -50,7 +50,7 @@
          "executor": "@nx/jest:jest",
          "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
          "options": {
-            "jestConfig": "packages/nx-cdk/jest.config.ts"
+            "jestConfig": "packages/nest-serverless/jest.config.ts"
          }
       }
    },

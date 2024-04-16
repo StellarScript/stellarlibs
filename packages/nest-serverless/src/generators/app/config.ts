@@ -1,92 +1,63 @@
 import { joinPathFragments, ProjectConfiguration } from '@nx/devkit';
-import { Commands, ProjectType, testCommands, TestRunnerType } from '@stellarlibs/utils';
+import { ProjectType, testCommands, TestRunnerType } from '@stellarlibs/utils';
 
 type Options = {
    projectRoot: string;
-   tags?: string[];
-   projectSource: string;
-   serviceName: string;
    projectName: string;
-   testRunner: TestRunnerType;
-};
-
-type CommandOptions = {
-   verboase?: boolean;
-   packageName?: string;
+   test: TestRunnerType;
+   tags: string[];
 };
 
 export function createConfiguration(options: Options) {
    return {
       root: options.projectRoot,
+      name: options.projectName,
       projectType: ProjectType.Application,
       sourceRoot: joinPathFragments(options.projectRoot, 'src'),
-      targets: targets(options),
-      tags: options.tags || [],
+      targets: generateTargets(options),
+      tags: options.tags,
    };
 }
 
-function targets(options: Options) {
+function generateTargets(options: Options) {
    const config: ProjectConfiguration['targets'] = {
-      package: {
-         executor: 'nx:run-commands',
+      build: {
+         executor: '@nx/esbuild:esbuild',
+         outputs: ['{options.outputPath}'],
+         defaultConfiguration: 'production',
          options: {
-            cwd: options.projectRoot,
-            color: true,
-            command: command('package', { verboase: true }),
-         },
-      },
-      deploy: {
-         executor: 'nx:run-commands',
-         options: {
-            cwd: options.projectRoot,
-            color: true,
-            command: command('deploy', { verboase: true }),
-         },
-         dependsOn: [
-            'package',
-            {
-               target: 'deploy',
-               projects: 'dependencies',
+            platform: 'node',
+            outputPath: joinPathFragments('dist', 'apps', options.projectName),
+            format: ['cjs'],
+            bundle: false,
+            main: joinPathFragments(options.projectRoot, 'src', 'main.ts'),
+            tsConfig: joinPathFragments(options.projectRoot, 'tsconfig.app.json'),
+            assets: [joinPathFragments(options.projectRoot, 'src', 'assets')],
+            generatePackageJson: true,
+            esbuildOptions: {
+               sourcemap: true,
+               outExtension: {
+                  '.js': '.js',
+               },
             },
-         ],
-      },
-      remove: {
-         executor: 'nx:run-commands',
-         options: {
-            cwd: options.projectRoot,
-            color: true,
-            command: command('remove', { verboase: true }),
          },
-      },
-      serve: {
-         executor: 'nx:run-commands',
-         options: {
-            cwd: options.projectRoot,
-            color: true,
-            command: command('offline start'),
-         },
-      },
-      lint: {
-         executor: '@nrwl/linter:eslint',
-         options: {
-            lintFilePatterns: [joinPathFragments(options.projectRoot, '**/*.ts')],
+         configurations: {
+            development: {},
+            production: {
+               esbuildOptions: {
+                  sourcemap: false,
+                  outExtension: {
+                     '.js': '.js',
+                  },
+               },
+            },
          },
       },
    };
 
-   if (options.testRunner !== 'none') {
+   if (options.test !== 'none') {
       config.test = testCommands(options);
    }
 
    return config;
-}
-
-function command(cmd: string, options: CommandOptions = {}) {
-   const commands = new Commands();
-   commands.add('sls').add(cmd);
-
-   if (options?.verboase) {
-      commands.add('--verbose');
-   }
-   return commands.command;
 }

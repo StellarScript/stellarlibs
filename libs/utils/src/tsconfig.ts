@@ -1,9 +1,11 @@
+import * as path from 'path';
 import { offsetFromRoot, Tree } from '@nx/devkit';
-import path = require('path');
+import { TestRunnerType } from './types';
 
 type Options = {
    projectRoot: string;
-   testRunner?: 'jest' | 'none' | 'vitest';
+   baseConfigName?: string;
+   test?: TestRunnerType;
 };
 
 export function tsConfigGenerator(tree: Tree, options: Options) {
@@ -19,10 +21,10 @@ export function tsConfigGenerator(tree: Tree, options: Options) {
  * @param offset
  * @param options
  */
-function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
-   const baseConfig = baseTsConfigTemplate(offset);
+export function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
+   const baseConfig = baseTsConfigTemplate(offset, options.baseConfigName);
 
-   if (options.testRunner !== 'none') {
+   if (options.test !== 'none') {
       baseConfig.references = [...baseConfig.references, { path: './tsconfig.spec.json' }];
    }
    tree.write(path.join(options.projectRoot, 'tsconfig.json'), JSON.stringify(baseConfig));
@@ -34,10 +36,10 @@ function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
  * @param offset
  * @param options
  */
-function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
+export function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
    const appConfig = appTsConfigTemplate(offset);
 
-   if (options.testRunner !== 'none') {
+   if (options.test !== 'none') {
       appConfig.exclude = [...appConfig.exclude, 'src/**/*.spec.ts', 'src/**/*.test.ts'];
    }
    tree.write(path.join(options.projectRoot, 'tsconfig.app.json'), JSON.stringify(appConfig));
@@ -49,12 +51,12 @@ function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
  * @param offset
  * @param options
  */
-function specTsConfigGenerator(tree: Tree, offset: string, options: Options) {
-   if (options.testRunner !== 'none') {
+export function specTsConfigGenerator(tree: Tree, offset: string, options: Options) {
+   if (options.test !== 'none') {
       const specConfig = specTsConfigTemplate(offset);
 
-      specConfig.include = [...specConfig.include, `${options.testRunner}.config.ts`];
-      if (options.testRunner) specConfig.compilerOptions.types.push(options.testRunner);
+      specConfig.include = [...specConfig.include, `${options.test}.config.ts`];
+      if (options.test) specConfig.compilerOptions.types.push(options.test);
 
       tree.write(path.join(options.projectRoot, 'tsconfig.spec.json'), JSON.stringify(specConfig));
    }
@@ -64,9 +66,10 @@ function specTsConfigGenerator(tree: Tree, offset: string, options: Options) {
  *
  * Ts Config Templates
  */
-function baseTsConfigTemplate(offsetFromRoot: string) {
+function baseTsConfigTemplate(offsetFromRoot: string, baseConfigName?: string) {
+   const _baseConfigName = baseConfigName || 'tsconfig.base.json';
    return {
-      extends: `${offsetFromRoot}tsconfig.base.json`,
+      extends: `${offsetFromRoot}${_baseConfigName}`,
       files: [],
       include: [],
       references: [
@@ -87,7 +90,7 @@ function appTsConfigTemplate(offsetFromRoot: string) {
          esModuleInterop: true,
          skipLibCheck: true,
       },
-      exclude: ['./serverless.ts', 'node_modules'],
+      exclude: ['node_modules'],
       include: ['**/*.ts'],
    };
 }

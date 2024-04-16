@@ -1,82 +1,71 @@
 import {
    Tree,
    updateJson,
+   formatFiles,
    generateFiles,
    offsetFromRoot,
    joinPathFragments,
-   installPackagesTask,
    addProjectConfiguration,
    addDependenciesToPackageJson,
-   formatFiles,
+   installPackagesTask,
 } from '@nx/devkit';
 import {
-   addIgnoreFileName,
-   GeneratorTasks,
+   toArray,
    getProjectDir,
    ProjectType,
-   testGenerator,
    TestRunnerType,
-   tsConfigGenerator,
+   GeneratorTasks,
+   baseConfigGenerator,
+   appTsConfigGenerator,
+   specTsConfigGenerator,
+   testGenerator,
 } from '@stellarlibs/utils';
 import { lintProjectGenerator } from '@nx/eslint';
-import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
+import { AppGeneratorSchema } from './schema';
 import { dependencies, devDependencies } from './dependencies';
 
 interface NormalizedSchema {
    projectRoot: string;
    projectSource: string;
-   workspaceRoot: string;
    projectName: string;
-   serviceName: string;
-   testRunner: TestRunnerType;
+   projectSourceName: string;
+   test: TestRunnerType;
+   tags: string[];
 }
 
 export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
    const tasks = new GeneratorTasks();
 
    const options = normalizeOptions(tree, schema);
-   configurationGenerator(tree, options);
-   projectGenerator(tree, options);
-
-   await lintingGenerator(tree, options, tasks);
-   testGenerator(tree, options, tasks);
+   generateProjectSourceConfig(tree, options);
+   generateProjectConfig(tree, options);
+   generateApplication(tree, options);
    tsConfigGenerator(tree, options);
 
+   tasks.register(await testGenerator(tree, options));
+   tasks.register(await generateLinting(tree, options));
+
    tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
-   tasks.register(() => installPackagesTask(tree, true));
    tasks.register(async () => await formatFiles(tree));
-   await tasks.runInSerial();
+   tasks.register(() => installPackagesTask(tree, true));
+   tasks.runInSerial();
 }
 
 /**
  *
  * @param tree
  * @param options
+ * @param tasks
  */
-function configurationGenerator(tree: Tree, options: NormalizedSchema) {
-   const config = createConfiguration(options);
-   addProjectConfiguration(tree, options.projectName, config);
-   updateJson(tree, 'tsconfig.base.json', (json) => {
-      json.compilerOptions.module = 'CommonJS';
-      return json;
-   });
-}
-
-/**
- *
- * @param tree
- * @param options
- */
-async function lintingGenerator(tree: Tree, options: NormalizedSchema, tasks: GeneratorTasks) {
-   const task = await lintProjectGenerator(tree, {
+async function generateLinting(tree: Tree, options: NormalizedSchema) {
+   return await lintProjectGenerator(tree, {
       project: options.projectName,
-      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.*?.json')],
+      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.app.json')],
       eslintFilePatterns: [`${options.projectRoot}/**/*.ts`],
       skipFormat: false,
       setParserOptionsProject: true,
    });
-   tasks.register(task);
 }
 
 /**
@@ -84,20 +73,81 @@ async function lintingGenerator(tree: Tree, options: NormalizedSchema, tasks: Ge
  * @param tree
  * @param options
  */
-function projectGenerator(tree: Tree, options: NormalizedSchema) {
-   addIgnoreFileName(tree, '# Serverless', ['.serverless']);
-   generateFiles(tree, joinPathFragments(__dirname, 'files', 'root'), options.workspaceRoot, {
-      offsetFromRoot: offsetFromRoot(options.workspaceRoot),
-      template: '',
-   });
-   generateFiles(tree, joinPathFragments(__dirname, 'files', 'project'), options.projectRoot, {
-      offsetFromRoot: offsetFromRoot(options.projectRoot),
-      projectRoot: options.projectRoot,
+function tsConfigGenerator(tree: Tree, options: NormalizedSchema) {
+   const offset = '../../';
+   baseConfigGenerator(tree, offset, { ...options, baseConfigName: 'tsconfig.json' });
+   appTsConfigGenerator(tree, offset, options);
+   specTsConfigGenerator(tree, offset, options);
+}
+
+/**
+ *
+ * @param tree
+ * @param options
+ */
+function generateApplication(tree: Tree, options: NormalizedSchema) {
+   const filesPath = joinPathFragments(__dirname, 'files', 'project');
+   generateFiles(tree, filesPath, options.projectRoot, {
       projectName: options.projectName,
-      serviceName: options.serviceName,
-      projectSource: options.projectSource,
+      projectRoot: options.projectRoot,
+      offsetFromRoot: offsetFromRoot(options.projectRoot),
       template: '',
    });
+}
+
+/**
+ *
+ * @param tree
+ * @param options
+ */
+function generateProjectConfig(tree: Tree, options: NormalizedSchema) {
+   const config = createConfiguration(options);
+   addProjectConfiguration(tree, options.projectName, config);
+}
+
+/**
+ *
+ * @param tree
+ * @param options
+ * @returns
+ */
+function generateProjectSourceConfig(tree: Tree, options: NormalizedSchema) {
+   const rootProjectExists = tree.exists(joinPathFragments(options.projectSource, 'tsconfig.json'));
+   const rootProjectFilePath = joinPathFragments(options.projectSource, 'project.json');
+
+   if (rootProjectExists) {
+      updateJson(tree, rootProjectFilePath, (json) => {
+         json.projects.push({
+            name: options.projectName,
+            root: options.projectRoot,
+         });
+         return json;
+      });
+      return;
+   }
+
+   const filesPath = joinPathFragments(__dirname, 'files', 'root');
+   generateFiles(tree, filesPath, options.projectSource, {
+      projectName: options.projectName,
+      projectRoot: options.projectRoot,
+      offsetFromRoot: offsetFromRoot(options.projectSource),
+      template: '',
+   });
+
+   const rootProjectConfig = {
+      root: options.projectSource,
+      name: options.projectSourceName,
+      projectType: ProjectType.Application,
+      sourceRoot: options.projectSource,
+      projects: [
+         {
+            name: options.projectName,
+            root: options.projectRoot,
+         },
+      ],
+      tags: options.tags,
+   };
+   addProjectConfiguration(tree, options.projectName, rootProjectConfig);
 }
 
 /**
@@ -106,20 +156,17 @@ function projectGenerator(tree: Tree, options: NormalizedSchema) {
  * @param schema
  * @returns
  */
-function normalizeOptions(tree: Tree, schema: AppGeneratorSchema): NormalizedSchema {
-   const projDir = getProjectDir(tree, ProjectType.Application);
-   const workspaceDir = joinPathFragments(projDir, schema.project);
-
-   const workspaceRoot = '.';
-   const projectRoot = joinPathFragments(workspaceDir, schema.name);
-   const projectSource = joinPathFragments(projectRoot);
+function normalizeOptions(tree: Tree, options: AppGeneratorSchema): NormalizedSchema {
+   const appsDir = getProjectDir(tree, ProjectType.Application);
+   const projectSource = joinPathFragments(appsDir, options.project);
+   const projectRoot = joinPathFragments(projectSource, 'apps', options.name);
 
    return {
       projectRoot,
       projectSource,
-      workspaceRoot,
-      projectName: schema.name,
-      serviceName: schema.project,
-      testRunner: schema.test || 'none',
+      projectName: options.name,
+      projectSourceName: options.project,
+      test: options.test || 'none',
+      tags: toArray(options.tag),
    };
 }
