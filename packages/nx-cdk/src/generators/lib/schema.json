@@ -14,7 +14,7 @@
          "x-prompt": "What name would you like to use?"
       },
 
-      "testRunner": {
+      "test": {
          "type": "string",
          "enum": ["jest", "vitest", "none"],
          "description": "Test runner to use for unit tests.",

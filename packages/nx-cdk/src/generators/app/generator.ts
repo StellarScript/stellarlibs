@@ -1,5 +1,6 @@
 import {
    Tree,
+   formatFiles,
    joinPathFragments,
    installPackagesTask,
    addProjectConfiguration,
@@ -8,106 +9,97 @@ import {
 
 import {
    toArray,
-   TestRunner,
    ProjectType,
+   testGenerator,
+   TestRunnerType,
    getProjectDir,
    GeneratorTasks,
    addProjectFiles,
-   addIgnoreFileName,
    updateConfiguration,
+   tsConfigGenerator,
 } from '@stellarlibs/utils';
+import { lintProjectGenerator } from '@nx/eslint';
 
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
-import { lintConfigGenerator, testConfigGenerator } from '../../common/generator';
-import { dependencies, lintDependencies, viteDependencies, jestDependencies } from './dependencies';
+import { dependencies } from './dependencies';
 
-interface NormalizedSchema extends AppGeneratorSchema {
-   tags: string[];
+interface NormalizedSchema {
    projectRoot: string;
    projectSource: string;
+   projectName: string;
+   test: TestRunnerType;
+   tags: string[];
 }
 
 export default async function appGenerator(tree: Tree, schema: AppGeneratorSchema) {
    const projectType = ProjectType.Application;
-   await generateApplication(tree, schema, projectType);
+   await generateApplication(tree, projectType, schema);
 }
 
-/**
- *
- * @param tree
- * @param schema
- * @param projectType
- */
 export async function generateApplication(
    tree: Tree,
-   schema: AppGeneratorSchema,
-   projectType = ProjectType.Application
+   projectType: ProjectType,
+   schema: AppGeneratorSchema
 ) {
    const tasks = new GeneratorTasks();
-
    const options = normailzeOptions(tree, projectType, schema);
-   const appFilesDir = joinPathFragments(__dirname, 'files', projectType);
 
-   generateProject(tree, appFilesDir, projectType, options);
+   generateConfiguration(tree, projectType, options);
+   generateProjectFiles(tree, options);
+   tsConfigGenerator(tree, options);
 
-   await lintConfigGenerator(tree, {
-      projectRoot: options.projectRoot,
-      name: options.name,
-      lintDependencies,
-   });
+   tasks.register(await testGenerator(tree, options));
+   tasks.register(await generateLinting(tree, options));
+   tasks.register(await addDependenciesToPackageJson(tree, dependencies, {}));
+   tasks.register(async () => await formatFiles(tree));
+   tasks.register(() => installPackagesTask(tree, true));
 
-   const filePath = joinPathFragments(__dirname, 'files', projectType, 'testing', options.testRunner);
-   const runnerDependencies = TestRunner.Vitest ? viteDependencies : jestDependencies;
-
-   await testConfigGenerator(tree, filePath, {
-      name: options.name,
-      projectRoot: options.projectRoot,
-      testRunner: options.testRunner,
-      dependencies: runnerDependencies,
-   });
-
-   addIgnoreFileName(tree, '# AWS CDK', ['cdk.out']);
-   tasks.register(addDependenciesToPackageJson(tree, dependencies, {}));
-
-   await installPackagesTask(tree);
-   await tasks.runInSerial();
+   tasks.runInSerial();
 }
 
 /**
  *
  * @param tree
- * @param filePath
+ * @param options
+ * @param tasks
+ */
+async function generateLinting(tree: Tree, options: NormalizedSchema) {
+   return await lintProjectGenerator(tree, {
+      project: options.projectName,
+      rootProject: true,
+      skipFormat: false,
+      setParserOptionsProject: true,
+      eslintFilePatterns: [`${options.projectRoot}/**/*.ts`],
+      unitTestRunner: options.test === 'none' ? undefined : options.test,
+      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.app.json')],
+   });
+}
+/**
+ *
+ * @param tree
  * @param options
  */
-function generateProject(
-   tree: Tree,
-   filePath: string,
-   projectType: ProjectType,
-   options: NormalizedSchema
-): void {
-   const config = createConfiguration(projectType, options);
-   addProjectConfiguration(tree, options.name, config);
+function generateProjectFiles(tree: Tree, options: NormalizedSchema) {
+   const filesPath = joinPathFragments(__dirname, 'files', 'application');
+   addProjectFiles(tree, filesPath, {
+      projectName: options.projectName,
+      projectRoot: options.projectRoot,
+   });
+}
 
-   updateConfiguration(tree, options.name, (workspace) => {
+/**
+ *
+ * @param tree
+ * @param projectType
+ * @param options
+ */
+function generateConfiguration(tree: Tree, projectType: ProjectType, options: NormalizedSchema) {
+   const config = createConfiguration(projectType, options);
+   addProjectConfiguration(tree, options.projectName, config);
+   updateConfiguration(tree, options.projectName, (workspace) => {
       workspace.tags = options.tags;
       return workspace;
-   });
-
-   const commandFiles = joinPathFragments(filePath, 'common');
-   addProjectFiles(tree, commandFiles, {
-      projectName: options.name,
-      projectRoot: options.projectRoot,
-   });
-
-   const specFiles = joinPathFragments(
-      filePath,
-      options.testRunner !== TestRunner.None ? 'withTest' : 'withoutTest'
-   );
-   addProjectFiles(tree, specFiles, {
-      projectName: options.name,
-      projectRoot: options.projectRoot,
-      testRunner: options.testRunner,
    });
 }
 
@@ -131,8 +123,8 @@ export function normailzeOptions(
    return {
       projectRoot,
       projectSource,
-      name: options.name,
-      testRunner: options.testRunner,
+      projectName: options.name,
+      test: options.test || 'none',
       tags: toArray(options.tags),
    };
 }
