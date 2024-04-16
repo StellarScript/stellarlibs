@@ -78,6 +78,14 @@ function tsConfigGenerator(tree: Tree, options: NormalizedSchema) {
    baseConfigGenerator(tree, offset, { ...options, baseConfigName: 'tsconfig.json' });
    appTsConfigGenerator(tree, offset, options);
    specTsConfigGenerator(tree, offset, options);
+
+   //  reference app tsconfig from root tsconfig
+   updateJson(tree, joinPathFragments(options.projectSource, 'tsconfig.json'), (json) => {
+      json.references.push({
+         path: './' + joinPathFragments('apps', options.projectName, 'tsconfig.app.json'),
+      });
+      return json;
+   });
 }
 
 /**
