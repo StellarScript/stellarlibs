@@ -16,7 +16,7 @@ describe('"@stellarlibs/nx-cdk" Remove Generators', () => {
       }, 120000);
 
       it('generate application', async () => {
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner none`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --test none`);
          expect(() => checkFilesExist(pluginName)).not.toThrow();
       }, 120000);
 
