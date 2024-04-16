@@ -1,10 +1,11 @@
+import * as path from 'path';
 import { offsetFromRoot, Tree } from '@nx/devkit';
-import path = require('path');
+import { TestRunnerType } from './types';
 
 type Options = {
    projectRoot: string;
-   testRunner?: 'jest' | 'none' | 'vitest';
    baseConfigName?: string;
+   testRunner?: TestRunnerType;
 };
 
 export function tsConfigGenerator(tree: Tree, options: Options) {
@@ -89,7 +90,7 @@ function appTsConfigTemplate(offsetFromRoot: string) {
          esModuleInterop: true,
          skipLibCheck: true,
       },
-      exclude: ['./serverless.ts', 'node_modules'],
+      exclude: ['node_modules'],
       include: ['**/*.ts'],
    };
 }
