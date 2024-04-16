@@ -29,6 +29,7 @@ interface NormalizedSchema {
    projectRoot: string;
    projectSource: string;
    projectName: string;
+   projectSourceName: string;
    test: TestRunnerType;
    tags: string[];
 }
@@ -134,6 +135,8 @@ function generateProjectSourceConfig(tree: Tree, options: NormalizedSchema) {
    });
 
    const rootProjectConfig = {
+      root: options.projectSource,
+      name: options.projectSourceName,
       projectType: ProjectType.Application,
       sourceRoot: options.projectSource,
       projects: [
@@ -144,8 +147,7 @@ function generateProjectSourceConfig(tree: Tree, options: NormalizedSchema) {
       ],
       tags: options.tags,
    };
-   const rootProject = joinPathFragments(options.projectSource, 'project.json');
-   tree.write(rootProject, JSON.stringify(rootProjectConfig));
+   addProjectConfiguration(tree, options.projectName, rootProjectConfig);
 }
 
 /**
@@ -163,6 +165,7 @@ function normalizeOptions(tree: Tree, options: AppGeneratorSchema): NormalizedSc
       projectRoot,
       projectSource,
       projectName: options.name,
+      projectSourceName: options.project,
       test: options.test || 'none',
       tags: toArray(options.tag),
    };

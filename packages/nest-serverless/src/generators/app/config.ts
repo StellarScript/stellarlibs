@@ -11,6 +11,7 @@ type Options = {
 export function createConfiguration(options: Options) {
    return {
       root: options.projectRoot,
+      name: options.projectName,
       projectType: ProjectType.Application,
       sourceRoot: joinPathFragments(options.projectRoot, 'src'),
       targets: generateTargets(options),
