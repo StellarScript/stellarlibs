@@ -13,10 +13,11 @@
          },
          "x-prompt": "What name would you like to use?"
       },
+
       "project": {
          "type": "string",
-         "description": "name the root project",
-         "x-prompt": "What project would you like to use for project name?"
+         "description": "name the project root directory",
+         "x-prompt": "What project would you like name root project?"
       }
    },
    "required": ["name", "project"]
