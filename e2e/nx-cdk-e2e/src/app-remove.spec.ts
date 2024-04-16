@@ -1,5 +1,5 @@
-import * as path from 'path';
 import { uniq, checkFilesExist, ensureNxProject, runNxCommandAsync } from '@nx/plugin/testing';
+import { joinPathFragments } from '@nx/devkit';
 
 describe('"@stellarlibs/nx-cdk" Remove Generators', () => {
    beforeAll(async () => {
@@ -16,13 +16,13 @@ describe('"@stellarlibs/nx-cdk" Remove Generators', () => {
       }, 120000);
 
       it('generate application', async () => {
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --testRunner none`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:app ${pluginName} --test none`);
          expect(() => checkFilesExist(pluginName)).not.toThrow();
       }, 120000);
 
       it('remove application', async () => {
          await runNxCommandAsync(`generate @stellarlibs/nx-cdk:remove ${pluginName}`);
-         expect(() => checkFilesExist(path.join(pluginName, 'cdk.json'))).toThrow();
+         expect(() => checkFilesExist(joinPathFragments(pluginName, 'cdk.json'))).toThrow();
       }, 120000);
    });
 });

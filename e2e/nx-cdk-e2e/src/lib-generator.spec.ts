@@ -1,5 +1,5 @@
-import * as path from 'path';
 import { uniq, checkFilesExist, ensureNxProject, runNxCommandAsync } from '@nx/plugin/testing';
+import { joinPathFragments } from '@nx/devkit';
 
 describe('"@stellarlibs/nx-cdk" Library Generators', () => {
    beforeAll(async () => {
@@ -10,24 +10,22 @@ describe('"@stellarlibs/nx-cdk" Library Generators', () => {
    describe('Generate Library', () => {
       it('generate library with duplicate name (error)', async () => {
          const pluginName = uniq('aws-cdk');
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --test none`);
 
-         expect(() => checkFilesExist(path.join(pluginName))).not.toThrow();
+         expect(() => checkFilesExist(joinPathFragments(pluginName))).not.toThrow();
          expect(async () => {
-            return await runNxCommandAsync(
-               `generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`
-            );
+            return await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --test none`);
          }).rejects.toThrow();
       }, 100000);
 
       it('generate library', async () => {
          const pluginName = uniq('aws-cdk');
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --test none`);
 
          expect(() => {
-            checkFilesExist(path.join(pluginName));
-            checkFilesExist(path.join(pluginName, 'src', 'construct.ts'));
-            checkFilesExist(path.join(pluginName, 'tsconfig.json'));
+            checkFilesExist(joinPathFragments(pluginName));
+            checkFilesExist(joinPathFragments(pluginName, 'src', 'construct.ts'));
+            checkFilesExist(joinPathFragments(pluginName, 'tsconfig.json'));
          }).not.toThrow();
       }, 100000);
 
@@ -36,40 +34,40 @@ describe('"@stellarlibs/nx-cdk" Library Generators', () => {
          const pluginDirectory = uniq('subdir');
 
          await runNxCommandAsync(
-            `generate @stellarlibs/nx-cdk:lib ${pluginName} --directory ${pluginDirectory} --testRunner none`
+            `generate @stellarlibs/nx-cdk:lib ${pluginName} --directory ${pluginDirectory} --test none`
          );
-         expect(() => checkFilesExist(path.join(pluginDirectory, pluginName))).not.toThrow();
+         expect(() => checkFilesExist(joinPathFragments(pluginDirectory, pluginName))).not.toThrow();
       }, 100000);
    });
 
    describe('Generate Library Test Runner', () => {
       it('generate library with none test runner', async () => {
          const pluginName = uniq('aws-cdk');
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner none`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --test none`);
          expect(() => {
-            checkFilesExist(path.join('jest.config.ts'));
-            checkFilesExist(path.join('tsconfig.spec.json'));
+            checkFilesExist(joinPathFragments('jest.config.ts'));
+            checkFilesExist(joinPathFragments('tsconfig.spec.json'));
          }).toThrow();
       }, 100000);
 
       it('generate library with jest test runner', async () => {
          const pluginName = uniq('aws-cdk');
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner jest`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --test jest`);
 
          expect(() => {
-            checkFilesExist(path.join(pluginName));
-            checkFilesExist(path.join(pluginName, 'jest.config.ts'));
-            checkFilesExist(path.join(pluginName, 'tsconfig.spec.json'));
+            checkFilesExist(joinPathFragments(pluginName));
+            checkFilesExist(joinPathFragments(pluginName, 'jest.config.ts'));
+            checkFilesExist(joinPathFragments(pluginName, 'tsconfig.spec.json'));
          }).not.toThrow();
       }, 100000);
 
       it('generate library with vitest test runner', async () => {
          const pluginName = uniq('aws-cdk');
-         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --testRunner vitest`);
+         await runNxCommandAsync(`generate @stellarlibs/nx-cdk:lib ${pluginName} --test vitest`);
          expect(() => {
-            checkFilesExist(path.join(pluginName));
-            checkFilesExist(path.join(pluginName, 'vitest.config.ts'));
-            checkFilesExist(path.join(pluginName, 'tsconfig.spec.json'));
+            checkFilesExist(joinPathFragments(pluginName));
+            checkFilesExist(joinPathFragments(pluginName, 'vitest.config.ts'));
+            checkFilesExist(joinPathFragments(pluginName, 'tsconfig.spec.json'));
          }).not.toThrow();
       }, 100000);
    });

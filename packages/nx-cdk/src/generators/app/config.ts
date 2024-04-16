@@ -1,9 +1,11 @@
 import { ProjectConfiguration, joinPathFragments } from '@nx/devkit';
-import { ProjectType } from '@stellarlibs/utils';
+import { ProjectType, testCommands, TestRunner, TestRunnerType } from '@stellarlibs/utils';
 
 interface ConfigOptions {
-   tags: string[];
    projectRoot: string;
+   projectName: string;
+   test: TestRunnerType;
+   tags: string[];
 }
 
 const applicationTargets = {
@@ -44,7 +46,8 @@ export const createConfiguration = (
       return {};
    };
 
-   return {
+   const config: ProjectConfiguration = {
+      name: options.projectName,
       root: options.projectRoot,
       projectType: projectType,
       sourceRoot: joinPathFragments(options.projectRoot, 'src'),
@@ -60,4 +63,10 @@ export const createConfiguration = (
       },
       tags: options.tags,
    };
+
+   if (options.test !== TestRunner.None) {
+      config.targets.test = testCommands[options.test];
+   }
+
+   return config;
 };

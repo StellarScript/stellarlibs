@@ -58,15 +58,17 @@ export function testCommands(options: Options) {
  * Test Templates
  */
 function jestConfig(offsetFromRoot: string, displayName: string) {
-   return {
-      displayName: displayName,
-      preset: `${offsetFromRoot}jest.preset.js`,
+   return `
+   export default {
+      displayName: "${displayName}",
+      preset: "${offsetFromRoot}jest.preset.js",
       transform: {
          '^.+\\.[tj]s$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.spec.json' }],
       },
       moduleFileExtensions: ['ts', 'js', 'html'],
-      coverageDirectory: `${offsetFromRoot}coverage/packages/nest-serverless`,
-   };
+      coverageDirectory: "${offsetFromRoot}coverage/packages/nest-serverless:,
+   }
+   `;
 }
 
 function vitestConfig() {
