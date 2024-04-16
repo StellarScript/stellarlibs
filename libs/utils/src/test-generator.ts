@@ -1,40 +1,37 @@
 import { addDependenciesToPackageJson, joinPathFragments, offsetFromRoot, Tree } from '@nx/devkit';
 import { TestRunner } from './constants';
 import { TestRunnerType } from './types';
-import { GeneratorTasks } from './generator';
 
 type Options = {
-   testRunner: TestRunnerType;
+   test: TestRunnerType;
    projectRoot: string;
    projectName: string;
 };
 
-export function testGenerator(tree: Tree, options: Options, tasks: GeneratorTasks) {
+export function testGenerator(tree: Tree, options: Options) {
    const offset = offsetFromRoot(options.projectRoot);
 
-   if (options.testRunner === TestRunner.None) {
+   if (options.test === TestRunner.None) {
       return;
-   }
-
-   if (options.testRunner === TestRunner.Jest) {
+   } else if (options.test === TestRunner.Jest) {
       tree.write(
          joinPathFragments(options.projectRoot, 'jest.config.ts'),
          JSON.stringify(jestConfig(offset, options.projectName))
       );
-      tasks.register(addDependenciesToPackageJson(tree, {}, jestDependencies));
-   }
-
-   if (options.testRunner === TestRunner.Vitest) {
+      return addDependenciesToPackageJson(tree, {}, jestDependencies);
+   } else if (options.test === TestRunner.Vitest) {
       tree.write(joinPathFragments(options.projectRoot, 'vitest.config.ts'), vitestConfig());
-      tasks.register(addDependenciesToPackageJson(tree, {}, viteDependencies));
+      return addDependenciesToPackageJson(tree, {}, viteDependencies);
+   } else {
+      throw new Error('unknown test runner');
    }
 }
 
 export function testCommands(options: Options) {
-   if (options.testRunner === TestRunner.None) {
+   if (options.test === TestRunner.None) {
       return null;
    }
-   if (options.testRunner === TestRunner.Jest) {
+   if (options.test === TestRunner.Jest) {
       return {
          executor: '@nx/jest:jest',
          outputs: ['{workspaceRoot}/coverage/{projectRoot}'],
@@ -44,7 +41,7 @@ export function testCommands(options: Options) {
          },
       };
    }
-   if (options.testRunner === TestRunner.Vitest) {
+   if (options.test === TestRunner.Vitest) {
       return {
          executor: '@nx/vite:test',
          outputs: ['{workspaceRoot}/coverage/{projectRoot}'],

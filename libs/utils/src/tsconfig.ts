@@ -4,6 +4,7 @@ import path = require('path');
 type Options = {
    projectRoot: string;
    testRunner?: 'jest' | 'none' | 'vitest';
+   baseConfigName?: string;
 };
 
 export function tsConfigGenerator(tree: Tree, options: Options) {
@@ -19,8 +20,8 @@ export function tsConfigGenerator(tree: Tree, options: Options) {
  * @param offset
  * @param options
  */
-function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
-   const baseConfig = baseTsConfigTemplate(offset);
+export function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
+   const baseConfig = baseTsConfigTemplate(offset, options.baseConfigName);
 
    if (options.testRunner !== 'none') {
       baseConfig.references = [...baseConfig.references, { path: './tsconfig.spec.json' }];
@@ -34,7 +35,7 @@ function baseConfigGenerator(tree: Tree, offset: string, options: Options) {
  * @param offset
  * @param options
  */
-function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
+export function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
    const appConfig = appTsConfigTemplate(offset);
 
    if (options.testRunner !== 'none') {
@@ -49,7 +50,7 @@ function appTsConfigGenerator(tree: Tree, offset: string, options: Options) {
  * @param offset
  * @param options
  */
-function specTsConfigGenerator(tree: Tree, offset: string, options: Options) {
+export function specTsConfigGenerator(tree: Tree, offset: string, options: Options) {
    if (options.testRunner !== 'none') {
       const specConfig = specTsConfigTemplate(offset);
 
@@ -64,9 +65,10 @@ function specTsConfigGenerator(tree: Tree, offset: string, options: Options) {
  *
  * Ts Config Templates
  */
-function baseTsConfigTemplate(offsetFromRoot: string) {
+function baseTsConfigTemplate(offsetFromRoot: string, baseConfigName?: string) {
+   const _baseConfigName = baseConfigName || 'tsconfig.base.json';
    return {
-      extends: `${offsetFromRoot}tsconfig.base.json`,
+      extends: `${offsetFromRoot}${_baseConfigName}`,
       files: [],
       include: [],
       references: [
