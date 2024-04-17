@@ -2,7 +2,7 @@ import { NxWebpackPlugin } from '@nx/webpack';
 import { join } from 'path';
 
 export const output = {
-   path: join(__dirname, '<%= offsetFromRoot %>dist/<%= projectName %>/<%= projectSourceName %>'),
+   path: join(__dirname, '<%= offsetFromRoot %>dist/<%= projectSourceName %>/<%= projectName %>'),
    libraryTarget: 'umd',
 };
 export const plugins = [

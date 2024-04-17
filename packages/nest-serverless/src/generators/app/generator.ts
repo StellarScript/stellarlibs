@@ -104,6 +104,7 @@ function generateApplication(tree: Tree, options: NormalizedSchema) {
    generateFiles(tree, filesPath, options.projectRoot, {
       projectName: options.projectName,
       projectRoot: options.projectRoot,
+      projectSourceName: options.projectSourceName,
       offsetFromRoot: offsetFromRoot(options.projectRoot),
       template: '',
    });
@@ -144,7 +145,6 @@ function generateProjectSourceConfig(tree: Tree, options: NormalizedSchema) {
    generateFiles(tree, filesPath, options.projectSource, {
       projectName: options.projectName,
       projectRoot: options.projectRoot,
-      projectSourceName: options.projectSourceName,
       offsetFromRoot: offsetFromRoot(options.projectSource),
       template: '',
    });
