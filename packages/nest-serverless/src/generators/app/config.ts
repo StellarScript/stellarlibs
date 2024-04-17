@@ -33,7 +33,7 @@ function generateTargets(options: Options) {
             generatePackageJson: true,
             main: joinPathFragments(options.projectRoot, 'src', 'main.ts'),
             tsConfig: joinPathFragments(options.projectRoot, 'tsconfig.app.json'),
-            webpackConfig: joinPathFragments(options.projectRoot, 'webpack.config.js'),
+            webpackConfig: joinPathFragments(options.projectRoot, 'webpack.config.ts'),
             outputPath: joinPathFragments('dist', options.projectSourceName, options.projectName),
          },
       },
