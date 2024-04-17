@@ -1,0 +1,26 @@
+import { NxWebpackPlugin } from '@nx/webpack';
+import { join } from 'path';
+
+export const output = {
+   path: join(__dirname, '<%= offsetFromRoot %>dist/<%= projectSourceName %>/<%= projectName %>'),
+   libraryTarget: 'umd',
+};
+export const plugins = [
+   new NxWebpackPlugin({
+      target: 'node20',
+      compiler: 'tsc',
+      main: './src/main.ts',
+      tsConfig: './tsconfig.app.json',
+      outputHashing: 'none',
+      generatePackageJson: true,
+      externalDependencies: [
+         'terminal-kit',
+         'kuromoji',
+         'cache-manager',
+         '@nestjs/microservices',
+         '@nestjs/websockets/socket-module',
+         '@nestjs/microservices/microservices-module',
+
+      ],
+   }),
+];

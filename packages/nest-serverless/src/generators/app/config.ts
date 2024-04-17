@@ -4,6 +4,7 @@ import { ProjectType, testCommands, TestRunnerType } from '@stellarlibs/utils';
 type Options = {
    projectRoot: string;
    projectName: string;
+   projectSourceName: string;
    test: TestRunnerType;
    tags: string[];
 };
@@ -22,35 +23,18 @@ export function createConfiguration(options: Options) {
 function generateTargets(options: Options) {
    const config: ProjectConfiguration['targets'] = {
       build: {
-         executor: '@nx/esbuild:esbuild',
+         executor: '@nx/webpack:webpack',
          outputs: ['{options.outputPath}'],
-         defaultConfiguration: 'production',
+         defaultConfiguration: 'development',
          options: {
-            platform: 'node',
-            outputPath: joinPathFragments('dist', 'apps', options.projectName),
-            format: ['cjs'],
-            bundle: false,
+            target: 'node',
+            compiler: 'tsc',
+            outputFileName: 'main.js',
+            generatePackageJson: true,
             main: joinPathFragments(options.projectRoot, 'src', 'main.ts'),
             tsConfig: joinPathFragments(options.projectRoot, 'tsconfig.app.json'),
-            assets: [joinPathFragments(options.projectRoot, 'src', 'assets')],
-            generatePackageJson: true,
-            esbuildOptions: {
-               sourcemap: true,
-               outExtension: {
-                  '.js': '.js',
-               },
-            },
-         },
-         configurations: {
-            development: {},
-            production: {
-               esbuildOptions: {
-                  sourcemap: false,
-                  outExtension: {
-                     '.js': '.js',
-                  },
-               },
-            },
+            webpackConfig: joinPathFragments(options.projectRoot, 'webpack.config.ts'),
+            outputPath: joinPathFragments('dist', options.projectSourceName, options.projectName),
          },
       },
    };

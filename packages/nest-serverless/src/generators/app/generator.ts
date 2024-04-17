@@ -20,7 +20,7 @@ import {
    specTsConfigGenerator,
    testGenerator,
 } from '@stellarlibs/utils';
-import { lintProjectGenerator } from '@nx/eslint';
+import { lintInitGenerator } from '@nx/eslint';
 import { createConfiguration } from './config';
 import { AppGeneratorSchema } from './schema';
 import { dependencies, devDependencies } from './dependencies';
@@ -47,9 +47,9 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    tasks.register(await generateLinting(tree, options));
 
    tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
+   tasks.register(async () => await installPackagesTask(tree, true));
    tasks.register(async () => await formatFiles(tree));
-   tasks.register(() => installPackagesTask(tree, true));
-   tasks.runInSerial();
+   await tasks.runInSerial();
 }
 
 /**
@@ -59,13 +59,19 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
  * @param tasks
  */
 async function generateLinting(tree: Tree, options: NormalizedSchema) {
-   return await lintProjectGenerator(tree, {
-      project: options.projectName,
-      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.app.json')],
-      eslintFilePatterns: [`${options.projectRoot}/**/*.ts`],
-      skipFormat: false,
-      setParserOptionsProject: true,
+   const lintTask = await lintInitGenerator(tree, {
+      skipPackageJson: false,
+      keepExistingVersions: true,
+      updatePackageScripts: false,
    });
+   const eslintFilePath = joinPathFragments(options.projectSource, '.eslintrc.json');
+   updateJson(tree, eslintFilePath, (json) => {
+      json.overrides[0]?.parserOptions?.project.push(
+         joinPathFragments(options.projectRoot, 'tsconfig.app.json')
+      );
+      return json;
+   });
+   return lintTask;
 }
 
 /**
@@ -98,6 +104,7 @@ function generateApplication(tree: Tree, options: NormalizedSchema) {
    generateFiles(tree, filesPath, options.projectRoot, {
       projectName: options.projectName,
       projectRoot: options.projectRoot,
+      projectSourceName: options.projectSourceName,
       offsetFromRoot: offsetFromRoot(options.projectRoot),
       template: '',
    });
