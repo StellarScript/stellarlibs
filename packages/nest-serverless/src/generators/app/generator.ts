@@ -44,7 +44,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    tsConfigGenerator(tree, options);
 
    tasks.register(await testGenerator(tree, options));
-   tasks.register(await generateLinting(tree));
+   tasks.register(await generateLinting(tree, options));
 
    tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
    tasks.register(async () => await installPackagesTask(tree, true));
@@ -58,12 +58,20 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
  * @param options
  * @param tasks
  */
-async function generateLinting(tree: Tree) {
-   return await lintInitGenerator(tree, {
+async function generateLinting(tree: Tree, options: NormalizedSchema) {
+   const lintTask = await lintInitGenerator(tree, {
       skipPackageJson: false,
       keepExistingVersions: true,
       updatePackageScripts: false,
    });
+   const eslintFilePath = joinPathFragments(options.projectSource, '.eslintrc.json');
+   updateJson(tree, eslintFilePath, (json) => {
+      json.overrides[0]?.parserOptions?.project.push(
+         joinPathFragments(options.projectRoot, 'tsconfig.app.json')
+      );
+      return json;
+   });
+   return lintTask;
 }
 
 /**
