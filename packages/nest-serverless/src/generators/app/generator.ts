@@ -47,9 +47,9 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    tasks.register(await generateLinting(tree));
 
    tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
+   tasks.register(async () => await installPackagesTask(tree, true));
    tasks.register(async () => await formatFiles(tree));
-   tasks.register(() => installPackagesTask(tree, true));
-   tasks.runInSerial();
+   await tasks.runInSerial();
 }
 
 /**
