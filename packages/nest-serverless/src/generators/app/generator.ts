@@ -20,7 +20,7 @@ import {
    specTsConfigGenerator,
    testGenerator,
 } from '@stellarlibs/utils';
-import { lintProjectGenerator } from '@nx/eslint';
+import { lintInitGenerator } from '@nx/eslint';
 import { createConfiguration } from './config';
 import { AppGeneratorSchema } from './schema';
 import { dependencies, devDependencies } from './dependencies';
@@ -44,7 +44,7 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
    tsConfigGenerator(tree, options);
 
    tasks.register(await testGenerator(tree, options));
-   tasks.register(await generateLinting(tree, options));
+   tasks.register(await generateLinting(tree));
 
    tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
    tasks.register(async () => await formatFiles(tree));
@@ -58,13 +58,11 @@ export default async function appGenerator(tree: Tree, schema: AppGeneratorSchem
  * @param options
  * @param tasks
  */
-async function generateLinting(tree: Tree, options: NormalizedSchema) {
-   return await lintProjectGenerator(tree, {
-      project: options.projectName,
-      tsConfigPaths: [joinPathFragments(options.projectRoot, 'tsconfig.app.json')],
-      eslintFilePatterns: [`${options.projectRoot}/**/*.ts`],
-      skipFormat: false,
-      setParserOptionsProject: true,
+async function generateLinting(tree: Tree) {
+   return await lintInitGenerator(tree, {
+      skipPackageJson: false,
+      keepExistingVersions: true,
+      updatePackageScripts: false,
    });
 }
 
