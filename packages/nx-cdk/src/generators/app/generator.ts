@@ -22,7 +22,7 @@ import { lintProjectGenerator } from '@nx/eslint';
 
 import { AppGeneratorSchema } from './schema';
 import { createConfiguration } from './config';
-import { dependencies } from './dependencies';
+import { dependencies, devDependencies } from './dependencies';
 
 interface NormalizedSchema {
    projectRoot: string;
@@ -51,7 +51,7 @@ export async function generateApplication(
 
    tasks.register(await testGenerator(tree, options));
    tasks.register(await generateLinting(tree, options));
-   tasks.register(await addDependenciesToPackageJson(tree, dependencies, {}));
+   tasks.register(await addDependenciesToPackageJson(tree, dependencies, devDependencies));
    tasks.register(async () => await formatFiles(tree));
    tasks.register(() => installPackagesTask(tree, true));
 
