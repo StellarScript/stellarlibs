@@ -28,6 +28,24 @@ The [`@stellarlibs/nx-cdk`](https://www.npmjs.com/package/@stellarlibs/nx-cdk) p
 npm i @stellarlibs/nx-cdk
 ```
 
+</br>
+
+## Starter
+
+basic commands
+
+```sh
+nx g @stellarlibs/nx-cdk:app <AppName>
+```
+
+```sh
+nx bootstrap <AppName>
+```
+
+```sh
+nx deploy <AppName>
+```
+
 <br>
 <br>
 
